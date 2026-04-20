@@ -37,7 +37,7 @@ body {
 .heart-logo {
     width: 100px;
     height: 100px;
-    background: url('assets/imagens/logo.png') no-repeat center;
+    background: url('../imagens/logo.png') no-repeat center;
     background-size: contain;
     animation: pulse 1.2s infinite;
 }
