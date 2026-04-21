@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Patrimônio RTP</title>
+  <link rel="stylesheet" href="../styles/global.css" />
+</head>
+<body>
+  <h1>Patrimônio RTP</h1>
+  <p id="status">Conectando ao servidor...</p>
+
+  <script>
+    fetch("http://localhost:5000/")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("status").textContent = data.message;
+      })
+      .catch(() => {
+        document.getElementById("status").textContent = "Servidor indisponível.";
+      });
+  </script>
+</body>
+</html>
