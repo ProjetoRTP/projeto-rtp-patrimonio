@@ -1,14 +1,15 @@
+CREATE DATABASE patrimonio;
 USE patrimonio;
 
 -- ==========================================
--- TABELA DE USUÁRIOS DO SISTEMA
+-- TABELA DE USUÁRIOS
 -- ==========================================
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    perfil ENUM('admin', 'operador') NOT NULL DEFAULT 'operador',
+    perfil ENUM('admin', 'operador') DEFAULT 'operador',
     ativo BOOLEAN DEFAULT TRUE,
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -51,12 +52,13 @@ CREATE TABLE equipamentos (
     descricao TEXT,
     data_aquisicao DATE,
     valor DECIMAL(10,2),
-    
+
     status ENUM(
         'ativo',
         'emprestado',
         'em_manutencao',
         'inativo',
+        'desativado',
         'descartado'
     ) DEFAULT 'ativo',
 
@@ -64,6 +66,7 @@ CREATE TABLE equipamentos (
     colaborador_id INT,
 
     data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    data_exclusao DATETIME NULL,
 
     FOREIGN KEY (setor_id) REFERENCES setores(id),
     FOREIGN KEY (colaborador_id) REFERENCES colaboradores(id)
@@ -79,7 +82,6 @@ CREATE TABLE movimentacoes (
     setor_destino_id INT,
     colaborador_origem_id INT,
     colaborador_destino_id INT,
-    usuario_id INT NOT NULL,
     data_movimentacao DATETIME DEFAULT CURRENT_TIMESTAMP,
     observacao TEXT,
 
@@ -87,8 +89,7 @@ CREATE TABLE movimentacoes (
     FOREIGN KEY (setor_origem_id) REFERENCES setores(id),
     FOREIGN KEY (setor_destino_id) REFERENCES setores(id),
     FOREIGN KEY (colaborador_origem_id) REFERENCES colaboradores(id),
-    FOREIGN KEY (colaborador_destino_id) REFERENCES colaboradores(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    FOREIGN KEY (colaborador_destino_id) REFERENCES colaboradores(id)
 );
 
 -- ==========================================
@@ -97,7 +98,6 @@ CREATE TABLE movimentacoes (
 CREATE TABLE manutencoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     equipamento_id INT NOT NULL,
-    usuario_id INT NOT NULL,
     descricao TEXT NOT NULL,
     fornecedor VARCHAR(150),
     tecnico_responsavel VARCHAR(150),
@@ -114,41 +114,118 @@ CREATE TABLE manutencoes (
 
     observacao TEXT,
 
-    FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id)
 );
 
 -- ==========================================
--- INSERINDO SETORES EXEMPLO
+-- ÍNDICES PARA PERFORMANCE
+-- ==========================================
+CREATE INDEX idx_equipamento_tombamento
+ON equipamentos(numero_tombamento);
+
+CREATE INDEX idx_equipamento_status
+ON equipamentos(status);
+
+CREATE INDEX idx_equipamento_setor
+ON equipamentos(setor_id);
+
+CREATE INDEX idx_movimentacao_equipamento
+ON movimentacoes(equipamento_id);
+
+CREATE INDEX idx_movimentacao_data
+ON movimentacoes(data_movimentacao);
+
+CREATE INDEX idx_manutencao_equipamento
+ON manutencoes(equipamento_id);
+
+CREATE INDEX idx_manutencao_status
+ON manutencoes(status);
+
+-- ==========================================
+-- TRIGGER PARA MOVIMENTAÇÃO AUTOMÁTICA
+-- ==========================================
+DELIMITER $$
+
+CREATE TRIGGER trg_movimentacao_equipamento
+AFTER UPDATE ON equipamentos
+FOR EACH ROW
+BEGIN
+    IF OLD.setor_id <> NEW.setor_id
+       OR OLD.colaborador_id <> NEW.colaborador_id THEN
+
+        INSERT INTO movimentacoes (
+            equipamento_id,
+            setor_origem_id,
+            setor_destino_id,
+            colaborador_origem_id,
+            colaborador_destino_id,
+            data_movimentacao,
+            observacao
+        )
+        VALUES (
+            NEW.id,
+            OLD.setor_id,
+            NEW.setor_id,
+            OLD.colaborador_id,
+            NEW.colaborador_id,
+            NOW(),
+            'Movimentação automática registrada'
+        );
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- ==========================================
+-- TRIGGER PARA ALTERAR STATUS AO ABRIR MANUTENÇÃO
+-- ==========================================
+DELIMITER $$
+
+CREATE TRIGGER trg_manutencao_aberta
+AFTER INSERT ON manutencoes
+FOR EACH ROW
+BEGIN
+    UPDATE equipamentos
+    SET status = 'em_manutencao'
+    WHERE id = NEW.equipamento_id;
+END$$
+
+DELIMITER ;
+
+-- ==========================================
+-- TRIGGER PARA ALTERAR STATUS AO FINALIZAR MANUTENÇÃO
+-- ==========================================
+DELIMITER $$
+
+CREATE TRIGGER trg_manutencao_finalizada
+AFTER UPDATE ON manutencoes
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 'finalizada' THEN
+        UPDATE equipamentos
+        SET status = 'ativo'
+        WHERE id = NEW.equipamento_id;
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- ==========================================
+-- DADOS DE EXEMPLO
 -- ==========================================
 INSERT INTO setores (nome, descricao) VALUES
-('TI', 'Setor de tecnologia'),
-('Financeiro', 'Setor financeiro'),
-('RH', 'Recursos humanos'),
+('TI', 'Setor de Tecnologia'),
+('Financeiro', 'Setor Financeiro'),
+('RH', 'Recursos Humanos'),
 ('Almoxarifado', 'Equipamentos em estoque');
 
--- ==========================================
--- INSERINDO USUÁRIO ADMIN
--- ==========================================
-INSERT INTO usuarios (nome, email, senha, perfil)
-VALUES (
-    'Administrador',
-    'admin@empresa.com',
-    '123456',
-    'admin'
-);
-
--- ==========================================
--- INSERINDO COLABORADORES
--- ==========================================
-INSERT INTO colaboradores (nome, cpf, email, telefone, setor_id)
-VALUES
+INSERT INTO colaboradores (nome, cpf, email, telefone, setor_id) VALUES
 ('João Silva', '123.456.789-00', 'joao@empresa.com', '(81)99999-1111', 1),
 ('Maria Souza', '987.654.321-00', 'maria@empresa.com', '(81)99999-2222', 2);
 
--- ==========================================
--- INSERINDO EQUIPAMENTOS
--- ==========================================
+INSERT INTO usuarios (nome, email, senha, perfil) VALUES
+('Administrador', 'admin@empresa.com', '123456', 'admin');
+
 INSERT INTO equipamentos (
     numero_tombamento,
     numero_serie,
@@ -163,8 +240,7 @@ INSERT INTO equipamentos (
     setor_id,
     colaborador_id
 )
-VALUES
-(
+VALUES (
     'TMB-0001',
     'SN123456',
     'Notebook Dell',
@@ -177,66 +253,4 @@ VALUES
     'ativo',
     1,
     1
-),
-(
-    'TMB-0002',
-    'SN654321',
-    'Impressora HP',
-    'Impressora',
-    'HP',
-    'LaserJet Pro',
-    'Impressora do financeiro',
-    '2025-02-15',
-    1800.00,
-    'ativo',
-    2,
-    2
-);
-
--- ==========================================
--- EXEMPLO DE MOVIMENTAÇÃO
--- ==========================================
-INSERT INTO movimentacoes (
-    equipamento_id,
-    setor_origem_id,
-    setor_destino_id,
-    colaborador_origem_id,
-    colaborador_destino_id,
-    usuario_id,
-    observacao
-)
-VALUES (
-    1,
-    1,
-    2,
-    1,
-    2,
-    1,
-    'Notebook transferido do TI para Financeiro'
-);
-
--- ==========================================
--- EXEMPLO DE MANUTENÇÃO
--- ==========================================
-INSERT INTO manutencoes (
-    equipamento_id,
-    usuario_id,
-    descricao,
-    fornecedor,
-    tecnico_responsavel,
-    data_entrada,
-    custo,
-    status,
-    observacao
-)
-VALUES (
-    2,
-    1,
-    'Troca de toner e revisão',
-    'Assistência HP',
-    'Carlos Técnico',
-    NOW(),
-    250.00,
-    'em_andamento',
-    'Equipamento apresentava falha de impressão'
 );
