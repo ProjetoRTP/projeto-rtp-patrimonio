@@ -4,166 +4,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROCAPE - Sistema de Ativos</title>
+    <title>PROCAPE - Menu Principal</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Biblioteca de ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .icone-box {
+            width: 65px; 
+            height: 65px; 
+            background-color: var(--vermelho-claro, #FFECEC); 
+            color: var(--vermelho-principal, #B44848); 
+            font-size: 28px;
+            border-radius: 12px;
+        }
+        
+        .card-botao {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+        }
+
+        .card-botao:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
+        }
+
+        .titulo-card {
+            color: var(--azul-principal, #1D4587);
+            font-weight: 700;
+            margin: 0 0 2px 0;
+            font-size: 1.15rem;
+        }
+
+        .subtitulo-card {
+            color: var(--azul-principal, #1D4587);
+            font-size: 0.75rem;
+            opacity: 0.8; /* Deixa o azul um pouco mais suave */
+            line-height: 1.2;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
     <div class="d-flex vh-100">
-    <!-- Navbar -->
-     <nav id="sidebar" class="d-flex flex-column vh-100 p-3" style="width: 120px; background: linear-gradient(to bottom, #1D4587, #022154);">
-        <div class="text-center mt-3">
-            <img src="../assets/imagens/logo-branca.png" alt="Coraciones" style="width: 50px;">
-        </div>
-
-        <div class="mt-auto mb-3 text-center text-white">
-            <a href="#" class="text-white text-decoration-none d-flex align-items-center justify-content-center gap-2">
-                <i class="bi bi-box-arrow-left"></i>
-                <span>Sair</span>
-            </a>
-        </div>
-
-     </nav>
-
-    <!-- Painel Principal -->
-     <main class="flex-grow-1 p-5 position-relative" style="background-color: #eef5fc;">
-
-        <div class="mb-5">
-            <h1 style="color: #0c2350; font-weight: bold">Olá, Maria.</h1>
-            <h5 style="color: #e56a6a; font-weight: bold">Painel Administrador</h5>
-        </div>
-
-        <div class="row g-4">
-            
-            <!-- Equipamentos -->
-            <div class="col-6">
-
-                <!-- Linkar as páginas aqui! -->
-                <a href="#" class="text-decoration-none text-dark">
-
-                    <div class="bg-white p-3 rounded-4 shadow-sm d-flex align-items-center card-botao">
-
-                        <div class="d-flex justify-content-center align-items-center rounded-3 me-3" style="width: 60px; height: 60px; background-color: #ffeaea; color: #e56a6a; font-size: 24px;">
-                            <i class="bi bi-pc-display"></i>
-                        </div>
-                        <div>
-                            <h5 style="color: #0c2350; font-weight: bold; margin: 0;">Equipamentos</h5>
-                            <small style="color: #6c757d;">Gerencie e visualize os equipamentos</small>
-                        </div>
-                    </div>
-                </a>
+        
+        <nav id="sidebar" class="d-flex flex-column vh-100 p-3" style="width: 130px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%));">
+            <div class="text-center mt-4">
+                <img src="../assets/imagens/logo-branca.png" alt="Logo PROCAPE" style="width: 50px;">
             </div>
 
-                <!-- Relatórios -->
-                <div class="col-6">
+            <div class="mt-auto mb-4 text-center">
+                <a href="index.html" class="text-white text-decoration-none d-flex flex-column align-items-center justify-content-center gap-1">
+                    <i class="bi bi-box-arrow-left fs-4"></i>
+                    <span style="font-weight: 600; font-size: 0.9rem;">Sair</span>
+                </a>
+            </div>
+        </nav>
 
-                    <!-- Linkar as páginas aqui! -->
-                    <a href="#" class="text-decoration-none text-dark">
-                        <div class="bg-white p-3 rounded-4 shadow-sm d-flex align-items-center card-botao">
-                        
-                            <div class="d-flex justify-content-center align-items-center rounded-3 me-3" style="width: 60px; height: 60px; background-color: #ffeaea; color: #e56a6a; font-size: 24px;">
-                                <i class="bi-file-earmark-text"></i>
-                            </div>
-                            <div>
-                                <h5 style="color: #0c2350; font-weight: bold; margin: 0;">Relatórios</h5>
-                                <small style="color: #6c757d;">Visualize dados e relatórios do sistema</small>
-                            </div>
-                        </div>
-                    </a>
+        <main class="flex-grow-1 position-relative d-flex align-items-center justify-content-center" style="background-color: #F4F8FB;">
+            
+            <div class="container" style="max-width: 850px; z-index: 1;">
+                
+                <div class="mb-5">
+                    <h1 style="color: var(--azul-principal, #1D4587); font-weight: 700; font-size: 2.5rem; margin-bottom: 0;">Olá, Maria.</h1>
+                    <h5 style="color: var(--vermelho-principal, #B44848); font-weight: 600; font-size: 1.1rem;">Painel Administrador</h5>
                 </div>
 
-                <!-- Movimentações -->
-                <div class="col-6">
-
-                    <!-- Linkar as páginas aqui! -->
-                    <a href="#" class="text-decoration-none text-dark">
-
-                        <div class="bg-white p-3 rounded-4 shadow-sm d-flex align-items-center card-botao">
-                        
-                            <div class="d-flex justify-content-center align-items-center rounded-3 me-3" style="width: 60px; height: 60px; background-color: #ffeaea; color: #e56a6a; font-size: 24px;">
-                                <i class="bi-arrow-left-right"></i>
+                <div class="row g-4">
+                    
+                    <div class="col-md-6">
+                        <a href="equipamentos.html" class="text-decoration-none text-dark">
+                            <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
+                                <div class="d-flex justify-content-center align-items-center me-3 icone-box">
+                                    <img src="../assets/imagens/icone_equip.svg" alt="Ícone Equipamento" style="width: 28px;">
+                                </div>
+                                <div>
+                                    <h5 class="titulo-card">Equipamentos</h5>
+                                    <span class="subtitulo-card">Acesso a todas as<br>movimentações registradas</span>
+                                </div>
                             </div>
-                            <div>
-                                <h5 style="color: #0c2350; font-weight: bold; margin: 0;">Movimentações</h5>
-                                <small style="color: #6c757d;">Controle transferências entre setores</small>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="#" class="text-decoration-none text-dark">
+                            <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
+                                <div class="d-flex justify-content-center align-items-center me-3 icone-box">
+                                    <img src="../assets/imagens/incone_rel.svg" alt="Ícone Relatório" style="width: 28px;">
+                                </div>
+                                <div>
+                                    <h5 class="titulo-card">Relatórios</h5>
+                                    <span class="subtitulo-card">Acesso a todas as<br>movimentações registradas</span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="#" class="text-decoration-none text-dark">
+                            <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
+                                <div class="d-flex justify-content-center align-items-center me-3 icone-box">
+                                    <img src="../assets/imagens/icone_movi.svg" alt="Ícone Movimentação" style="width: 28px;">
+                                </div>
+                                <div>
+                                    <h5 class="titulo-card">Movimentações</h5>
+                                    <span class="subtitulo-card">Acesso a todas as<br>movimentações registradas</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="#" class="text-decoration-none text-dark">
+                            <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
+                                <div class="d-flex justify-content-center align-items-center me-3 icone-box">
+                                    <img src="../assets/imagens/icone_usu.svg" alt="Ícone Usuário" style="width: 28px;">
+                                </div>
+                                <div>
+                                    <h5 class="titulo-card">Usuários</h5>
+                                    <span class="subtitulo-card">Acesso a todas as<br>movimentações registradas</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="setores.html" class="text-decoration-none text-dark">
+                            <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
+                                <div class="d-flex justify-content-center align-items-center me-3 icone-box">
+                                    <img src="../assets/imagens/icone_set.svg" alt="Ícone Setor" style="width: 28px;">
+                                </div>
+                                <div>
+                                    <h5 class="titulo-card">Setores</h5>
+                                    <span class="subtitulo-card">Acesso a todas as<br>movimentações registradas</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="#" class="text-decoration-none text-dark">
+                            <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
+                                <div class="d-flex justify-content-center align-items-center me-3 icone-box">
+                                    <img src="../assets/imagens/icone_man.svg" alt="Ícone Manutenção" style="width: 28px;">
+                                </div>
+                                <div>
+                                    <h5 class="titulo-card">Manutenção</h5>
+                                    <span class="subtitulo-card">Acesso a todas as<br>movimentações registradas</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-
-                <!-- Usuários -->
-                <div class="col-6">
-
-                    <!-- Linkar as páginas aqui! -->
-                    <a href="#" class="text-decoration-none text-dark">
-
-                        <div class="bg-white p-3 rounded-4 shadow-sm d-flex align-items-center card-botao">
-                            <div class="d-flex justify-content-center align-items-center rounded-3 me-3" style="width: 60px; height: 60px; background-color: #ffeaea; color: #e56a6a; font-size: 24px;">
-                                <i class="bi-people"></i>
-                            </div>
-                            <div>
-                                <h5 style="color: #0c2350; font-weight: bold; margin: 0;">Usuários</h5>
-                                <small style="color: #6c757d;">Gerencie usuários e permissões</small>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Setores -->
-                <div class="col-6">
-
-                    <!-- Linkar as páginas aqui! -->
-                    <a href="#" class="text-decoration-none text-dark">
-
-                        <div class="bg-white p-3 rounded-4 shadow-sm d-flex align-items-center card-botao">
-
-                            <div class="d-flex justify-content-center align-items-center rounded-3 me-3" style="width: 60px; height: 60px; background-color: #ffeaea; color: #e56a6a; font-size: 24px;">
-                                <i class="bi-list-ul"></i>
-                            </div>
-                            <div>
-                                <h5 style="color: #0c2350; font-weight: bold; margin: 0;">Setores</h5>
-                                <small style="color: #6c757d;">Cadastre e organize setores e subsetores</small>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Manutenção -->
-                <div class="col-6">
-
-                    <!-- Linkar as páginas aqui! -->
-                    <a href="#" class="text-decoration-none text-dark">
-
-                        <div class="bg-white p-3 rounded-4 shadow-sm d-flex align-items-center card-botao">
-
-                            <div class="d-flex justify-content-center align-items-center rounded-3 me-3" style="width: 60px; height: 60px; background-color: #ffeaea; color: #e56a6a; font-size: 24px;">
-                                <i class="bi-gear"></i>
-                            </div>
-                            <div>
-                                <h5 style="color: #0c2350; font-weight: bold; margin: 0;">Manutenção</h5>
-                                <small style="color: #6c757d;">Gerencie manutenções dos equipamentos</small>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-        </div>
-        
-    <img src="../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4" style="width: 60px;">
-        
-     </main>
+            </div>
+            
+            <img src="../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4" style="width: 70px; z-index: 0; opacity: 0.9;">
+            
+        </main>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
 </body>
-
 </html>
