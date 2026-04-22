@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from flask import Blueprint, request, jsonify
 from datetime import timedelta, datetime
 from config. settings import *
-from functools import wraps
+from database.connection import get_connection
 
 forgot_bp = Blueprint("forgot", __name__)
 
@@ -40,7 +40,12 @@ def send_token():
         return jsonify({"erro": "Email obrigatório"}), 400
 
     try:
-        user = user_obj.get_by_email(email)
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT id FROM usuarios WHERE email=%s", (email,))
+        user = cursor.fetchone()
+
         if not user:
             return jsonify({"erro": "Usuário não encontrado"}), 404
 
@@ -57,6 +62,10 @@ def send_token():
 
     except Exception as e:
         return jsonify({"erro": str(e)}), 400
+
+    finally:
+        cursor.close()
+        conn.close()
     
 @forgot_bp.route('/reset-password', methods=['PUT'])
 def reset_password():
@@ -78,12 +87,27 @@ def reset_password():
         return jsonify({"erro": "Token inválido"}), 400
 
     if datetime.now() > registro["expira"]:
+        del tokenSaved[email]  
         return jsonify({"erro": "Token expirado"}), 400
 
     try:
-        user_obj.update_password_by_email(email, new_password)
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "UPDATE usuarios SET senha=%s WHERE email=%s",
+            (new_password, email)
+        )
+
+        conn.commit()
+
         del tokenSaved[email]
+
         return jsonify({"status": "Senha atualizada com sucesso"}), 200
 
     except Exception as e:
-        return jsonify({"erro": str(e)}), 400    
+        return jsonify({"erro": str(e)}), 400
+
+    finally:
+        cursor.close()
+        conn.close()   

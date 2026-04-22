@@ -1,0 +1,15 @@
+/* Reset e variáveis globais */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-primary: #2563eb;
+  --color-bg: #f8fafc;
+  --color-text: #1e293b;
+  --font-base: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+}

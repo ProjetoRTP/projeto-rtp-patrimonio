@@ -1,12 +1,16 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from routes.register import register_routes
+from backend.modules.authentication.register import register_routes
+from backend.modules.user.user_routes import user_bp
+from modules.forgot_password.routes import forgot_bp
 
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
     register_routes(app)
+    app.register_blueprint(user_bp)
+    app.register_blueprint(forgot_bp)
 
     @app.route("/")
     def hello():

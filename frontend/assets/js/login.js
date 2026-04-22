@@ -1,7 +1,6 @@
 // URL base do back-end (Mude isso quando o back-end subir o servidor local, ex: http://localhost:3000)
 const API_BASE_URL = "http://localhost:8080/api";
 
-// tela de carregamento
 document.addEventListener("DOMContentLoaded", () => {
   // Define o tempo do loading em milissegundos (2500ms = 2.5 segundos)
   setTimeout(() => {
@@ -21,14 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }, 2500);
 });
-
-// Bloqueia letras (apenas números)
-const camposNumeros = document.querySelectorAll(".apenas-numeros");
-camposNumeros.forEach(function (campo) {
-  campo.addEventListener("input", function (event) {
-    event.target.value = event.target.value.replace(/\D/g, "");
+  // Bloqueia letras (apenas números)
+  const camposNumeros = document.querySelectorAll(".apenas-numeros");
+  camposNumeros.forEach(function (campo) {
+    campo.addEventListener("input", function (event) {
+      event.target.value = event.target.value.replace(/\D/g, "");
+    });
   });
-});
 
 // ==========================================
 // INTEGRAÇÃO: TELA DE LOGIN

@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt, verify_jwt_in_request
 from functools import wraps
 from database.connection import get_connection
+from modules.crud import create, read, update, delete
 
 user_bp = Blueprint("user_bp", __name__, url_prefix="/user")
 

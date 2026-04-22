@@ -6,6 +6,7 @@ from flask_jwt_extended import (
 )
 from datetime import timedelta
 from database.connection import get_connection
+import mysql.connector 
 
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
 

@@ -1,4 +1,4 @@
-from modules.auth.routes import auth_bp
+from modules.authentication.routes import auth_bp
 
 
 def register_routes(app):
