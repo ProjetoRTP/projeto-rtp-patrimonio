@@ -1,10 +1,10 @@
-CREATE DATABASE patrimonio;
+CREATE DATABASE IF NOT EXISTS patrimonio;
 USE patrimonio;
 
 -- ==========================================
 -- TABELA DE USUÁRIOS
 -- ==========================================
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
@@ -17,7 +17,7 @@ CREATE TABLE usuarios (
 -- ==========================================
 -- TABELA DE SETORES
 -- ==========================================
-CREATE TABLE setores (
+CREATE TABLE IF NOT EXISTS setores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao VARCHAR(255),
@@ -27,7 +27,7 @@ CREATE TABLE setores (
 -- ==========================================
 -- TABELA DE COLABORADORES
 -- ==========================================
-CREATE TABLE colaboradores (
+CREATE TABLE IF NOT EXISTS colaboradores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     cpf VARCHAR(14) UNIQUE,
@@ -41,7 +41,7 @@ CREATE TABLE colaboradores (
 -- ==========================================
 -- TABELA DE EQUIPAMENTOS
 -- ==========================================
-CREATE TABLE equipamentos (
+CREATE TABLE IF NOT EXISTS equipamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero_tombamento VARCHAR(50) NOT NULL UNIQUE,
     numero_serie VARCHAR(100),
@@ -73,9 +73,24 @@ CREATE TABLE equipamentos (
 );
 
 -- ==========================================
+-- TABELA DE COMPOSIÇÃO DE EQUIPAMENTOS (PC + PERIFÉRICOS)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS equipamentos_componentes (
+    equipamento_principal_id INT NOT NULL,     -- O ID do Computador/Notebook
+    equipamento_secundario_id INT NOT NULL,    -- O ID do Mouse/Teclado/Monitor
+    data_vinculo DATETIME DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (equipamento_principal_id, equipamento_secundario_id),
+    UNIQUE (equipamento_secundario_id),
+
+    FOREIGN KEY (equipamento_principal_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
+    FOREIGN KEY (equipamento_secundario_id) REFERENCES equipamentos(id) ON DELETE CASCADE
+);
+
+-- ==========================================
 -- TABELA DE MOVIMENTAÇÕES
 -- ==========================================
-CREATE TABLE movimentacoes (
+CREATE TABLE IF NOT EXISTS movimentacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     equipamento_id INT NOT NULL,
     setor_origem_id INT,
@@ -95,7 +110,7 @@ CREATE TABLE movimentacoes (
 -- ==========================================
 -- TABELA DE MANUTENÇÕES
 -- ==========================================
-CREATE TABLE manutencoes (
+CREATE TABLE IF NOT EXISTS manutencoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     equipamento_id INT NOT NULL,
     descricao TEXT NOT NULL,
@@ -150,8 +165,8 @@ CREATE TRIGGER trg_movimentacao_equipamento
 AFTER UPDATE ON equipamentos
 FOR EACH ROW
 BEGIN
-    IF OLD.setor_id <> NEW.setor_id
-       OR OLD.colaborador_id <> NEW.colaborador_id THEN
+    IF NOT (OLD.setor_id <=> NEW.setor_id) OR 
+    NOT (OLD.colaborador_id <=> NEW.colaborador_id) THEN
 
         INSERT INTO movimentacoes (
             equipamento_id,
