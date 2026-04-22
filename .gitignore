@@ -1,5 +1,4 @@
 /frontend
-\backend\modules\auth
 \.venv
 .env
-backend\modules\auth
+/backend/modules/auth
