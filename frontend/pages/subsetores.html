@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROCAPE - Subsetores</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/subsetores.css">
+    <link rel="shortcut icon" href="../assets/imagens/favicon.ico" type="image/x-icon">
+
+
+</head>
+
+<body>
+    <div class="d-flex vh-100">
+        
+        <nav id="sidebar" class="d-flex flex-column vh-100 pt-4" style="width: 250px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%));">
+            <div class="text-center mb-4">
+                <img src="../assets/imagens/logo-branca.png" alt="Logo" style="width: 60px;">
+            </div>
+
+            <div class="flex-grow-1">
+                <a href="equipamentos.html" class="sidebar-link">Equipamentos</a>
+                <a href="movimentacoes.html" class="sidebar-link">Movimentações</a>
+                <a href="setores.html" class="sidebar-link">Setores</a>
+                <a href="subsetores.html" class="sidebar-sublink active">Subsetores</a>
+                <a href="relatorios.html" class="sidebar-link">Relatórios</a>
+                <a href="usuarios.html" class="sidebar-link">Usuários</a>
+                <a href="manutencao.html" class="sidebar-link">Manutenção</a>
+            </div>
+
+            <div class="mt-auto p-4 text-left">
+                <a href="#" id="btn-sair" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                    <i class="bi bi-box-arrow-left fs-5"></i>
+                    <span style="font-weight: 500;">Sair</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="flex-grow-1 p-5 position-relative d-flex justify-content-center align-items-start" style="background-color: #EAF2F8; overflow-y: auto;">
+            
+            <div class="bg-white rounded-4 shadow-sm w-100" style="max-width: 900px; padding: 40px; z-index: 1;">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 style="color: var(--azul-principal, #1D4587); font-weight: 700; margin: 0;">Subsetores</h2>
+                    
+                    <a href="cadastro-subsetor.html" class="btn" style="border: 1px solid var(--vermelho-principal, #B44848); color: var(--vermelho-principal, #B44848); border-radius: 8px; padding: 8px 20px; font-weight: 600;">
+                        <i class="bi bi-plus-circle me-1"></i> Cadastrar
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table tabela-padrao mb-0">
+                        <thead>
+                            <tr>
+                                <th>NOME DO SUBSETOR</th>
+                                <th>SETOR</th>
+                                <th class="text-end">AÇÕES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-subsetores">
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted">A carregar subsetores...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            
+            <img src="../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4" style="width: 60px; z-index: 0; opacity: 0.8;">
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/subsetores.js"></script>
+</body>
+</html>
