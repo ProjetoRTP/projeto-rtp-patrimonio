@@ -34,9 +34,11 @@
                     </ul>
                 </li>
                 <li class="nav-item linha-divisoria"><a class="nav-link text-white fw-bold px-0" href="#">Movimentações</a></li>
-                <li class="nav-item linha-divisoria"><a class="nav-link text-white fw-bold px-0" href="#">Setores</a></li>
+                <li class="nav-item linha-divisoria"><a class="nav-link text-white fw-bold px-0" href="#">
+                    es</a></li>
                 <li class="nav-item linha-divisoria"><a class="nav-link text-white fw-bold px-0" href="#">Relatórios</a></li>
                 <li class="nav-item linha-divisoria"><a class="nav-link text-white fw-bold px-0" href="#">Usuários</a></li>
+                <li class="nav-item linha-divisoria"><a class="nav-link text-white fw-bold px-0" href="#">Manutenção</a></li>
             </ul>
             <div class="mt-auto mb-5 ms-4">
                 <a href="index.html" class="btn-sair text-white text-decoration-none d-flex align-items-center gap-2">
@@ -55,66 +57,71 @@
 
                 <form>
                     
-                    <div class="d-flex align-items-center mb-4 gap-3">
-                        <label class="label-azul mb-0 fs-5">Tipo:</label>
-                        <select class="form-select input-vermelho" style="width: 200px; background-color: #ffeaea; color: #D32F2F;">
-                            <option selected>Selecione</option>
-                            <option value="1">Computador</option>
-                            <option value="2">Impressora</option>
-                            <option value="3">Estabilizador</option>
-                        </select>
+                    <div class="d-flex flex-wrap gap-5 mb-4">
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="label-azul mb-0 fs-5">Tipo:</label>
+                            <select class="form-select input-vermelho" style="width: 200px; background-color: #ffeaea; color: #D32F2F;">
+                                <option selected>Selecione</option>
+                                <option value="1">Computador</option>
+                                <option value="2">Impressora</option>
+                                <option value="3">Estabilizador</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="label-azul mb-0 fs-5">Setor:</label>
+                            <select class="form-select input-vermelho" style="width: 200px; background-color: #ffeaea; color: #D32F2F;">
+                                <option selected>Selecione</option>
+                                <option value="1">opt1</option>
+                                <option value="2">opt2</option>
+                                <option value="3">opt3</option>
+                            </select>
+                        </div>
+                        
                     </div>
 
-                    <div class="row g-4"> <div class="col-md-6"> <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
+                    <div class="row g-4"> <div class="col-md-6"> <label class="label-azul d-block">Tombamento</label>
+                            <input type="text" class="form-control input-vermelho" placeholder="00000.00000.000-00">
                         </div>
                         <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
+                            <label class="label-azul d-block">Sistema operacional</label>
+                            <input type="text" class="form-control input-vermelho" placeholder="Sistema">
                         </div>
 
                         <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
+                            <label class="label-azul d-block">Memória interna CPU</label>
+                            <input type="text" class="form-control input-vermelho" placeholder="Memória">
                         </div>
                         <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
+                            <label class="label-azul d-block">Memória RAM</label>
+                            <input type="text" class="form-control input-vermelho" placeholder="Memória RAM">
                         </div>
 
                         <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
+                            <label class="label-azul d-block">Armazenamento</label>
+                            <input type="text" class="form-control input-vermelho" placeholder="Armazenamento">
                         </div>
                         <div class="col-md-6">
-                            <label class="label-azul d-block">Impressora</label>
-                            <input type="text" class="form-control input-vermelho" placeholder="Informações da impressora">
+                            <label class="label-azul d-block">Número IP</label>
+                            <input type="text" class="form-control input-vermelho" placeholder="Número">
                         </div>
 
                         <div class="col-12 mt-4">
-                            <label class="label-azul d-block">Detalhes</label>
-                            <textarea class="form-control input-vermelho" rows="4" placeholder="Write a message"></textarea>
+                            <label class="label-azul d-block">Observações</label>
+                            <textarea class="form-control input-vermelho" rows="4" placeholder="Detalhes adicionais"></textarea>
                         </div>
 
-                        <div class="col-12 mt-5 d-flex justify-content-end gap-3">
-                            
-                            <a href="equipamentos-computadores.html" class="btn btn-outline-secondary px-4 py-2 fw-bold rounded-pill">
-                                Cancelar
+                        <div class="d-flex justify-content-center gap-4 mt-5 mb-4">
+                            <a href="equipamentos-computadores.html">
+                                <button type="button" class="btn text-white fw-bold" style="background-color: #bd4a4a; width: 140px; border-radius: 6px;">
+                                    Cancelar
+                                </button>
                             </a>
-                            
-                            <button type="submit" class="btn text-white px-4 py-2 fw-bold rounded-pill" style="background-color: #1D4587; transition: all 0.3s ease;">
-                                Salvar Cadastro
-                            </button>
 
+                            <button type="submit" class="btn text-white fw-bold" style="background-color: #214383; width: 140px; border-radius: 6px;">
+                                Cadastrar
+                            </button>
                         </div>
 
                     </div>
