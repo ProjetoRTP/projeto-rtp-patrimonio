@@ -9,47 +9,66 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../assets/css/menu-principal.css">
 
 </head>
 
 <body>
-    <div class="d-flex vh-100">
-        
-        <nav id="sidebar" class="d-flex flex-column vh-100 p-3" style="width: 130px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%));">
-            <div class="text-center mt-4">
+    <div class="d-flex flex-column flex-lg-row vh-100">
+
+        <header class="d-lg-none w-100 p-3 d-flex justify-content-between align-items-center shadow-sm"
+            style="background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); z-index: 1040;">
+            <img src="../assets/imagens/logo-branca.png" alt="Logo PROCAPE" style="width: 40px;">
+            <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#sidebar" aria-controls="sidebar">
+                <i class="bi bi-list fs-1"></i>
+            </button>
+        </header>
+
+        <nav id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column h-100 p-3" tabindex="-1"
+            style="width: 130px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); flex-shrink: 0;">
+
+            <div class="d-lg-none text-end pb-3">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    data-bs-target="#sidebar"></button>
+            </div>
+
+            <div class="text-center mt-4 d-none d-lg-block">
                 <img src="../assets/imagens/logo-branca.png" alt="Logo PROCAPE" style="width: 50px;">
             </div>
 
             <div class="mt-auto mb-4 text-center">
-                <a href="../index.html" class="text-white text-decoration-none d-flex flex-column align-items-center justify-content-center gap-1">
+                <a href="../index.html"
+                    class="text-white text-decoration-none d-flex flex-column align-items-center justify-content-center gap-1">
                     <i class="bi bi-box-arrow-left fs-4"></i>
                     <span style="font-weight: 600; font-size: 0.9rem;">Sair</span>
                 </a>
             </div>
         </nav>
-
         <!-- Painel Principal -->
-        <main class="flex-grow-1 position-relative d-flex align-items-center justify-content-center" style="background-color: #F4F8FB;">
-            
-            <div class="container" style="max-width: 850px; z-index: 1;">
-                
-                <div class="mb-5">
-                    <h1 style="color: var(--azul-principal, #1D4587); font-weight: 700; font-size: 2.5rem; margin-bottom: 0;">Olá, Maria.</h1>
-                    <h5 style="color: var(--vermelho-principal, #B44848); font-weight: 600; font-size: 1.1rem;">Painel Administrador</h5>
+        <main class="flex-grow-1 position-relative d-flex align-items-center justify-content-center p-3 p-lg-0"
+            style="background-color: #F4F8FB; overflow-y: auto;">
+
+            <div class="container py-4 py-lg-0" style="max-width: 850px; z-index: 1;">
+
+                <div class="mb-5 text-center text-md-start">
+                    <h1
+                        style="color: var(--azul-principal, #1D4587); font-weight: 700; font-size: 2.5rem; margin-bottom: 0;">
+                        Olá, Maria.</h1>
+                    <h5 style="color: var(--vermelho-principal, #B44848); font-weight: 600; font-size: 1.1rem;">Painel
+                        Administrador</h5>
                 </div>
 
-                <!-- Cards -->
                 <div class="row g-4">
-                    
-                    <!-- Equipamentos -->
+
                     <div class="col-md-6">
                         <a href="equipamentos-computadores.html" class="text-decoration-none text-dark">
                             <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
                                 <div class="d-flex justify-content-center align-items-center me-3 icone-box">
-                                    <img src="../assets/imagens/icone_equip.svg" alt="Ícone Equipamento" style="width: 28px;">
+                                    <img src="../assets/imagens/icone_equip.svg" alt="Ícone Equipamento"
+                                        style="width: 28px;">
                                 </div>
                                 <div>
                                     <h5 class="titulo-card">Equipamentos</h5>
@@ -58,13 +77,13 @@
                             </div>
                         </a>
                     </div>
-
-                    <!-- Relatórios -->
+                    <!-- Movimentações -->
                     <div class="col-md-6">
                         <a href="#" class="text-decoration-none text-dark">
                             <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
                                 <div class="d-flex justify-content-center align-items-center me-3 icone-box">
-                                    <img src="../assets/imagens/incone_rel.svg" alt="Ícone Relatório" style="width: 28px;">
+                                    <img src="../assets/imagens/incone_rel.svg" alt="Ícone Relatório"
+                                        style="width: 28px;">
                                 </div>
                                 <div>
                                     <h5 class="titulo-card">Relatórios</h5>
@@ -73,13 +92,13 @@
                             </div>
                         </a>
                     </div>
-
-                    <!-- Movimentações -->
+                    <!-- Usuários -->
                     <div class="col-md-6">
                         <a href="#" class="text-decoration-none text-dark">
                             <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
                                 <div class="d-flex justify-content-center align-items-center me-3 icone-box">
-                                    <img src="../assets/imagens/icone_movi.svg" alt="Ícone Movimentação" style="width: 28px;">
+                                    <img src="../assets/imagens/icone_movi.svg" alt="Ícone Movimentação"
+                                        style="width: 28px;">
                                 </div>
                                 <div>
                                     <h5 class="titulo-card">Movimentações</h5>
@@ -88,8 +107,7 @@
                             </div>
                         </a>
                     </div>
-
-                    <!-- Usuários -->
+                    <!-- Setores -->
                     <div class="col-md-6">
                         <a href="#" class="text-decoration-none text-dark">
                             <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
@@ -103,8 +121,7 @@
                             </div>
                         </a>
                     </div>
-
-                    <!-- Setores -->
+                    <!-- Manutenção -->
                     <div class="col-md-6">
                         <a href="setores.html" class="text-decoration-none text-dark">
                             <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
@@ -119,12 +136,12 @@
                         </a>
                     </div>
 
-                    <!-- Manutenção -->
                     <div class="col-md-6">
                         <a href="#" class="text-decoration-none text-dark">
                             <div class="bg-white p-3 rounded-4 d-flex align-items-center card-botao">
                                 <div class="d-flex justify-content-center align-items-center me-3 icone-box">
-                                    <img src="../assets/imagens/icone_man.svg" alt="Ícone Manutenção" style="width: 28px;">
+                                    <img src="../assets/imagens/icone_man.svg" alt="Ícone Manutenção"
+                                        style="width: 28px;">
                                 </div>
                                 <div>
                                     <h5 class="titulo-card">Manutenção</h5>
@@ -135,12 +152,15 @@
                     </div>
                 </div>
             </div>
-            
-            <img src="../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4" style="width: 70px; z-index: 0; opacity: 0.9;">
-            
+
+            <img src="../assets/imagens/logo.png" alt="Logo Coração"
+                class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
+                style="width: 70px; z-index: 0; opacity: 0.9;">
+
         </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -174,3 +174,23 @@ body {
     opacity: 0.9;
     /* Dá uma leve transparência para ficar mais elegante (opcional) */
 }
+
+/* ==========================================
+   ESTRUTURA RESPONSIVA (MASTER LAYOUT)
+   ========================================== */
+body {
+    background-color: #EAF2F8;
+    overflow-x: hidden;
+    /* Evita que a página balance para os lados no telemóvel */
+}
+
+/* Garante que a barra lateral mantenha os 250px no PC */
+.sidebar-master {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+/* O fundo do menu quando abre no telemóvel */
+.offcanvas-lg {
+    background: linear-gradient(180deg, #1D4587 0%, #022154 100%);
+}
