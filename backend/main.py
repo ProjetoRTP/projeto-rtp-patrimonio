@@ -1,20 +1,21 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
-from backend.modules.authentication.register import register_routes
-from backend.modules.user.user_routes import user_bp
-from modules.forgot_password.routes import forgot_bp
-
+from database.connection import init_db
+from flask_jwt_extended import JWTManager
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    register_routes(app)
-    app.register_blueprint(user_bp)
-    app.register_blueprint(forgot_bp)
 
-    @app.route("/")
-    def hello():
-        return jsonify({"message": "Hello, World!", "status": "ok"})
+    app.config["JWT_SECRET_KEY"] = "chave"
+    app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+
+    JWTManager(app)
+
+    init_db()   
+
+    from register import register_routes
+    register_routes(app)
 
     return app
 
