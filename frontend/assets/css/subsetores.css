@@ -1,0 +1,85 @@
+/* Estilos da Sidebar */
+.sidebar-link {
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.sidebar-link.active {
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-sublink {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    padding: 10px 25px 10px 40px;
+    display: block;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Destaque para quando o Subsetor estiver ativo */
+.sidebar-sublink.active {
+    color: white;
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Estilização da Tabela */
+.tabela-padrao th {
+    color: var(--vermelho-principal, #B44848);
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.tabela-padrao td {
+    color: var(--azul-principal, #1D4587);
+    font-weight: 500;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 12px 0;
+}
+
+/* Botões de Ação */
+.btn-acao {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid;
+    background: white;
+    transition: all 0.2s;
+}
+
+.btn-editar {
+    border-color: #6a92d4;
+    color: #6a92d4;
+}
+
+.btn-editar:hover {
+    background: #6a92d4;
+    color: white;
+}
+
+.btn-info-red {
+    border-color: #e56a6a;
+    color: #e56a6a;
+}
+
+.btn-info-red:hover {
+    background: #e56a6a;
+    color: white;
+}

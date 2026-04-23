@@ -1,0 +1,22 @@
+name: RTP Patrimonio Deploy
+
+o:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy-local:
+    runs-on: self-hosted
+    steps:
+      - name: Chekout do código
+        uses: actions/checkout@v4
+      
+      - name: Preparar ambiente
+        run:
+          echo "ambiente preparado no servidor SRVPROJETO"
+        
+      - name: Build e Deploy com Docker
+        run:
+          docker compose down
+          docker compose up -d --build
+          echo "Deploy finalizado com sucesso!" 
