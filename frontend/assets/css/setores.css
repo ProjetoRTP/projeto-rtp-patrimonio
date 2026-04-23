@@ -139,3 +139,47 @@
            background: #e56a6a;
            color: white;
        }
+
+       /* ==============================
+   AJUSTE DE PROPORÇÃO DA TELA DE SETORES
+   ============================== */
+
+       /* 1. O Botão Cadastrar mais sutil e proporcional */
+       .btn-cadastrar-custom {
+           display: inline-flex;
+           align-items: center;
+           gap: 8px;
+           /* Espaço entre ícone e texto */
+           color: var(--vermelho-principal, #B44848);
+           border: 1px solid var(--vermelho-principal, #B44848);
+           border-radius: 8px;
+           padding: 4px 16px;
+           /* AJUSTE: Padding vertical reduzido para 4px */
+           font-weight: 600;
+           font-size: 0.9rem;
+           /* Fonte ligeiramente menor para harmonia */
+           text-decoration: none;
+           transition: all 0.2s;
+       }
+
+       .btn-cadastrar-custom:hover {
+           background-color: var(--vermelho-principal, #B44848);
+           color: white;
+       }
+
+       /* 2. Barra de Filtros mais compacta (para harmonia) */
+       .barra-filtros {
+           padding: 10px 20px;
+           /* Reduzir padding */
+       }
+
+       .filtro-select {
+           padding: 2px 16px;
+           /* Reduzir padding interno */
+       }
+
+       .btn-aplicar,
+       .btn-limpar {
+           padding: 4px 16px;
+           /* Reduzir padding dos botões de filtro */
+       }
