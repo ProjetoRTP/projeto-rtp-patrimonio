@@ -189,11 +189,7 @@
 
 
 
-    /* Inputs desabilitados */
-input:disabled {
-  background-color: #eef2f7;
-  cursor: not-allowed;
-}
+
 
 /* Toast */
 .toast-custom {
