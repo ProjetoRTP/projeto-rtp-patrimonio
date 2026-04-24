@@ -98,5 +98,4 @@ def delete_user(url_id):
     user_model = User()
     user_model.soft_delete(url_id)
 
-
     return jsonify({"status": "usuário desativado"}), 200
