@@ -1,0 +1,44 @@
+.fundo-tela {
+            /* Cria aquele fundo com um degradê azul bem suave */
+            background: linear-gradient(to right, #e4f4fb, #ccecf7);
+        }
+
+        .texto-azul-escuro {
+            /* A cor principal dos títulos e textos */
+            color: #1a3c6d;
+        }
+
+        .input-personalizado {
+            /* As bordinhas avermelhadas dos campos de digitar */
+            border: 1px solid #d96b6b !important;
+            border-radius: 6px;
+            color: #8fa0b3; /* Cor do texto de exemplo (placeholder) */
+        }
+        
+        .input-personalizado:focus {
+            /* Deixa a borda um pouco mais forte quando a pessoa clica no campo */
+            border-color: #b74b4b !important;
+            box-shadow: 0 0 0 0.2rem rgba(217, 107, 107, 0.25);
+        }
+
+        .btn-cancelar {
+            background-color: #ba4a4a;
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #a33f3f;
+            color: white;
+        }
+
+        .btn-cadastrar {
+            background-color: #1a3c6d;
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn-cadastrar:hover {
+            background-color: #122b50;
+            color: white;
+        }
