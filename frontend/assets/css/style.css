@@ -139,6 +139,17 @@ body {
     color: white;
 }
 
+/* Botão sair */
+.btn-sair {
+        transition: all 0.3s ease;
+}
+
+/* Botão Sair Navbar */
+.btn-sair:hover {
+        color: #ff6b6b !important;
+        transform: scale(1.05);/
+}
+
 .link-text {
     color: var(--azul-principal);
     font-size: 0.85rem;

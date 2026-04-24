@@ -85,7 +85,7 @@
 }
 
        /* ==============================
-   AJUSTE DE PROPORÇÃO DA TELA
+   AJUSTE DE PROPORÇÃO DA TELA DE SETORES
    ============================== */
 
        /* 1. O Botão Cadastrar mais sutil e proporcional */
@@ -126,76 +126,87 @@
        .btn-limpar {
            padding: 4px 16px;
            /* Reduzir padding dos botões de filtro */
-       }
+       }  
+  
+  
+  
+  
+  
+  
+  
+  body {
+      background: linear-gradient(to bottom, #cfe8f3, #eaf6fb);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container-box {
+      background: #f8fbff;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      margin: 60px auto;
+    }
+
+    .titulo {
+      color: #1d4587;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      border: 1px solid #cfd8dc;
+      padding: 10px;
+    }
+
+    .badge-permissao {
+      background-color: #dbe9ff;
+      color: #1d4587;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .btn-voltar {
+      border: 1px solid #dc3545;
+      color: #dc3545;
+      background: transparent;
+      border-radius: 10px;
+      padding: 10px 25px;
+    }
+
+    .btn-editar {
+      background-color: #1d4587;
+      color: white;
+      border-radius: 10px;
+      padding: 10px 25px;
+    }
+
+    label {
+      font-weight: 500;
+      color: #1d4587;
+    }
 
 
-.titulo-relatorio {
-    color: var(--azul-principal, #1D4587);
-    font-weight: 700;
-    margin-bottom: 25px;
+
+
+
+/* Toast */
+.toast-custom {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #1d4587;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s;
+  z-index: 9999;
 }
 
-.align-items-center {
-    align-items: baseline !important;
-}
-
-/* Badge estilo input */
-.badge-info {
-    display: inline-block;
-    border: 1px solid #6a92d4;
-    padding: 6px 14px;
-    border-radius: 8px;
-    margin-left: 10px;
-    color: #1D4587;
-    background: #f5f9ff;
-}
-
-/* BOX RESUMO */
-.box-resumo {
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid #6a92d4;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-}
-
-.box-resumo div {
-    flex: 1;
-    font-size: 0.85rem;
-    color: #B44848;
-    font-weight: 600;
-}
-
-.box-resumo span {
-    display: block;
-    color: #1D4587;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-top: 4px;
-}
-
-/* STATUS */
-.status {
-    font-weight: 600;
-}
-
-.status-uso {
-    color: #2e7d32;
-}
-
-.status-manut {
-    color: #f57c00;
-}
-
-.status-estoque {
-    color: #1565c0;
-}
-
-.table{
-    text-align: center !important;
-}
-
-.align-items-center {
-    align-items: center !important;
+.toast-custom.show {
+  opacity: 1;
+  transform: translateY(0);
 }
