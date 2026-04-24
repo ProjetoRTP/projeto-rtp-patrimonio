@@ -63,6 +63,7 @@ def list_user():
 # READ SELF
 @user_bp.route("/getself/<int:url_id>", methods=["GET"])
 @jwt_required()
+@user_or_admin_user()
 def get_self(url_id):
     user_model = User()
     user = user_model.get_by_id(url_id)
@@ -81,6 +82,9 @@ def update_user(url_id):
     dados = request.get_json()
     user_model = User()
 
+    if not dados:
+        return jsonify({"erro": "JSON inválido"}), 400
+    
     user_model.update(url_id, dados)
 
     return jsonify({"status": "sucesso"}), 200
@@ -88,9 +92,11 @@ def update_user(url_id):
 
 # DELETE
 @user_bp.route("/delete/<int:url_id>", methods=["DELETE"])
+@jwt_required()
 @check_role_user("admin")
 def delete_user(url_id):
     user_model = User()
     user_model.soft_delete(url_id)
+
 
     return jsonify({"status": "usuário desativado"}), 200
