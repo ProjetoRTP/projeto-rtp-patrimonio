@@ -240,7 +240,7 @@ INSERT INTO colaboradores (nome, cpf, email, telefone, setor_id) VALUES
 ('Maria Souza', '987.654.321-00', 'maria@empresa.com', '(81)99999-2222', 2);
 
 INSERT INTO usuarios (nome, email, senha, perfil) VALUES
-('Administrador', 'admin@empresa.com', '123456', 'admin');
+('Administrador', '12345678910', 'admin@empresa.com', '123456', 'admin');
 
 INSERT INTO equipamentos (
     numero_tombamento,

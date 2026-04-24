@@ -20,7 +20,7 @@ def login():
         return jsonify({"erro": "Credenciais inválidas"}), 401
 
     token = create_access_token(
-        identity=user["id"],
+        identity=str(user["id"]),
         additional_claims={"perfil": user["perfil"]}
     )
 
