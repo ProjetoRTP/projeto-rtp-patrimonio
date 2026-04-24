@@ -1,0 +1,62 @@
+.titulo-relatorio {
+    color: var(--azul-principal, #1D4587);
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.align-items-center {
+    align-items: baseline !important;
+}
+
+/* Badge estilo input */
+.badge-info {
+    display: inline-block;
+    border: 1px solid #6a92d4;
+    padding: 6px 14px;
+    border-radius: 8px;
+    margin-left: 10px;
+    color: #1D4587;
+    background: #f5f9ff;
+}
+
+/* BOX RESUMO */
+.box-resumo {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #6a92d4;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.box-resumo div {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #B44848;
+    font-weight: 600;
+}
+
+.box-resumo span {
+    display: block;
+    color: #1D4587;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+/* STATUS */
+.status {
+    font-weight: 600;
+}
+
+.status-uso {
+    color: #2e7d32;
+}
+
+.status-manut {
+    color: #f57c00;
+}
+
+.status-estoque {
+    color: #1565c0;
+}
