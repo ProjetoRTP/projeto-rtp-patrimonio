@@ -1,39 +1,12 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt, verify_jwt_in_request
-from functools import wraps
+from flask_jwt_extended import jwt_required
+from modules.utils.decorators import check_role, user_or_admin_user
 from modules.user.user import User
 from datetime import datetime, timedelta
 from modules.user.forgot_password import send_email, create_token
 
 user_bp = Blueprint("user_bp", __name__, url_prefix="/user")
 tokenSaved = {}
-
-def check_role_user(cargo):
-    def wrapper(f):
-        @wraps(f)
-        def checker_role_user(*args, **kwargs):
-            verify_jwt_in_request()
-            jwt = get_jwt()
-            if jwt.get("perfil") != cargo: 
-                return jsonify({"status": "Acesso negado"}), 403
-            return f(*args, **kwargs)
-        return checker_role_user
-    return wrapper
-
-
-def user_or_admin_user():
-    def wrapper(f):
-        @wraps(f)
-        def checker_user(*args, **kwargs):
-            verify_jwt_in_request()
-            id_url = kwargs.get("url_id")
-            jwt = get_jwt()
-            user_id = get_jwt_identity()
-            if jwt.get("perfil") != "admin" and str(user_id) != str(id_url):
-                return jsonify({"status": "Acesso negado"}), 403
-            return f(*args, **kwargs)
-        return checker_user
-    return wrapper
 
 
 # CREATE
@@ -63,7 +36,7 @@ def list_user():
 
 
 # READ SELF
-@user_bp.route("/getself/<int:url_id>", methods=["GET"])
+@user_bp.route("/get/<int:url_id>", methods=["GET"])
 @jwt_required()
 @user_or_admin_user()
 def get_self(url_id):
@@ -95,12 +68,14 @@ def update_user(url_id):
 # DELETE
 @user_bp.route("/delete/<int:url_id>", methods=["DELETE"])
 @jwt_required()
-@check_role_user("admin")
+@check_role("admin")
 def delete_user(url_id):
     user_model = User()
     user_model.soft_delete(url_id)
 
     return jsonify({"status": "usuário desativado"}), 200
+
+
 
 # FORGOT PASSWORD
 @user_bp.route('/forgot-password', methods=['POST'])
@@ -123,6 +98,14 @@ def send_token():
         if not user:
             return jsonify({"erro": "Usuário não encontrado"}), 404
 
+        registro = tokenSaved.get(email)
+
+        if registro:
+            if datetime.now() < registro["expira"]:
+                return jsonify({
+                    "erro": "Já existe um token válido. Aguarde expirar."
+                }), 400
+            
         token = create_token()
 
         tokenSaved[email] = {

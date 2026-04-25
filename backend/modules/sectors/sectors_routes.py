@@ -1,0 +1,72 @@
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
+from modules.utils.decorators import check_role
+from modules.sectors.sectors import Sector
+
+sectors_bp = Blueprint("sectors_bp", __name__, url_prefix="/sectors")
+
+# CREATE
+@sectors_bp.route("/post", methods=["POST"])
+@check_role("Admin")
+def create_sector():
+    dados = request.get_json()
+
+    if not dados:
+        return jsonify({"erro": "JSON inválido"}), 400
+
+    sector_model = Sector()
+
+    try:
+        sector_model.create(dados)
+        return jsonify({"status": "sucesso"}), 201
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
+
+
+# READ ALL
+@sectors_bp.route("/get", methods=["GET"])
+@jwt_required()
+def list_sector():
+    sector_model = Sector()
+    return jsonify(sector_model.get_all()), 200
+
+
+# READ SELF
+@sectors_bp.route("/get/<int:url_id>", methods=["GET"])
+@jwt_required()
+def get_self(url_id):
+    sector_model = Sector()
+    sector = sector_model.get_by_id(url_id)
+
+    if not sector:
+        return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    return jsonify(sector), 200
+
+
+# UPDATE
+@sectors_bp.route("/put/<int:url_id>", methods=["PUT"])
+@jwt_required()
+@check_role("Admin")
+def update_sector(url_id):
+    dados = request.get_json()
+    sector_model = Sector()
+
+    if not dados:
+        return jsonify({"erro": "JSON inválido"}), 400
+    
+    sector_model.update(url_id, dados)
+
+    return jsonify({"status": "sucesso"}), 200
+
+
+# DELETE
+@sectors_bp.route("/delete/<int:url_id>", methods=["DELETE"])
+@jwt_required()
+@check_role("Admin")
+def delete_sector(url_id):
+    sector_model = Sector()
+    sector_model.soft_delete(url_id)
+
+    return jsonify({"status": "usuário desativado"}), 200

@@ -2,19 +2,19 @@ from flask import Flask
 from flask_cors import CORS
 from database.connection import init_db
 from flask_jwt_extended import JWTManager
+from register import register_routes
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    app.config["JWT_SECRET_KEY"] = "chave"
+    app.config["JWT_SECRET_KEY"] = "key"
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 
     JWTManager(app)
 
     init_db()   
 
-    from register import register_routes
     register_routes(app)
 
     return app
