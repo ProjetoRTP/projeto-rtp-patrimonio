@@ -199,3 +199,67 @@
 .align-items-center {
     align-items: center !important;
 }
+
+.box-resumo {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #6a92d4;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.box-resumo div {
+    flex: 1;
+    font-weight: 600;
+    color: #444;
+}
+
+.box-resumo span {
+    display: block;
+    color: #1D4587;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+
+.fundo-tela {
+            background: linear-gradient(to right, #e4f4fb, #ccecf7);
+        }
+
+        .texto-azul-escuro {
+            color: #1a3c6d;
+        }
+
+        .input-personalizado {
+            border: 1px solid #d96b6b !important;
+            border-radius: 6px;
+            color: #8fa0b3;
+        }
+        
+        .input-personalizado:focus {
+            border-color: #b74b4b !important;
+            box-shadow: 0 0 0 0.2rem rgba(217, 107, 107, 0.25);
+        }
+
+        .btn-cancelar {
+            background-color: #ba4a4a;
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #a33f3f;
+            color: white;
+        }
+
+        .btn-cadastrar {
+            background-color: #1a3c6d;
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn-cadastrar:hover {
+            background-color: #122b50;
+            color: white;
+        }
