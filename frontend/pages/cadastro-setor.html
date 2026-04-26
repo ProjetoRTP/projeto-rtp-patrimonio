@@ -12,22 +12,19 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/cadastro-setor.css">
     <link rel="shortcut icon" href="../assets/imagens/favicon.ico" type="image/x-icon">
-
-    
 </head>
 
 <body>
-    <div class="d-flex vh-100">
+    <div class="d-flex flex-column flex-lg-row vh-100">
 
-        <!-- Navbar -->
-        <nav id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column h-100 pt-lg-4" tabindex="-1" style="width: 250px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); flex-shrink: 0;">
-
-            <header class="d-lg-none w-100 p-3 d-flex justify-content-between align-items-center shadow-sm" style="background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); z-index: 1040;">
+        <header class="d-lg-none w-100 p-3 d-flex justify-content-between align-items-center shadow-sm" style="background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); z-index: 1040;">
             <a href="../pages/menu_principal.html"><img src="../assets/imagens/logo-branca.png" alt="Logo" style="width: 40px;"></a>
             <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
                 <i class="bi bi-list fs-1"></i>
             </button>
-            </header>
+        </header>
+
+        <nav id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column h-100 pt-lg-4" tabindex="-1" style="width: 250px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); flex-shrink: 0;">
             
             <div class="d-lg-none text-end p-3 pb-0">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"></button>
@@ -61,38 +58,39 @@
             </div>
         </nav>
 
-        <main class="flex-grow-1 p-5 position-relative d-flex justify-content-center align-items-center"
-            style="background-color: #EAF2F8; overflow-y: auto;">
+        <main class="flex-grow-1 p-3 p-lg-5 position-relative d-flex justify-content-center align-items-start align-items-lg-center"
+            style="background-color: #EAF2F8; overflow-y: auto; overflow-x: hidden;">
 
-            <div class="bg-white rounded-4 shadow-sm w-100 p-5" style="max-width: 650px; z-index: 1;">
+            <div class="bg-white rounded-4 shadow-sm w-100 p-4 p-lg-5 mx-auto" style="max-width: 650px; z-index: 1;">
 
-                <h2 style="color: var(--azul-principal, #1D4587); font-weight: 700; margin-bottom: 30px;">Cadastro de
-                    Setor</h2>
+                <h2 class="text-center text-sm-start" style="color: var(--azul-principal, #1D4587); font-weight: 700; margin-bottom: 30px;">
+                    Cadastro de Setor
+                </h2>
 
                 <form id="form-cadastro-setor">
 
                     <div class="mb-4">
-                        <label for="inp-nome-setor" class="form-label">Nome do Setor</label>
+                        <label for="inp-nome-setor" class="form-label fw-bold" style="color: #1D4587;">Nome do Setor</label>
                         <input type="text" class="form-control form-control-custom w-100" id="inp-nome-setor"
                             placeholder="Nome completo" required>
                     </div>
 
                     <div class="mb-5">
-                        <label for="inp-descricao-setor" class="form-label">Descrição</label>
+                        <label for="inp-descricao-setor" class="form-label fw-bold" style="color: #1D4587;">Descrição</label>
                         <input type="text" class="form-control form-control-custom w-100" id="inp-descricao-setor"
                             placeholder="Digite uma breve descrição..." required>
                     </div>
 
-                    <div class="d-flex justify-content-center gap-3">
-                        <button type="button" id="btn-cancelar" class="btn btn-cancelar">Cancelar</button>
-                        <button type="submit" id="btn-salvar-setor" class="btn btn-cadastrar">Cadastrar</button>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <button type="button" id="btn-cancelar" class="btn btn-cancelar w-100">Cancelar</button>
+                        <button type="submit" id="btn-salvar-setor" class="btn btn-cadastrar w-100">Cadastrar</button>
                     </div>
 
                 </form>
 
             </div>
 
-            <img src="../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4"
+            <img src="../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
                 style="width: 60px; z-index: 0; opacity: 0.8;">
         </main>
     </div>
