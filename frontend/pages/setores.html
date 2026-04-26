@@ -17,15 +17,14 @@
 <body>
     <div class="d-flex flex-column flex-lg-row vh-100">
 
-        <!-- Navbar -->
-        <nav id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column h-100 pt-lg-4" tabindex="-1" style="width: 250px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); flex-shrink: 0;">
-
-            <header class="d-lg-none w-100 p-3 d-flex justify-content-between align-items-center shadow-sm" style="background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); z-index: 1040;">
+        <header class="d-lg-none w-100 p-3 d-flex justify-content-between align-items-center shadow-sm" style="background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); z-index: 1040;">
             <a href="../pages/menu_principal.html"><img src="../assets/imagens/logo-branca.png" alt="Logo" style="width: 40px;"></a>
             <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
                 <i class="bi bi-list fs-1"></i>
             </button>
-            </header>
+        </header>
+
+        <nav id="sidebar" class="offcanvas-lg offcanvas-start d-flex flex-column h-100 pt-lg-4" tabindex="-1" style="width: 250px; background: var(--bg-gradiente, linear-gradient(180deg, #1D4587 0%, #022154 100%)); flex-shrink: 0;">
             
             <div class="d-lg-none text-end p-3 pb-0">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"></button>
@@ -60,21 +59,20 @@
         </nav>
 
         <main class="flex-grow-1 p-3 p-lg-5 position-relative d-flex justify-content-center align-items-start"
-            style="background-color: #EAF2F8; overflow-y: auto;">
+            style="background-color: #EAF2F8; overflow-y: auto; overflow-x: hidden;">
 
             <div class="bg-white rounded-4 shadow-sm w-100 p-4 p-lg-5" style="max-width: 900px; z-index: 1;">
 
-                <div
-                    class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
                     <h2 style="color: var(--azul-principal, #1D4587); font-weight: 700; margin: 0;">Setores</h2>
 
-                    <a href="cadastro-setor.html" class="btn-cadastrar-custom">
-                        <i class="bi bi-plus-circle me-1"></i> Cadastrar
+                    <a href="cadastro-setor.html" class="btn-cadastrar-custom w-100 w-sm-auto d-flex justify-content-center align-items-center">
+                        <i class="bi bi-plus-circle me-2"></i> Cadastrar
                     </a>
                 </div>
 
                 <form id="form-filtros"
-                    class="barra-filtros d-flex flex-column flex-xl-row align-items-start align-items-xl-center justify-content-between mb-4 gap-3">
+                    class="border p-3 rounded-4 d-flex flex-column flex-xl-row align-items-start align-items-xl-center justify-content-between mb-4 gap-3" style="border-color: #1D4587 !important;">
 
                     <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 w-100">
                         <span class="d-none d-md-block fw-bold"
@@ -109,7 +107,7 @@
                     </div>
                 </form>
 
-                <div class="table-responsive">
+                <div class="table-responsive w-100">
                     <table class="table tabela-setores mb-0" style="min-width: 500px;">
                         <thead>
                             <tr>
