@@ -1,4 +1,8 @@
 
+body {
+    background: linear-gradient(to bottom, #cfe8f3, #eaf6fb);
+    font-family: 'Quicksand', sans-serif !important;
+}
 
 /* Estilos da Sidebar */
 .sidebar-link {
