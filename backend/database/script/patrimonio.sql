@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS colaboradores (
 CREATE TABLE IF NOT EXISTS equipamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     num_patrimonio VARCHAR(50) NOT NULL UNIQUE,
-    tipo ENUM('computador','impressora','periferico','estabilizador'),
+    tipo ENUM('computador','impressora','periferico'),
     endereco_ip VARCHAR(50) UNIQUE NULL,
     observacao TEXT,
     data_aquisicao DATE,
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS computadores (
 -- ==========================================
 CREATE TABLE IF NOT EXISTS perifericos (
     id INT PRIMARY KEY,
-    tipo_per ENUM('mouse','teclado','tela'),
+    tipo_per ENUM('mouse','teclado','tela', 'estabilizador'),
     descricao TEXT,
 
     FOREIGN KEY (id) REFERENCES equipamentos(id)
