@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -6,16 +7,17 @@ from flask_jwt_extended import JWTManager
 from register import register_routes
 
 def create_app():
-    app = Flask(__name__)
-    CORS(app)
     load_dotenv()
 
-    app.config["JWT_SECRET_KEY"] = "key"
+    app = Flask(__name__)
+    CORS(app)
+
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "fallback-inseguro")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 
     JWTManager(app)
 
-    init_db()   
+    init_db()
 
     register_routes(app)
 
