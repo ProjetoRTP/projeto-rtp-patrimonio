@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from modules.utils.decorators import check_role
-from modules.equipments.peripheral import Peripheral
+from modules.equipments.services.peripheral_service import PeripheralService
 
 peripheral_bp = Blueprint("peripheral_bp", __name__, url_prefix="/peripheral")
 
@@ -16,12 +16,11 @@ def create_peripheral():
     if not dados:
         return jsonify({"erro": "JSON inválido"}), 400
 
-    peripheral_model = Peripheral()
+    service = PeripheralService()
 
     try:
-        peripheral_model.create(dados)
-        return jsonify({"status": "sucesso"}), 201
-
+        result = service.create(dados)
+        return jsonify(result), 201
     except Exception as e:
         return jsonify({"erro": str(e)}), 400
 
@@ -29,22 +28,68 @@ def create_peripheral():
 # READ ALL
 @peripheral_bp.route("", methods=["GET"])
 @jwt_required()
-def list_peripheral():
-    peripheral_model = Peripheral()
-    return jsonify(peripheral_model.get_all()), 200
+def list_peripherals():
+    service = PeripheralService()
+    return jsonify(service.get_all()), 200
 
 
 # READ BY ID
 @peripheral_bp.route("/<int:url_id>", methods=["GET"])
 @jwt_required()
 def get_peripheral(url_id):
-    peripheral_model = peripheral()
-    peripheral = peripheral_model.get_by_id(url_id)
+    service = PeripheralService()
+    peripheral = service.get_by_id(url_id)
 
     if not peripheral:
-        return jsonify({"erro": "Impressora não encontrada"}), 404
+        return jsonify({"erro": "Periférico não encontrado"}), 404
 
     return jsonify(peripheral), 200
+
+
+# READ BY COMPUTER
+@peripheral_bp.route("/computer/<int:computador_id>", methods=["GET"])
+@jwt_required()
+def get_peripherals_by_computer(computador_id):
+    service = PeripheralService()
+    return jsonify(service.get_by_computer(computador_id)), 200
+
+
+# LINK ao computador
+@peripheral_bp.route("/link", methods=["POST"])
+@jwt_required()
+@check_role("admin")
+def link_peripheral():
+    dados = request.get_json()
+
+    if not dados.get("computador_id") or not dados.get("periferico_id"):
+        return jsonify({"erro": "computador_id e periferico_id são obrigatórios"}), 400
+
+    service = PeripheralService()
+
+    try:
+        service.link(dados["computador_id"], dados["periferico_id"])
+        return jsonify({"status": "periférico vinculado"}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
+
+
+# UNLINK do computador
+@peripheral_bp.route("/unlink", methods=["POST"])
+@jwt_required()
+@check_role("admin")
+def unlink_peripheral():
+    dados = request.get_json()
+
+    if not dados.get("computador_id") or not dados.get("periferico_id"):
+        return jsonify({"erro": "computador_id e periferico_id são obrigatórios"}), 400
+
+    service = PeripheralService()
+
+    try:
+        service.unlink(dados["computador_id"], dados["periferico_id"])
+        return jsonify({"status": "periférico desvinculado"}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
 
 
 # UPDATE
@@ -57,10 +102,13 @@ def update_peripheral(url_id):
     if not dados:
         return jsonify({"erro": "JSON inválido"}), 400
 
-    peripheral_model = Peripheral()
-    peripheral_model.update(url_id, dados)
+    service = PeripheralService()
 
-    return jsonify({"status": "sucesso"}), 200
+    try:
+        service.update(url_id, dados)
+        return jsonify({"status": "sucesso"}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
 
 
 # DELETE
@@ -68,7 +116,6 @@ def update_peripheral(url_id):
 @jwt_required()
 @check_role("admin")
 def delete_peripheral(url_id):
-    peripheral_model = Peripheral()
-    peripheral_model.soft_delete(url_id)
-
-    return jsonify({"status": "impressora desativada"}), 200
+    service = PeripheralService()
+    service.delete(url_id)
+    return jsonify({"status": "periférico desativado"}), 200

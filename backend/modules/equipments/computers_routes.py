@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from modules.utils.decorators import check_role
-from modules.equipments.computers import Computer
+from modules.equipments.classes.computers import Computer
+from modules.equipments.services.computer_service import ComputerService
 
 computers_bp = Blueprint("computers_bp", __name__, url_prefix="/computers")
 
@@ -16,11 +17,11 @@ def create_computer():
     if not dados:
         return jsonify({"erro": "JSON inválido"}), 400
 
-    computers_model = Computer()
+    service = ComputerService()
 
     try:
-        computers_model.create(dados)
-        return jsonify({"status": "sucesso"}), 201
+        result = service.create(dados)
+        return jsonify(result), 201
 
     except Exception as e:
         return jsonify({"erro": str(e)}), 400

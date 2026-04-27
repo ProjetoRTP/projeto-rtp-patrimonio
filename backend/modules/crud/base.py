@@ -8,7 +8,10 @@ class BaseCRUD:
 
     def create(self, data):
         with engine.begin() as conn:
-            conn.execute(insert(self.table), data)
+            result = conn.execute(
+                insert(self.table).values(**data)
+            )
+            return result.inserted_primary_key[0]
 
     def get_all(self, include_inactive=False):
         with engine.connect() as conn:
