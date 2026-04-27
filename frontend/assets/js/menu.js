@@ -65,3 +65,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+// ==========================================
+// ACESSO DO ADMIN E GERENTE
+// ==========================================
+// Backend deve blokear o acesso da página 'Usuários' e todas as relaciondas a essa página
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const tipoUsuario = "gerente";
+
+    if (tipoUsuario !== "admin") {
+        document.querySelectorAll('[data-role="admin-only"]').forEach(el => {
+            el.style.display = "none";
+        });
+    }
+
+});
