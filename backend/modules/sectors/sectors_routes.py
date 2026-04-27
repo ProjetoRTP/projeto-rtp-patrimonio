@@ -6,8 +6,9 @@ from modules.sectors.sectors import Sector
 sectors_bp = Blueprint("sectors_bp", __name__, url_prefix="/sectors")
 
 # CREATE
-@sectors_bp.route("/post", methods=["POST"])
-@check_role("Admin")
+@sectors_bp.route("", methods=["POST"])
+@jwt_required()
+@check_role("admin")
 def create_sector():
     dados = request.get_json()
 
@@ -25,7 +26,7 @@ def create_sector():
 
 
 # READ ALL
-@sectors_bp.route("/get", methods=["GET"])
+@sectors_bp.route("", methods=["GET"])
 @jwt_required()
 def list_sector():
     sector_model = Sector()
@@ -33,7 +34,7 @@ def list_sector():
 
 
 # READ SELF
-@sectors_bp.route("/get/<int:url_id>", methods=["GET"])
+@sectors_bp.route("/<int:url_id>", methods=["GET"])
 @jwt_required()
 def get_self(url_id):
     sector_model = Sector()
@@ -46,9 +47,9 @@ def get_self(url_id):
 
 
 # UPDATE
-@sectors_bp.route("/put/<int:url_id>", methods=["PUT"])
+@sectors_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
-@check_role("Admin")
+@check_role("admin")
 def update_sector(url_id):
     dados = request.get_json()
     sector_model = Sector()
@@ -62,9 +63,9 @@ def update_sector(url_id):
 
 
 # DELETE
-@sectors_bp.route("/delete/<int:url_id>", methods=["DELETE"])
+@sectors_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
-@check_role("Admin")
+@check_role("admin")
 def delete_sector(url_id):
     sector_model = Sector()
     sector_model.soft_delete(url_id)

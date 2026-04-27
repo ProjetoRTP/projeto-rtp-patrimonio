@@ -1,26 +1,32 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from modules.utils.decorators import check_role, user_or_admin_user
+from modules.utils.security import hash_password
 from modules.user.user import User
 from datetime import datetime, timedelta
 from modules.user.forgot_password import send_email, create_token
 
-user_bp = Blueprint("user_bp", __name__, url_prefix="/user")
+user_bp = Blueprint("user_bp", __name__, url_prefix="/users")
 tokenSaved = {}
 
 
 # CREATE
-@user_bp.route("/post", methods=["POST"])
+@user_bp.route("", methods=["POST"])
 def create_user():
     dados = request.get_json()
 
     if not dados:
         return jsonify({"erro": "JSON inválido"}), 400
 
-    user_model = User()
+    if not dados.get("senha"):
+        return jsonify({"erro": "Senha obrigatória"}), 400
 
     try:
+        dados["senha"] = hash_password(dados["senha"])
+
+        user_model = User()
         user_model.create(dados)
+
         return jsonify({"status": "sucesso"}), 201
 
     except Exception as e:
@@ -28,7 +34,7 @@ def create_user():
 
 
 # READ ALL
-@user_bp.route("/get", methods=["GET"])
+@user_bp.route("", methods=["GET"])
 @jwt_required()
 def list_user():
     user_model = User()
@@ -36,7 +42,7 @@ def list_user():
 
 
 # READ SELF
-@user_bp.route("/get/<int:url_id>", methods=["GET"])
+@user_bp.route("/<int:url_id>", methods=["GET"])
 @jwt_required()
 @user_or_admin_user()
 def get_self(url_id):
@@ -50,7 +56,7 @@ def get_self(url_id):
 
 
 # UPDATE
-@user_bp.route("/put/<int:url_id>", methods=["PUT"])
+@user_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
 @user_or_admin_user()
 def update_user(url_id):
@@ -66,7 +72,7 @@ def update_user(url_id):
 
 
 # DELETE
-@user_bp.route("/delete/<int:url_id>", methods=["DELETE"])
+@user_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
 @check_role("admin")
 def delete_user(url_id):
@@ -151,7 +157,10 @@ def reset_password():
     user_model = User()
 
     try:
-        user_model.update_password_by_email(email, new_password)
+        user_model.update_password_by_email(
+            email,
+            hash_password(new_password)
+        )
 
         del tokenSaved[email]
 

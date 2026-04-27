@@ -36,3 +36,13 @@ class User(BaseCRUD):
                 .where(self.table.c.email == email)
                 .values(senha=new_password)
             )
+
+    def get_by_cpf(self, cpf):
+        with engine.connect() as conn:
+            query = select(self.table).where(self.table.c.cpf == cpf)
+            result = conn.execute(query).fetchone()
+
+            if result:
+                return dict(result._mapping)
+
+            return None
