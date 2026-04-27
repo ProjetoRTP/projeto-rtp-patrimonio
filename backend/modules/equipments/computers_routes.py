@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
-from utils.decorators import check_role
+from modules.utils.decorators import check_role
 from modules.equipments.computers import Computer
 
 computers_bp = Blueprint("computers_bp", __name__, url_prefix="/computers")
 
 
 # CREATE
-@computers_bp.route("/post", methods=["POST"])
+@computers_bp.route("", methods=["POST"])
 @jwt_required()
 @check_role("admin")
 def create_computer():
@@ -27,7 +27,7 @@ def create_computer():
 
 
 # READ ALL
-@computers_bp.route("/get", methods=["GET"])
+@computers_bp.route("", methods=["GET"])
 @jwt_required()
 def list_computers():
     computers_model = Computer()
@@ -35,7 +35,7 @@ def list_computers():
 
 
 # READ BY ID
-@computers_bp.route("/get/<int:url_id>", methods=["GET"])
+@computers_bp.route("/<int:url_id>", methods=["GET"])
 @jwt_required()
 def get_computer(url_id):
     computers_model = Computer()
@@ -48,7 +48,7 @@ def get_computer(url_id):
 
 
 # UPDATE
-@computers_bp.route("/put/<int:url_id>", methods=["PUT"])
+@computers_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
 @check_role("admin")
 def update_computer(url_id):
@@ -64,7 +64,7 @@ def update_computer(url_id):
 
 
 # DELETE
-@computers_bp.route("/delete/<int:url_id>", methods=["DELETE"])
+@computers_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
 @check_role("admin")
 def delete_computer(url_id):
