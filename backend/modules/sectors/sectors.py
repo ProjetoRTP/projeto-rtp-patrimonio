@@ -9,13 +9,13 @@ class Sector(BaseCRUD):
 
         if table is None:
             raise Exception("Tabela 'setores' não encontrada no metadata")
-        
-        def change_status(self, id, status):
-            with engine.begin() as conn:
-                conn.execute(
-                    update(self.table)
-                    .where(self.table.c.id == id)
-                    .values(status=status)
-                )
 
         super().__init__(table)
+
+    def change_status(self, id, status):
+        with engine.begin() as conn:
+            conn.execute(
+                update(self.table)
+                .where(self.table.c.id == id)
+                .values(status=status)
+            )

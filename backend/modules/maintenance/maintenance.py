@@ -9,13 +9,13 @@ class Maintenance(BaseCRUD):
 
         if table is None:
             raise Exception("Tabela 'manutencoes' não encontrada no metadata")
-        
-        def change_status(self, id, status):
-            with engine.begin() as conn:
-                conn.execute(
-                    update(self.table)
-                    .where(self.table.c.id == id)
-                    .values(status=status)
-                )
 
         super().__init__(table)
+
+    def change_status(self, id, status):
+        with engine.begin() as conn:
+            conn.execute(
+                update(self.table)
+                .where(self.table.c.id == id)
+                .values(status=status)
+            )

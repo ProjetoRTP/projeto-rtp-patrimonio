@@ -5,13 +5,17 @@ from modules.utils.security import hash_password
 from modules.user.user import User
 from datetime import datetime, timedelta
 from modules.user.forgot_password import send_email, create_token
+import threading
 
 user_bp = Blueprint("user_bp", __name__, url_prefix="/users")
 tokenSaved = {}
+_token_lock = threading.Lock()
 
 
 # CREATE
 @user_bp.route("", methods=["POST"])
+@jwt_required()
+@check_role("admin")
 def create_user():
     dados = request.get_json()
 
@@ -104,20 +108,21 @@ def send_token():
         if not user:
             return jsonify({"erro": "Usuário não encontrado"}), 404
 
-        registro = tokenSaved.get(email)
+        with _token_lock:
+            registro = tokenSaved.get(email)
 
-        if registro:
-            if datetime.now() < registro["expira"]:
-                return jsonify({
-                    "erro": "Já existe um token válido. Aguarde expirar."
-                }), 400
-            
-        token = create_token()
+            if registro:
+                if datetime.now() < registro["expira"]:
+                    return jsonify({
+                        "erro": "Já existe um token válido. Aguarde expirar."
+                    }), 400
 
-        tokenSaved[email] = {
-            "token": token,
-            "expira": datetime.now() + timedelta(minutes=5)
-        }
+            token = create_token()
+
+            tokenSaved[email] = {
+                "token": token,
+                "expira": datetime.now() + timedelta(minutes=5)
+            }
 
         send_email(email, token)
 

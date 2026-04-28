@@ -9,7 +9,7 @@ collaborator_bp = Blueprint("collaborator", __name__, url_prefix="/collaborator"
 # CREATE
 @collaborator_bp.route("/post", methods=["POST"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def create_collaborator():
     dados = request.get_json()
 
@@ -50,7 +50,7 @@ def get_collaborator(url_id):
 # UPDATE
 @collaborator_bp.route("/put/<int:url_id>", methods=["PUT"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def update_collaborator(url_id):
     dados = request.get_json()
 
@@ -66,7 +66,7 @@ def update_collaborator(url_id):
 # DELETE
 @collaborator_bp.route("/delete/<int:url_id>", methods=["DELETE"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def delete_collaborator(url_id):
     collaborator_model = Collaborator()
     collaborator_model.soft_delete(url_id)
