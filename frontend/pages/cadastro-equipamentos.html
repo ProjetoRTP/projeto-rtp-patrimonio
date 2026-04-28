@@ -50,55 +50,50 @@
                         <div class="col-md-6">
                             <div class="d-flex align-items-center gap-3">
                                 <label class="label-azul mb-0 fs-5">Setor:</label>
-                                <select class="form-select input-vermelho flex-grow-1 w-100"
-                                    style="background-color: #ffeaea; color: #D32F2F;">
-                                    <option selected>Selecione</option>
-                                    <option value="1">opt1</option>
-                                    <option value="2">opt2</option>
-                                    <option value="3">opt3</option>
-                                </select>
+
+                                <input id="setor" list="lista-setores" class="form-control input-vermelho">
+                                <datalist id="lista-setores"></datalist>
+
                             </div>
                         </div>
-
 
                         <div class="row g-4">
                             <!-- CAMPOS COMPUTADOR -->
                             <div id="campos-computador" class="row g-4 d-none">
                                 <div class="col-md-6">
                                     <label class="label-azul d-block">Tombamento</label>
-                                    <input type="text" class="form-control input-vermelho w-100"
+                                    <input id="tombamento" type="text" class="form-control input-vermelho w-100"
                                         placeholder="00000.00000.000-00">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul d-block">Sistema operacional</label>
-                                    <input type="text" class="form-control input-vermelho w-100" placeholder="Sistema">
+                                    <input id="sistema" type="text" class="form-control input-vermelho w-100" placeholder="Sistema">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul d-block">Memória interna CPU</label>
-                                    <input type="text" class="form-control input-vermelho w-100" placeholder="Memória">
+                                    <input id="memoria-interna" type="text" class="form-control input-vermelho w-100" placeholder="Memória">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul d-block">Memória RAM</label>
-                                    <input type="text" class="form-control input-vermelho w-100" placeholder="Memória RAM">
+                                    <input id="memoria-ram" type="text" class="form-control input-vermelho w-100" placeholder="Memória RAM">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul d-block">Armazenamento</label>
-                                    <input type="text" class="form-control input-vermelho w-100" placeholder="Armazenamento">
+                                    <input id="armazenamento" type="text" class="form-control input-vermelho w-100" placeholder="Armazenamento">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul d-block">Número IP</label>
-                                    <input type="text" class="form-control input-vermelho w-100" placeholder="Número">
+                                    <input id="numero-ip" type="text" class="form-control input-vermelho w-100" placeholder="Número">
                                 </div>
 
                                 <div class="col-12 mt-4">
                                     <label class="label-azul d-block">Observações</label>
-                                    <textarea class="form-control input-vermelho w-100" rows="4"
-                                        placeholder="Detalhes adicionais"></textarea>
+                                    <textarea id="observacoes" class="form-control input-vermelho w-100" rows="4" placeholder="Detalhes adicionais"></textarea>
                                 </div>
                             </div>
 
@@ -109,12 +104,12 @@
 
                                 <div class="col-md-6">
                                     <label class="label-azul">Modelo</label>
-                                    <input type="text" class="form-control input-vermelho">
+                                    <input id="modelo" type="text" class="form-control input-vermelho">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul">Tipo</label>
-                                    <select class="form-select input-vermelho">
+                                    <select id="tipo" class="form-select input-vermelho">
                                         <option>Laser</option>
                                         <option>Jato de tinta</option>
                                         <option>Térmica</option>
@@ -124,7 +119,7 @@
 
                                 <div class="col-md-6">
                                     <label class="label-azul">Coloração</label>
-                                    <select class="form-select input-vermelho">
+                                    <select id="coloracao" class="form-select input-vermelho">
                                         <option>Monocromática</option>
                                         <option>Colorida</option>
                                     </select>
@@ -132,17 +127,17 @@
 
                                 <div class="col-md-6">
                                     <label class="label-azul">Conectividade</label>
-                                    <input type="text" class="form-control input-vermelho" placeholder="USB / Wi-Fi / Rede">
+                                    <input id="conectividade" type="text" class="form-control input-vermelho" placeholder="USB / Wi-Fi / Rede">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul">Endereço IP</label>
-                                    <input type="text" class="form-control input-vermelho">
+                                    <input id="endereco-ip" type="text" class="form-control input-vermelho">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="label-azul">Insumo principal</label>
-                                    <input type="text" class="form-control input-vermelho" placeholder="Toner / Tinta">
+                                    <input id="insumo" type="text" class="form-control input-vermelho" placeholder="Toner / Tinta">
                                 </div>
 
                             </div>
@@ -153,8 +148,7 @@
                         <!-- BOTÕES -->
                         <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
                             <a href="equipamentos-computadores.html" class="text-decoration-none text-center">
-                                <button type="button" class="btn text-white fw-bold w-100"
-                                    style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
+                                <button type="button" class="btn text-white fw-bold w-100" style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
                                     Cancelar
                                 </button>
                             </a>
