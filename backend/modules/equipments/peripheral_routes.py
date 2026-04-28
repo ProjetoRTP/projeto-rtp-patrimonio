@@ -6,10 +6,9 @@ from modules.equipments.services.peripheral_service import PeripheralService
 peripheral_bp = Blueprint("peripheral_bp", __name__, url_prefix="/peripheral")
 
 
-# CREATE
+# CREATE — qualquer usuário autenticado pode cadastrar
 @peripheral_bp.route("", methods=["POST"])
 @jwt_required()
-@check_role("admin")
 def create_peripheral():
     dados = request.get_json()
 
@@ -54,10 +53,9 @@ def get_peripherals_by_computer(computador_id):
     return jsonify(service.get_by_computer(computador_id)), 200
 
 
-# LINK ao computador
+# LINK ao computador — qualquer autenticado (faz parte da transferência)
 @peripheral_bp.route("/link", methods=["POST"])
 @jwt_required()
-@check_role("admin")
 def link_peripheral():
     dados = request.get_json()
 
@@ -73,10 +71,9 @@ def link_peripheral():
         return jsonify({"erro": str(e)}), 400
 
 
-# UNLINK do computador
+# UNLINK do computador — qualquer autenticado
 @peripheral_bp.route("/unlink", methods=["POST"])
 @jwt_required()
-@check_role("admin")
 def unlink_peripheral():
     dados = request.get_json()
 
@@ -92,10 +89,10 @@ def unlink_peripheral():
         return jsonify({"erro": str(e)}), 400
 
 
-# UPDATE
+# UPDATE — gerente ou admin
 @peripheral_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def update_peripheral(url_id):
     dados = request.get_json()
 
@@ -111,10 +108,10 @@ def update_peripheral(url_id):
         return jsonify({"erro": str(e)}), 400
 
 
-# DELETE
+# DELETE — gerente ou admin
 @peripheral_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def delete_peripheral(url_id):
     service = PeripheralService()
     service.delete(url_id)

@@ -14,9 +14,10 @@ class ComputerService(EquipmentService):
         if not data.get("num_patrimonio"):
             raise Exception("num_patrimonio é obrigatório")
 
+        self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
 
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
-                            "data_aquisicao", "valor", "setor_id", "colaborador_id"}
+                            "data_aquisicao", "valor", "setor_id", "subsetor_id", "colaborador_id"}
         computer_fields = {"os", "mem_cpu", "mem_ram", "armazenamento"}
 
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
@@ -37,8 +38,10 @@ class ComputerService(EquipmentService):
 
 
     def update(self, id, data):
+        self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
+
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
-                            "data_aquisicao", "valor", "status", "setor_id", "colaborador_id"}
+                            "data_aquisicao", "valor", "status", "setor_id", "subsetor_id", "colaborador_id"}
         computer_fields = {"os", "mem_cpu", "mem_ram", "armazenamento"}
 
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}

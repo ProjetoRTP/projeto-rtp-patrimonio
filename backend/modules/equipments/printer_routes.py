@@ -6,10 +6,9 @@ from modules.equipments.services.printer_service import PrinterService
 printer_bp = Blueprint("printer_bp", __name__, url_prefix="/printer")
 
 
-# CREATE
+# CREATE — qualquer usuário autenticado pode cadastrar
 @printer_bp.route("", methods=["POST"])
 @jwt_required()
-@check_role("admin")
 def create_printer():
     dados = request.get_json()
 
@@ -46,10 +45,10 @@ def get_printer(url_id):
     return jsonify(printer), 200
 
 
-# UPDATE
+# UPDATE — gerente ou admin
 @printer_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def update_printer(url_id):
     dados = request.get_json()
 
@@ -65,10 +64,10 @@ def update_printer(url_id):
         return jsonify({"erro": str(e)}), 400
 
 
-# DELETE
+# DELETE — gerente ou admin
 @printer_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
-@check_role("admin")
+@check_role("admin", "gerente")
 def delete_printer(url_id):
     service = PrinterService()
     service.delete(url_id)

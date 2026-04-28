@@ -8,6 +8,31 @@ class EquipmentService:
         self.eq = meta.tables['equipamentos']
         self.specific = meta.tables[specific_table_name]
 
+    def _validate_subsector(self, sector_id, subsector_id):
+        """
+        Ensures the subsector belongs to the given sector.
+        Raises an exception before reaching the database trigger,
+        providing a clear error message to the client.
+        """
+        if subsector_id is None:
+            return
+
+        subsectors = meta.tables.get('subsetores')
+        with engine.connect() as conn:
+            result = conn.execute(
+                select(subsectors.c.setor_id)
+                .where(subsectors.c.id == subsector_id)
+                .where(subsectors.c.ativo == True)
+            ).fetchone()
+
+        if result is None:
+            raise Exception(f"Subsector {subsector_id} not found")
+
+        if result.setor_id != sector_id:
+            raise Exception(
+                f"Subsector {subsector_id} does not belong to sector {sector_id}"
+            )
+
     def _base_query(self):
         return (
             select(self.eq, self.specific)
