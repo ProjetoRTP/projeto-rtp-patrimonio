@@ -1,8 +1,7 @@
 // ===============================
 // CONFIGURAÇÃO
 // ===============================
-// Ajuste a URL conforme a rota definida no seu 'user_routes.py'
-const API_URL = "http://localhost:5000/users"; 
+const API_URL = "http://localhost:5000/users";
 
 // ===============================
 // ELEMENTOS DO DOM
@@ -13,19 +12,32 @@ const tbody = document.getElementById("tbody-usuarios");
 // INIT
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-    carregarUsuarios();
+    // Verificar token
+    const token = sessionStorage.getItem('token_procape');
+    if (!token) {
+        alert("Acesso negado. Por favor, inicie sessão.");
+        window.location.href = '../index.html';
+        return;
+    }
+    carregarUsuarios(token);
 });
 
 // ===============================
 // BUSCAR USUÁRIOS (GET)
 // ===============================
-async function carregarUsuarios() {
+async function carregarUsuarios(token) {
     try {
         tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-muted">Buscando usuários...</td></tr>`;
 
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+            method: 'GET',
+            headers: { 
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
         
-        if (!response.ok) throw new Error("Erro ao acessar servidor");
+        if (!response.ok) throw new Error(`Erro ${response.status}: ${response.statusText}`);
 
         const usuarios = await response.json();
         renderizarTabela(usuarios);
@@ -47,13 +59,13 @@ function renderizarTabela(lista) {
         return;
     }
 
-    // Gerando o HTML dinâmico com base no seu molde
+    // Gerando o HTML dinâmico com base nos dados do backend
     tbody.innerHTML = lista.map(user => `
         <tr style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding-top: 15px; padding-bottom: 15px;">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#modalHistorico"
+                <a href="usuario-info.html?id=${user.id}"
                    style="color: #1D4587; text-decoration: none; font-weight: 500;">
-                    ${user.username || user.nome} </a>
+                    ${user.nome} </a>
             </td>
             <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:5000';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -6,18 +6,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = sessionStorage.getItem('token_procape');
     if (!token) {
         alert("Acesso negado. Por favor, inicie sessão.");
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
         return;
     }
 
-    // 2. FUNÇÃO PARA CARREGAR A TABELA DE SETORES
-    // A função agora aceita uma query string de filtros (ex: ?setor_id=1&equipamento_id=5)
+    // 2. FUNÇÃO PARA CARREGAR OS DADOS NOS DROPDOWNS (COMENTADA - filtro desativado)
+    /* async function carregarFiltros() {
+        try {
+            // Carregar setores
+            const resposta = await fetch(`${API_BASE_URL}/sectors`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (resposta.ok) {
+                const setores = await resposta.json();
+                const selectSetor = document.getElementById('filtro-setor');
+                
+                setores.forEach(setor => {
+                    const option = document.createElement('option');
+                    option.value = setor.id;
+                    option.textContent = setor.nome;
+                    selectSetor.appendChild(option);
+                });
+            }
+        } catch (erro) {
+            console.error('Erro ao carregar filtros:', erro);
+        }
+    } */
+
+    // 3. FUNÇÃO PARA CARREGAR A TABELA DE SETORES
     async function carregarSetores(filtros = '') {
         const tbody = document.getElementById('tbody-setores');
         tbody.innerHTML = '<tr><td colspan="2" class="text-center py-4 text-muted">A carregar setores...</td></tr>';
 
         try {
-            const resposta = await fetch(`${API_BASE_URL}/setores${filtros}`, {
+            const resposta = await fetch(`${API_BASE_URL}/sectors${filtros}`, {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -56,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3. LÓGICA DA BARRA DE FILTROS
-    const formFiltros = document.getElementById('form-filtros');
+    // 4. LÓGICA DA BARRA DE FILTROS (COMENTADA - filtro desativado)
+    /* const formFiltros = document.getElementById('form-filtros');
     const btnLimpar = document.getElementById('btn-limpar-filtros');
 
     if (formFiltros) {
@@ -66,14 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Captura o que o utilizador escolheu nos dropdowns
             const setor = document.getElementById('filtro-setor').value;
-            const subsetor = document.getElementById('filtro-subsetor').value;
-            const equipamento = document.getElementById('filtro-equipamento').value;
 
             // Monta os parâmetros para enviar ao back-end
             let queryParams = [];
             if (setor) queryParams.push(`setor_id=${setor}`);
-            if (subsetor) queryParams.push(`subsetor_id=${subsetor}`);
-            if (equipamento) queryParams.push(`equipamento_id=${equipamento}`);
 
             const stringFiltro = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
@@ -86,15 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnLimpar) {
         btnLimpar.addEventListener('click', () => {
             document.getElementById('filtro-setor').value = '';
-            document.getElementById('filtro-subsetor').value = '';
-            document.getElementById('filtro-equipamento').value = '';
 
             // Recarrega a tabela sem filtros
             carregarSetores('');
         });
     }
 
-    // Carrega a tabela inicialmente sem filtros
+    // Carrega os dados dos filtros e a tabela inicialmente
+    carregarFiltros();
+    carregarSetores(''); */
+    
+    // Carrega apenas a tabela (sem filtros)
     carregarSetores('');
 });
 
@@ -103,5 +125,5 @@ function editarSetor(id) {
 }
 
 function verInfoSetor(id) {
-    alert(`A abrir informações do setor ID: ${id}`);
+    window.location.href = `setor-info.html?id=${id}`;
 }
