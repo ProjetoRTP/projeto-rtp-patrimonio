@@ -1,4 +1,6 @@
 
+const API_BASE_URL = "http://localhost:5000";
+
 /* Função Limpar */
 const botaoLimpar = document.getElementById('btn-limpar');
 const filtroSetor = document.getElementById('filtro-setor');
@@ -37,13 +39,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function carregarManutencoes() {
     try {
-        const resposta = await fetch("http://localhost:3000/api/manutencoes");
+        const token = sessionStorage.getItem('token_procape');
+        if (!token) {
+            console.warn('Token JWT não encontrado. Redirecionando para o login.');
+            window.location.href = '../index.html';
+            return;
+        }
+
+        const resposta = await fetch(`${API_BASE_URL}/maintenances`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!resposta.ok) {
+            const erroTexto = await resposta.text();
+            throw new Error(`Resposta inválida do servidor (${resposta.status}): ${erroTexto}`);
+        }
+
         const dados = await resposta.json();
 
         const tabela = document.getElementById("tabela-manutencoes");
         tabela.innerHTML = "";
 
         dados.forEach(manutencao => {
+            const equipamentoTexto = manutencao.descricao || `Equipamento #${manutencao.equipamento_id}`;
 
             const linha = `
                 <tr style="border-bottom: 1px solid #f1f1f1;">
@@ -58,7 +78,7 @@ async function carregarManutencoes() {
                     <td style="color: #1D4587; padding-top: 15px; padding-bottom: 15px; text-align: center;">
                         <a href="#" 
                         style="color: #1D4587; text-decoration: none; font-weight: 500;">
-                        ${manutencao.nome_equipamento}
+                        ${equipamentoTexto}
                         </a>
                     </td>
 

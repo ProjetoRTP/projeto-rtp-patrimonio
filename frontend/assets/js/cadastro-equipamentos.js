@@ -31,7 +31,7 @@ function configurarTipoEquipamento() {
 //  CARREGAR SETORES (GET)
 async function carregarSetores() {
     try {
-        const resposta = await fetch("http://localhost:3000/api/setores");
+        const resposta = await fetch("http://localhost:5000/sectors");
         const setores = await resposta.json();
 
         const lista = document.getElementById("lista-setores");
@@ -90,7 +90,7 @@ function configurarSubmit() {
         }
 
         try {
-            const resposta = await fetch("http://localhost:3000/api/equipamentos", {
+            const resposta = await fetch("http://localhost:5000/api/equipamentos", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

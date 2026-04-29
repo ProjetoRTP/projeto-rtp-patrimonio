@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     // BUSCAR DO BACKEND
-    fetch(`http://localhost:3000/impressoras/${id}`)
+    fetch(`http://localhost:5000/impressoras/${id}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Erro no backend");

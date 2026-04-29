@@ -1,7 +1,7 @@
 // ===============================
 // CONFIGURAÇÕES
 // ===============================
-const API_URL = "http://localhost:3000/equipamentos-computadores";
+const API_URL = "http://localhost:5000/equipamentos-computadores";
 
 // ===============================
 // ELEMENTOS DO DOM

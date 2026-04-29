@@ -1,5 +1,5 @@
 // URL base da API
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "http://localhost:5000";
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. VERIFICAÇÃO DE SEGURANÇA

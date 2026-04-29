@@ -1,5 +1,5 @@
 // URL base da API
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:5000';
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // Requisição POST para criar o setor
-                const resposta = await fetch(`${API_BASE_URL}/setores`, {
+                const resposta = await fetch(`${API_BASE_URL}/sectors`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

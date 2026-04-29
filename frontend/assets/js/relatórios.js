@@ -1,6 +1,6 @@
 async function carregarRelatorios() {
     try {
-        const resposta = await fetch("http://localhost:3000/relatorios");
+        const resposta = await fetch("http://localhost:5000/relatorios");
 
         const dados = await resposta.json();
 

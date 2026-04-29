@@ -1,5 +1,5 @@
-// URL base do back-end (Mude isso quando o back-end subir o servidor local, ex: http://localhost:3000)
-const API_BASE_URL = "http://localhost:8080/api";
+// URL base do back-end
+const API_BASE_URL = "http://localhost:5000/auth";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Define o tempo do loading em milissegundos (2500ms = 2.5 segundos)

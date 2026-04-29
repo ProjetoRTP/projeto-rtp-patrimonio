@@ -1,7 +1,7 @@
 // ===============================
 // CONFIG
 // ===============================
-const API_URL = "http://localhost:3000/equipamentos-impressoras";
+const API_URL = "http://localhost:5000/equipamentos-impressoras";
 
 // ===============================
 // ELEMENTOS DO DOM

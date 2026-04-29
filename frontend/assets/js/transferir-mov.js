@@ -1,3 +1,11 @@
+const API_BASE_URL = "http://localhost:5000";
+const token = sessionStorage.getItem("token_procape");
+
+if (!token) {
+    alert("Faça login primeiro.");
+    window.location.href = "../index.html";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     carregarEquipamentos();
     carregarColaboradores();
@@ -11,7 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function carregarEquipamentos() {
     try {
-        const resposta = await fetch("http://localhost:3000/api/equipamentos");
+        const resposta = await fetch(`${API_BASE_URL}/api/equipamentos`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const dados = await resposta.json();
 
         const lista = document.getElementById("lista-equipamentos");
@@ -31,7 +41,9 @@ async function carregarEquipamentos() {
 
 async function carregarColaboradores() {
     try {
-        const resposta = await fetch("http://localhost:3000/api/colaboradores");
+        const resposta = await fetch(`${API_BASE_URL}/api/colaboradores`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const dados = await resposta.json();
 
         const lista = document.getElementById("lista-colaboradores");
@@ -52,7 +64,9 @@ async function carregarColaboradores() {
 
 async function carregarSetores() {
     try {
-        const resposta = await fetch("http://localhost:3000/api/setores");
+        const resposta = await fetch(`${API_BASE_URL}/api/setores`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const dados = await resposta.json();
 
         const lista = document.getElementById("lista-setores");
@@ -94,10 +108,11 @@ function configurarBotaoSalvar() {
         };
 
         try {
-            const resposta = await fetch("http://localhost:3000/api/movimentacoes", {
+            const resposta = await fetch(`${API_BASE_URL}/api/movimentacoes`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(dados)
             });
