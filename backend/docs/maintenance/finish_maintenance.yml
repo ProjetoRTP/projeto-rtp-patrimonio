@@ -1,0 +1,17 @@
+tags: [Manutenção]
+summary: Finaliza manutenção
+security: [{Bearer: []}]
+parameters:
+  - in: path
+    name: url_id
+    type: integer
+    required: true
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        descricao_resolucao: {type: string}
+responses:
+  200: {description: Sucesso}
+  201: {description: Sucesso}

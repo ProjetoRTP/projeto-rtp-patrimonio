@@ -1,0 +1,16 @@
+tags: [Subsetores]
+summary: Atualiza um subsetor
+security: [{Bearer: []}]
+consumes: [application/json]
+parameters:
+  - in: path
+    name: url_id
+    type: integer
+    required: true
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties: {nome: {type: string}, setor_id: {type: integer}}
+responses:
+  200: {description: Atualizado com sucesso}

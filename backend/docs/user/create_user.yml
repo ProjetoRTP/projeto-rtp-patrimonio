@@ -1,0 +1,22 @@
+tags: [Usuários]
+summary: Cria um novo usuário (Apenas Admin)
+security: [{Bearer: []}]
+consumes: [application/json]
+produces: [application/json]
+parameters:
+  - in: body
+    name: dados
+    required: true
+    schema:
+      type: object
+      required: [nome, cpf, email, data_nascimento, senha]
+      properties:
+        nome: {type: string, example: "Carlos Administrador"}
+        cpf: {type: string, example: "12345678910"}
+        email: {type: string, example: "carlos@empresa.com"}
+        data_nascimento: {type: string, format: date, example: "1990-01-01"}
+        senha: {type: string, example: "senhaSegura123"}
+        perfil: {type: string, example: "admin"}
+responses:
+  201: {description: Sucesso}
+  400: {description: Erro de validação}

@@ -1,0 +1,10 @@
+tags: [Computadores]
+summary: Busca computador pelo ID
+security: [{Bearer: []}]
+parameters:
+  - in: path
+    name: url_id
+    type: integer
+    required: true
+responses:
+  200: {description: Computador encontrado}

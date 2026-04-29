@@ -1,0 +1,5 @@
+tags: [Computadores]
+summary: Lista todos os computadores
+security: [{Bearer: []}]
+responses:
+  200: {description: Lista retornada}

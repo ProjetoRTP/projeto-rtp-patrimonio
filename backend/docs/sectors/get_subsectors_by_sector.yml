@@ -1,0 +1,8 @@
+tags:
+  - Sectors
+summary: Get subsectors by sector
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

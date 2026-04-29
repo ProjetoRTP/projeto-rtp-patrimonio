@@ -5,5 +5,7 @@ pymysql
 python-dotenv
 bcrypt
 flask_jwt_extended
-cryptographypytest
+cryptography
+pytest
 pytest-flask
+flasgger

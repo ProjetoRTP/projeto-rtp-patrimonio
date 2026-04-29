@@ -1,0 +1,6 @@
+tags: [Movimentação]
+summary: Finaliza movimentação
+security: [{Bearer: []}]
+parameters: [{in: path, name: id, type: integer, required: true}]
+responses:
+  200: {description: Finalizada}

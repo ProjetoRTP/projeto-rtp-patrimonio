@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from modules.movements.movement import Movement
 
@@ -8,6 +9,7 @@ movements_bp = Blueprint("movements_bp", __name__, url_prefix="/movements")
 # CREATE — any authenticated user can register a transfer
 @movements_bp.route("", methods=["POST"])
 @jwt_required()
+@swag_from("../../docs/movements/create_movement.yml")
 def create_movement():
     data = request.get_json()
 
@@ -34,6 +36,7 @@ def create_movement():
 # READ ALL
 @movements_bp.route("", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/movements/list_movements.yml")
 def list_movements():
     movement_model = Movement()
     return jsonify(movement_model.get_all()), 200
@@ -42,6 +45,7 @@ def list_movements():
 # READ BY ID
 @movements_bp.route("/<int:movement_id>", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/movements/get_movement.yml")
 def get_movement(movement_id):
     movement_model = Movement()
     movement = movement_model.get_by_id(movement_id)
@@ -55,6 +59,7 @@ def get_movement(movement_id):
 # READ BY EQUIPMENT
 @movements_bp.route("/equipment/<int:equipment_id>", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/movements/get_movements_by_equipment.yml")
 def get_movements_by_equipment(equipment_id):
     movement_model = Movement()
     return jsonify(movement_model.get_by_equipment(equipment_id)), 200

@@ -1,0 +1,4 @@
+tags: [Histórico]
+summary: Lista o histórico global
+security: [{Bearer: []}]
+responses: {200: {description: Sucesso}}

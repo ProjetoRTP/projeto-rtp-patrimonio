@@ -1,0 +1,5 @@
+tags: [Usuários]
+summary: Lista todos os usuários
+security: [{Bearer: []}]
+responses:
+  200: {description: Lista retornada}

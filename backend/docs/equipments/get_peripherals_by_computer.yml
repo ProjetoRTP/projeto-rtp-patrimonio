@@ -1,0 +1,8 @@
+tags:
+  - Equipments
+summary: Get peripherals by computer
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

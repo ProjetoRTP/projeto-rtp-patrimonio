@@ -1,0 +1,7 @@
+tags: [Computadores]
+summary: Lista Computadores
+security: [{Bearer: []}]
+
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

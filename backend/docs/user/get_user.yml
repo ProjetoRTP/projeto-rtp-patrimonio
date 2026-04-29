@@ -1,0 +1,6 @@
+tags: [Usuários]
+summary: Busca usuário pelo ID
+security: [{Bearer: []}]
+parameters: [{in: path, name: url_id, type: integer, required: true}]
+responses:
+  200: {description: Usuário encontrado}

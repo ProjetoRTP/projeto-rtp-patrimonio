@@ -1,0 +1,8 @@
+tags:
+  - Maintenance
+summary: Update maintenance
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

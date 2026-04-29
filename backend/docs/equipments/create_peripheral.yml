@@ -1,0 +1,18 @@
+tags: [Periféricos]
+summary: Cadastra Periféricos
+security: [{Bearer: []}]
+
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        num_patrimonio: {type: string}
+        setor_id: {type: integer}
+        subsetor_id: {type: integer}
+        tipo_periferico: {type: string}
+        modelo: {type: string}
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

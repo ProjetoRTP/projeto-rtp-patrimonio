@@ -1,0 +1,8 @@
+tags:
+  - History
+summary: Get history event
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

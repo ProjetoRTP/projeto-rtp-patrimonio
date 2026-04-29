@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flasgger import swag_from
 from flask_jwt_extended import jwt_required
 from modules.utils.decorators import check_role
 from modules.maintenance.maintenance import Maintenance
@@ -8,6 +9,7 @@ maintenances_bp = Blueprint("maintenances_bp", __name__, url_prefix="/maintenanc
 # CREATE — qualquer usuário autenticado pode abrir uma OS
 @maintenances_bp.route("", methods=["POST"])
 @jwt_required()
+@swag_from("../../docs/maintenance/create_maintenance.yml")
 def create_maintenance():
     dados = request.get_json()
 
@@ -27,6 +29,7 @@ def create_maintenance():
 # READ ALL
 @maintenances_bp.route("", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/maintenance/list_maintenance.yml")
 def list_maintenance():
     maintenance_model = Maintenance()
     return jsonify(maintenance_model.get_all()), 200
@@ -35,6 +38,7 @@ def list_maintenance():
 # READ BY ID
 @maintenances_bp.route("/<int:url_id>", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/maintenance/get_maintenance.yml")
 def get_maintenance(url_id):
     maintenance_model = Maintenance()
     maintenance = maintenance_model.get_by_id(url_id)
@@ -49,6 +53,7 @@ def get_maintenance(url_id):
 @maintenances_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
 @check_role("admin", "gerente")
+@swag_from("../../docs/maintenance/update_maintenance.yml")
 def update_maintenance(url_id):
     dados = request.get_json()
     maintenance_model = Maintenance()
@@ -67,6 +72,7 @@ def update_maintenance(url_id):
 @maintenances_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
 @check_role("admin", "gerente")
+@swag_from("../../docs/maintenance/delete_maintenance.yml")
 def delete_maintenance(url_id):
     maintenance_model = Maintenance()
 

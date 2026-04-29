@@ -1,0 +1,16 @@
+tags: [Movimentação]
+summary: Cria termo de responsabilidade ou transferência
+security: [{Bearer: []}]
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        equipamento_id: {type: integer}
+        colaborador_id: {type: integer}
+        local_origem: {type: string}
+        setor_origem_id: {type: integer}
+        setor_destino_id: {type: integer}
+responses:
+  201: {description: Sucesso}

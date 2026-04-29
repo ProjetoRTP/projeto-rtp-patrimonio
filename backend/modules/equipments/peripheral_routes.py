@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flasgger import swag_from
 from flask_jwt_extended import jwt_required
 from modules.utils.decorators import check_role
 from modules.equipments.services.peripheral_service import PeripheralService
@@ -9,6 +10,7 @@ peripheral_bp = Blueprint("peripheral_bp", __name__, url_prefix="/peripheral")
 # CREATE — qualquer usuário autenticado pode cadastrar
 @peripheral_bp.route("", methods=["POST"])
 @jwt_required()
+@swag_from("../../docs/equipments/create_peripheral.yml")
 def create_peripheral():
     dados = request.get_json()
 
@@ -27,6 +29,7 @@ def create_peripheral():
 # READ ALL
 @peripheral_bp.route("", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/equipments/list_peripherals.yml")
 def list_peripherals():
     service = PeripheralService()
     return jsonify(service.get_all()), 200
@@ -35,6 +38,7 @@ def list_peripherals():
 # READ BY ID
 @peripheral_bp.route("/<int:url_id>", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/equipments/get_peripheral.yml")
 def get_peripheral(url_id):
     service = PeripheralService()
     peripheral = service.get_by_id(url_id)
@@ -48,6 +52,7 @@ def get_peripheral(url_id):
 # READ BY COMPUTER
 @peripheral_bp.route("/computer/<int:computador_id>", methods=["GET"])
 @jwt_required()
+@swag_from("../../docs/equipments/get_peripherals_by_computer.yml")
 def get_peripherals_by_computer(computador_id):
     service = PeripheralService()
     return jsonify(service.get_by_computer(computador_id)), 200
@@ -56,6 +61,7 @@ def get_peripherals_by_computer(computador_id):
 # LINK ao computador — qualquer autenticado (faz parte da transferência)
 @peripheral_bp.route("/link", methods=["POST"])
 @jwt_required()
+@swag_from("../../docs/equipments/link_peripheral.yml")
 def link_peripheral():
     dados = request.get_json()
 
@@ -74,6 +80,7 @@ def link_peripheral():
 # UNLINK do computador — qualquer autenticado
 @peripheral_bp.route("/unlink", methods=["POST"])
 @jwt_required()
+@swag_from("../../docs/equipments/unlink_peripheral.yml")
 def unlink_peripheral():
     dados = request.get_json()
 
@@ -93,6 +100,7 @@ def unlink_peripheral():
 @peripheral_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()
 @check_role("admin", "gerente")
+@swag_from("../../docs/equipments/update_peripheral.yml")
 def update_peripheral(url_id):
     dados = request.get_json()
 
@@ -112,6 +120,7 @@ def update_peripheral(url_id):
 @peripheral_bp.route("/<int:url_id>", methods=["DELETE"])
 @jwt_required()
 @check_role("admin", "gerente")
+@swag_from("../../docs/equipments/delete_peripheral.yml")
 def delete_peripheral(url_id):
     service = PeripheralService()
     service.delete(url_id)

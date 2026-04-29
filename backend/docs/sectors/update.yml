@@ -1,0 +1,34 @@
+tags:
+  - Setores
+summary: Atualiza um setor
+security:
+  - Bearer: []
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: path
+    name: url_id
+    required: true
+    type: integer
+    description: ID do setor
+  - in: body
+    name: dados
+    required: true
+    schema:
+      type: object
+      properties:
+        nome:
+          type: string
+        descricao:
+          type: string
+responses:
+  200:
+    description: Setor atualizado com sucesso
+  400:
+    description: JSON inválido
+  401:
+    description: Token inválido
+  403:
+    description: Acesso negado

@@ -1,0 +1,7 @@
+tags: [Colaboradores]
+summary: Lista colaboradores
+security: [{Bearer: []}]
+
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}
