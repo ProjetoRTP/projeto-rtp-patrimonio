@@ -1,0 +1,14 @@
+tags: [Computadores]
+summary: Atualiza computador
+security: [{Bearer: []}]
+parameters:
+  - in: path
+    name: url_id
+    type: integer
+    required: true
+  - in: body
+    name: dados
+    schema:
+      type: object
+responses:
+  200: {description: Atualizado}

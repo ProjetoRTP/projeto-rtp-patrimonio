@@ -1,0 +1,20 @@
+tags:
+  - Setores
+summary: Desativa um setor
+security:
+  - Bearer: []
+produces:
+  - application/json
+parameters:
+  - in: path
+    name: url_id
+    required: true
+    type: integer
+    description: ID do setor
+responses:
+  200:
+    description: Setor desativado
+  401:
+    description: Token inválido
+  403:
+    description: Acesso negado

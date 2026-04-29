@@ -1,0 +1,10 @@
+tags: [Movimentação]
+summary: Cria movimentação de equipamento
+security: [{Bearer: []}]
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+responses:
+  201: {description: Criada}

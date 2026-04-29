@@ -1,0 +1,8 @@
+tags:
+  - User
+summary: List user
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

@@ -1,0 +1,12 @@
+tags:
+  - Setores
+summary: Lista todos os setores
+security:
+  - Bearer: []
+produces:
+  - application/json
+responses:
+  200:
+    description: Lista de setores retornada com sucesso
+  401:
+    description: Token inválido

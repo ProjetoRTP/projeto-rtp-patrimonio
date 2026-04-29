@@ -1,0 +1,8 @@
+tags:
+  - Equipments
+summary: Link peripheral
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

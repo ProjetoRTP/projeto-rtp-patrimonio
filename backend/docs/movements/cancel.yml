@@ -1,0 +1,6 @@
+tags: [Movimentação]
+summary: Cancela movimentação
+security: [{Bearer: []}]
+parameters: [{in: path, name: id, type: integer, required: true}]
+responses:
+  200: {description: Cancelada}

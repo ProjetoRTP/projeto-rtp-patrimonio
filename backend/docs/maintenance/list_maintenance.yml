@@ -1,0 +1,8 @@
+tags:
+  - Maintenance
+summary: List maintenance
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

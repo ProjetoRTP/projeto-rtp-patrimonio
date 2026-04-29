@@ -1,0 +1,49 @@
+tags:
+  - Autenticação
+summary: Realiza o login no sistema
+description: Rota para autenticação de usuários. Retorna o token JWT e as informações do usuário logado se as credenciais estiverem corretas.
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: body
+    name: credenciais
+    description: Email e senha do usuário
+    required: true
+    schema:
+      type: object
+      required:
+        - cpf
+        - senha
+      properties:
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        senha:
+          type: string
+          example: 123456
+responses:
+  200:
+    description: Login realizado com sucesso
+    schema:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: Token JWT para autenticação nas próximas requisições
+        usuario:
+          type: object
+          properties:
+            id:
+              type: integer
+            nome:
+              type: string
+            email:
+              type: string
+            perfil:
+              type: string
+  400:
+    description: Faltam e-mail ou senha no corpo da requisição
+  401:
+    description: Credenciais inválidas (senha errada ou usuário não existe)

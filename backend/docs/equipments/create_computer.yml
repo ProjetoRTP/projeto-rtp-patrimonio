@@ -1,0 +1,20 @@
+tags: [Computadores]
+summary: Cadastra Computadores
+security: [{Bearer: []}]
+
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        num_patrimonio: {type: string}
+        setor_id: {type: integer}
+        subsetor_id: {type: integer}
+        os: {type: string}
+        mem_cpu: {type: string}
+        mem_ram: {type: string}
+        armazenamento: {type: string}
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

@@ -1,0 +1,7 @@
+tags: [Periféricos]
+summary: Lista Periféricos
+security: [{Bearer: []}]
+
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

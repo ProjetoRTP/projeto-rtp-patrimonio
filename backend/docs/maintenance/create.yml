@@ -1,0 +1,11 @@
+tags: [Manutenção]
+summary: Cria registro de manutenção
+security: [{Bearer: []}]
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties: {equipamento_id: {type: integer}, motivo: {type: string}}
+responses:
+  201: {description: Manutenção registrada}

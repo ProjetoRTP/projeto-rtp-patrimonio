@@ -1,0 +1,18 @@
+tags: [Usuários]
+summary: Atualiza dados do usuário
+security: [{Bearer: []}]
+parameters:
+  - in: path
+    name: url_id
+    type: integer
+    required: true
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        nome: {type: string}
+        email: {type: string}
+        perfil: {type: string}
+responses:
+  200: {description: Atualizado}

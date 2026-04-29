@@ -1,0 +1,10 @@
+tags: [Subsetores]
+summary: Busca um subsetor pelo ID
+security: [{Bearer: []}]
+parameters:
+  - in: path
+    name: url_id
+    type: integer
+    required: true
+responses:
+  200: {description: Subsetor retornado}

@@ -1,0 +1,7 @@
+tags: [Impressoras]
+summary: Lista Impressoras
+security: [{Bearer: []}]
+
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

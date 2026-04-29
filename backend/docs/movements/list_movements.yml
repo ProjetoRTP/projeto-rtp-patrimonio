@@ -1,0 +1,4 @@
+tags: [Movimentação]
+summary: Lista movimentações pendentes
+security: [{Bearer: []}]
+responses: {200: {description: Sucesso}}

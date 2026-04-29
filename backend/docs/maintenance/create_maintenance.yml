@@ -1,0 +1,14 @@
+tags: [Manutenção]
+summary: Abre manutenção
+security: [{Bearer: []}]
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        equipamento_id: {type: integer}
+        motivo: {type: string}
+responses:
+  200: {description: Sucesso}
+  201: {description: Sucesso}

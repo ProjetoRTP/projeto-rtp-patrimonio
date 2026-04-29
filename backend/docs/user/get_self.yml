@@ -1,0 +1,8 @@
+tags:
+  - User
+summary: Get self
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

@@ -1,0 +1,7 @@
+tags: [Subsetores]
+summary: Lista subsetores
+security: [{Bearer: []}]
+parameters: [{in: query, name: setor_id, type: integer}]
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

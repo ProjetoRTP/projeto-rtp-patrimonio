@@ -1,0 +1,8 @@
+tags:
+  - Movements
+summary: Get movements by equipment
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

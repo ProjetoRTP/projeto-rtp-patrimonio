@@ -1,0 +1,18 @@
+tags: [Colaboradores]
+summary: Cria colaborador
+security: [{Bearer: []}]
+
+parameters:
+  - in: body
+    name: dados
+    schema:
+      type: object
+      properties:
+        nome: {type: string}
+        cpf: {type: string}
+        email: {type: string}
+        telefone: {type: string}
+        setor_id: {type: integer}
+responses:
+  200: {description: Sucesso}
+  201: {description: Criado}

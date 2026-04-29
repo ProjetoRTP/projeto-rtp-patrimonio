@@ -1,0 +1,8 @@
+tags:
+  - Equipments
+summary: List computers
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

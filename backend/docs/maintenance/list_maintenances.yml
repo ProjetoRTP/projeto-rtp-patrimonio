@@ -1,0 +1,7 @@
+tags: [Manutenção]
+summary: Lista manutenções ativas
+security: [{Bearer: []}]
+
+responses:
+  200: {description: Sucesso}
+  201: {description: Sucesso}

@@ -1,21 +1,42 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
 from database.connection import init_db
 from flask_jwt_extended import JWTManager
-from register import register_routes
+from core.register import register_routes
+from flasgger import Swagger
 
 def create_app():
-    app = Flask(__name__)
-    CORS(app)
     load_dotenv()
 
-    app.config["JWT_SECRET_KEY"] = "key"
+    app = Flask(__name__)
+    CORS(app)
+
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "fallback-inseguro")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 
     JWTManager(app)
 
-    init_db()   
+    swagger_template = {
+        "swagger": "2.0",
+        "info": {
+            "title": "API RTP Patrimônio",
+            "description": "Documentação interativa da API do sistema de Patrimônio.",
+            "version": "1.0.0"
+        },
+        "securityDefinitions": {
+            "Bearer": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "description": "⚠️ **AVISO IMPORTANTE:**\\nVocê **DEVE** digitar a palavra `Bearer` seguida de um espaço antes do seu token!\\n\\n**Exemplo correto:** `Bearer eyJhbGciOiJIUzI1NiIs...`"
+            }
+        },
+    }
+    Swagger(app, template=swagger_template)
+
+    init_db()
 
     register_routes(app)
 

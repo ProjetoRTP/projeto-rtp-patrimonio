@@ -1,0 +1,8 @@
+tags:
+  - User
+summary: Send token
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

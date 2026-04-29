@@ -1,0 +1,15 @@
+tags: [Subsetores]
+summary: Cria um novo subsetor
+security: [{Bearer: []}]
+consumes: [application/json]
+parameters:
+  - in: body
+    name: dados
+    required: true
+    schema:
+      type: object
+      properties:
+        nome: {type: string}
+        setor_id: {type: integer}
+responses:
+  201: {description: Subsetor criado}

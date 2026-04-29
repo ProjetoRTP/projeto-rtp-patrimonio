@@ -4,9 +4,12 @@ from datetime import timedelta
 from modules.utils.security import check_password
 from modules.user.user import User
 
+from flasgger import swag_from
+
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
 
 @auth_bp.route("/login", methods=["POST"])
+@swag_from("../../docs/auth/login.yml")
 def login():
     dados = request.get_json()
 

@@ -1,0 +1,8 @@
+tags:
+  - Equipments
+summary: List printers
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Sucesso

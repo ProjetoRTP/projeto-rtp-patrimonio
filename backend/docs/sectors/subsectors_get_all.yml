@@ -1,0 +1,9 @@
+tags: [Subsetores]
+summary: Lista subsetores (opcionalmente por setor)
+security: [{Bearer: []}]
+parameters:
+  - in: query
+    name: setor_id
+    type: integer
+responses:
+  200: {description: Lista de subsetores}
