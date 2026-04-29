@@ -1,65 +1,86 @@
-// ===============================
-// CONFIGURAÇÕES
-// ===============================
-const API_URL = "http://localhost:5000/computers";
 
-// ===============================
-// ELEMENTOS DO DOM
-// ===============================
+const API_BASE = "http://localhost:5000";
 const tbody = document.getElementById("tbody-equipamentos");
-const filtroSetor = document.getElementById('filtro-setor');
-const filtroStatus = document.getElementById('filtro-status');
-const botaoLimpar = document.getElementById('btn-limpar');
-const botaoAplicar = document.getElementById('btn-aplicar');
+const filtroSetor = document.getElementById("filtro-setor");
+const filtroStatus = document.getElementById("filtro-status");
 
-// ===============================
-// INICIALIZAÇÃO
-// ===============================
 document.addEventListener("DOMContentLoaded", () => {
-    carregarComputadores();
-    configurarEventos();
-});
+    const token = sessionStorage.getItem("token_procape");
 
-function configurarEventos() {
-    // Ação de Limpar
-    botaoLimpar.addEventListener('click', () => {
+    if (!token) {
+        alert("Acesso negado. Por favor, inicie sessão.");
+        window.location.href = "../index.html";
+        return;
+    }
+
+    carregarSetores(token);
+    carregarComputadores(token);
+
+    document.getElementById("btn-limpar").addEventListener("click", () => {
         filtroSetor.selectedIndex = 0;
         filtroStatus.selectedIndex = 0;
-        carregarComputadores(); // Recarrega tudo sem filtros
+        carregarComputadores(token);
     });
 
-    // Ação de Aplicar
-    botaoAplicar.addEventListener('click', () => {
-        const setor = filtroSetor.value;
-        const status = filtroStatus.value;
-        
-        // Chamamos a função passando os filtros escolhidos
-        carregarComputadores(setor, status);
+    document.getElementById("btn-aplicar").addEventListener("click", () => {
+        carregarComputadores(token, filtroSetor.value, filtroStatus.value);
     });
+});
+
+// ===============================
+// CARREGAR SETORES DINAMICAMENTE
+// ===============================
+async function carregarSetores(token) {
+    try {
+        const res = await fetch(`${API_BASE}/sectors`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!res.ok) return;
+
+        const setores = await res.json();
+
+        setores.forEach(setor => {
+            const option = document.createElement("option");
+            option.value = setor.id;
+            option.textContent = setor.nome;
+            filtroSetor.appendChild(option);
+        });
+
+    } catch (erro) {
+        console.error("Erro ao carregar setores:", erro);
+    }
 }
 
 // ===============================
-// LÓGICA DE DADOS (GET / FETCH)
+// CARREGAR COMPUTADORES
 // ===============================
-async function carregarComputadores(setorFiltro = "", statusFiltro = "") {
+async function carregarComputadores(token, setorFiltro = "", statusFiltro = "") {
+    mostrarLoading();
+
     try {
-        mostrarLoading();
+        const res = await fetch(`${API_BASE}/computers`, {
+            headers: {
+                "Authorization": `Bearer ${token}`, // ✅ token adicionado
+                "Content-Type": "application/json"
+            }
+        });
 
-        const response = await fetch(API_URL);
-        const dados = await response.json();
+        if (!res.ok) throw new Error(`Erro ${res.status}`);
 
-        // Aplicando a lógica de filtro nos dados recebidos
-        let dadosFiltrados = dados;
+        let dados = await res.json();
 
+        // ✅ Filtro por setor_id (número)
         if (setorFiltro) {
-            dadosFiltrados = dadosFiltrados.filter(item => item.setor === setorFiltro);
+            dados = dados.filter(item => String(item.setor_id) === String(setorFiltro));
         }
 
+        // ✅ Filtro por status (ENUM do banco)
         if (statusFiltro) {
-            dadosFiltrados = dadosFiltrados.filter(item => item.status === statusFiltro);
+            dados = dados.filter(item => item.status === statusFiltro);
         }
 
-        renderizarTabela(dadosFiltrados);
+        renderizarTabela(dados, token);
 
     } catch (erro) {
         console.error("Erro ao carregar computadores:", erro);
@@ -68,27 +89,20 @@ async function carregarComputadores(setorFiltro = "", statusFiltro = "") {
 }
 
 // ===============================
-// RENDERIZAÇÃO (PERFORMANCE)
+// RENDERIZAÇÃO
 // ===============================
-function renderizarTabela(lista) {
+function renderizarTabela(lista, token) {
     if (!lista || lista.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="2" class="text-center py-4 text-muted">
-                    Nenhum computador encontrado com esses filtros.
-                </td>
-            </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-muted">Nenhum computador encontrado.</td></tr>`;
         return;
     }
 
-    // Gerando o HTML de uma vez só (Performance Boost)
-    const htmlCompleto = lista.map(item => `
-        <tr data-id="${item.id}" style="border-bottom: 1px solid #f1f1f1;">
+    tbody.innerHTML = lista.map(item => `
+        <tr style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
-                <a href="#" onclick="abrirHistorico(${item.id})" style="text-decoration: none; color: #1D4587; font-weight: 500;">
-                    ${item.nome}
-                </a>
+                <span style="font-weight: 500;">
+                    ${item.num_patrimonio ?? "—"}
+                </span>
             </td>
             <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
@@ -101,9 +115,7 @@ function renderizarTabela(lista) {
                 </div>
             </td>
         </tr>
-    `).join('');
-
-    tbody.innerHTML = htmlCompleto;
+    `).join("");
 }
 
 // ===============================
@@ -114,25 +126,16 @@ function mostrarLoading() {
 }
 
 function mostrarErro() {
-    tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-danger text-uppercase fw-bold">Erro de conexão com o servidor 😢</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-danger fw-bold">Erro de conexão com o servidor.</td></tr>`;
 }
 
 // ===============================
-// AÇÕES DOS BOTÕES
+// AÇÕES
 // ===============================
 function editarComputador(id) {
-    window.location.href = `cadastro.html?id=${id}`;
+    window.location.href = `cadastro-equipamentos.html?id=${id}`; // ✅ URL corrigida
 }
 
 function verDetalhes(id) {
-    alert("Exibindo detalhes do computador ID: " + id);
-}
-
-function abrirHistorico(id) {
-    // Se estiver usando Bootstrap Modal
-    const modalElement = document.getElementById('modalHistorico');
-    if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-    }
+    window.location.href = `computador-info.html?id=${id}`; // ✅ navega ao invés de alert
 }
