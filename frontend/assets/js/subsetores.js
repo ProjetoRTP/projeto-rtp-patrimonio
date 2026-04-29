@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // Requisição GET para buscar os subsetores (Rota fictícia: /api/subsetores)
-      const resposta = await fetch(`${API_BASE_URL}/subsetores`, {
+      const resposta = await fetch(`${API_BASE_URL}/subsectors`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

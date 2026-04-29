@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. FUNÇÃO PARA CARREGAR OS DADOS NOS DROPDOWNS (COMENTADA - filtro desativado)
-    /* async function carregarFiltros() {
+    async function carregarFiltros() {
         try {
             // Carregar setores
             const resposta = await fetch(`${API_BASE_URL}/sectors`, {
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (erro) {
             console.error('Erro ao carregar filtros:', erro);
         }
-    } */
+    } 
 
     // 3. FUNÇÃO PARA CARREGAR A TABELA DE SETORES
     async function carregarSetores(filtros = '') {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. LÓGICA DA BARRA DE FILTROS (COMENTADA - filtro desativado)
-    /* const formFiltros = document.getElementById('form-filtros');
+    const formFiltros = document.getElementById('form-filtros');
     const btnLimpar = document.getElementById('btn-limpar-filtros');
 
     if (formFiltros) {
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carrega os dados dos filtros e a tabela inicialmente
     carregarFiltros();
-    carregarSetores(''); */
+    carregarSetores(''); 
     
     // Carrega apenas a tabela (sem filtros)
     carregarSetores('');

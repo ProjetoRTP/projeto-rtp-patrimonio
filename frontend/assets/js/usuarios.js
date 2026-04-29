@@ -12,13 +12,14 @@ const tbody = document.getElementById("tbody-usuarios");
 // INIT
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-    // Verificar token
-    const token = sessionStorage.getItem('token_procape');
+    const token = sessionStorage.getItem("token_procape");
+
     if (!token) {
         alert("Acesso negado. Por favor, inicie sessão.");
-        window.location.href = '../index.html';
+        window.location.href = "../index.html";
         return;
     }
+
     carregarUsuarios(token);
 });
 
@@ -30,13 +31,13 @@ async function carregarUsuarios(token) {
         tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-muted">Buscando usuários...</td></tr>`;
 
         const response = await fetch(API_URL, {
-            method: 'GET',
-            headers: { 
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
             }
         });
-        
+
         if (!response.ok) throw new Error(`Erro ${response.status}: ${response.statusText}`);
 
         const usuarios = await response.json();
@@ -52,34 +53,31 @@ async function carregarUsuarios(token) {
 // RENDERIZAÇÃO
 // ===============================
 function renderizarTabela(lista) {
-    const tbody = document.getElementById("tbody-usuarios");
-
     if (!lista || lista.length === 0) {
         tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-muted">Nenhum usuário encontrado.</td></tr>`;
         return;
     }
 
-    // Gerando o HTML dinâmico com base nos dados do backend
     tbody.innerHTML = lista.map(user => `
         <tr style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding-top: 15px; padding-bottom: 15px;">
                 <a href="usuario-info.html?id=${user.id}"
                    style="color: #1D4587; text-decoration: none; font-weight: 500;">
-                    ${user.nome} </a>
+                    ${user.nome}
+                </a>
             </td>
             <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
                     <button class="btn btn-sm btn-outline-primary px-2 py-1" onclick="editarUsuario(${user.id})">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button onclick="window.location.href='usuario-info.html?id=${user.id}'"
-                            class="btn btn-sm btn-outline-danger px-2 py-1">
+                    <button class="btn btn-sm btn-outline-danger px-2 py-1" onclick="verInfo(${user.id})">
                         <i class="bi bi-info"></i>
                     </button>
                 </div>
             </td>
         </tr>
-    `).join('');
+    `).join("");
 }
 
 // ===============================
@@ -92,4 +90,3 @@ function editarUsuario(id) {
 function verInfo(id) {
     window.location.href = `usuario-info.html?id=${id}`;
 }
-

@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btnSalvar.disabled = true;
 
       try {
-        const resposta = await fetch(`${API_BASE_URL}/subsetores`, {
+        const resposta = await fetch(`${API_BASE_URL}/subsectors`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

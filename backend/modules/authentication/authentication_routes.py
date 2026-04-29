@@ -40,4 +40,8 @@ def login():
         expires_delta=timedelta(hours=2)
     )
 
-    return jsonify({"access_token": token}), 200
+    return jsonify({
+    "access_token": token,
+    "nome": user["nome"],
+    "perfil": user["perfil"]
+}), 200

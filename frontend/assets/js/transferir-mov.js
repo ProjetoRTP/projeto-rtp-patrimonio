@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function carregarEquipamentos() {
     try {
-        const resposta = await fetch(`${API_BASE_URL}/api/equipamentos`, {
+        const resposta = await fetch(`${API_BASE_URL}/equipments`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         const dados = await resposta.json();
@@ -41,7 +41,7 @@ async function carregarEquipamentos() {
 
 async function carregarColaboradores() {
     try {
-        const resposta = await fetch(`${API_BASE_URL}/api/colaboradores`, {
+        const resposta = await fetch(`${API_BASE_URL}/collaborators`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         const dados = await resposta.json();
@@ -64,7 +64,7 @@ async function carregarColaboradores() {
 
 async function carregarSetores() {
     try {
-        const resposta = await fetch(`${API_BASE_URL}/api/setores`, {
+        const resposta = await fetch(`${API_BASE_URL}/sectors`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         const dados = await resposta.json();
@@ -108,7 +108,7 @@ function configurarBotaoSalvar() {
         };
 
         try {
-            const resposta = await fetch(`${API_BASE_URL}/api/movimentacoes`, {
+            const resposta = await fetch(`${API_BASE_URL}/maintenances`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

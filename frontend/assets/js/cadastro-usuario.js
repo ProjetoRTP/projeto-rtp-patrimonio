@@ -1,5 +1,3 @@
-
-
 const btCancelar = document.getElementById('btCancelar');
 const btCadastrar = document.getElementById('btCadastrar');
 

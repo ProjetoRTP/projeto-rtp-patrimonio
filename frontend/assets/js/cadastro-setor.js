@@ -4,12 +4,12 @@ const API_BASE_URL = 'http://localhost:5000';
 document.addEventListener('DOMContentLoaded', () => {
     
     // 1. VERIFICAÇÃO DE SEGURANÇA
-    // const token = sessionStorage.getItem('token_procape');
-    // if (!token) {
-    //     alert("Acesso negado. Por favor, faça o login.");
-    //     window.location.href = 'index.html';
-    //     return; 
-    // }
+       const token = sessionStorage.getItem('token_procape');
+       if (!token) {
+           alert("Acesso negado. Por favor, faça o login.");
+         window.location.href = 'index.html';
+         return; 
+     }
 
     // 2. AÇÃO DO BOTÃO CANCELAR
     const btnCancelar = document.getElementById('btn-cancelar');

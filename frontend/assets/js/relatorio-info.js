@@ -3,7 +3,7 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 // Requisição pro backend
-fetch(`http://localhost:5000/relatorios/${id}`)
+fetch(`http://localhost:5000//history/${id}`)
   .then(res => res.json())
   .then(data => {
 

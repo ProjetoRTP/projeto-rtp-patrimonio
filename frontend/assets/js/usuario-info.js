@@ -1,20 +1,84 @@
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+// ===============================
+// CONFIGURAÇÃO
+// ===============================
+const API_URL = "http://localhost:5000/users";
 
-// EXEMPLOO
-const usuario = {
-    nome: "Maria Silva",
-    cpf: "123.456.789-00",
-    email: "maria@email.com",
-    dataNascimento: "1990-05-10",
-    permissao: "Administrador"
-};
+// ===============================
+// INIT
+// ===============================
+document.addEventListener("DOMContentLoaded", async () => {
+    const token = sessionStorage.getItem("token_procape");
 
-// Preencher tela
-document.getElementById("nome").value = usuario.nome;
-document.getElementById("cpf").value = usuario.cpf;
-document.getElementById("email").value = usuario.email;
-document.getElementById("dataNascimento").value = usuario.dataNascimento;
-document.getElementById("permissao").value = usuario.permissao;
+    if (!token) {
+        alert("Acesso negado. Por favor, inicie sessão.");
+        window.location.href = "../index.html";
+        return;
+    }
+
+    // Pega o ID da URL (?id=3)
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+        alert("Usuário não identificado.");
+        window.location.href = "usuario.html";
+        return;
+    }
+
+    await carregarUsuario(token, id);
+
+    // ===============================
+    // BOTÃO VOLTAR
+    // ===============================
+    document.querySelector(".btn-cancelar").addEventListener("click", () => {
+        window.location.href = "usuario.html";
+    });
+
+    // ===============================
+    // BOTÃO EDITAR — corrige o href dinâmico
+    // ===============================
+    const btnEditar = document.querySelector(".btn-cadastrar");
+    if (btnEditar) {
+        btnEditar.href = `usuario-editar.html?id=${id}`; 
+    }
+});
+
+// ===============================
+// BUSCAR USUÁRIO (GET)
+// ===============================
+async function carregarUsuario(token, id) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) throw new Error(`Erro ${response.status}`);
+
+        const user = await response.json();
+        preencherFormulario(user);
+
+    } catch (erro) {
+        console.error("Erro ao carregar usuário:", erro);
+        alert("Erro ao carregar dados do usuário.");
+    }
+}
+
+// ===============================
+// PREENCHER FORMULÁRIO
+// ===============================
+function preencherFormulario(user) {
+    document.getElementById("nome").value          = user.nome          || "";
+    document.getElementById("cpf").value           = user.cpf           || "";
+    document.getElementById("email").value         = user.email         || "";
+    document.getElementById("dataNascimento").value = user.data_nascimento || ""; 
+    document.getElementById("senha").value         = ""; 
+    
+    const select = document.getElementById("permissao");
+    if (select) select.value = user.perfil || "usuario";
+}
 
 

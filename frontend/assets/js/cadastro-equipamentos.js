@@ -90,7 +90,7 @@ function configurarSubmit() {
         }
 
         try {
-            const resposta = await fetch("http://localhost:5000/api/equipamentos", {
+            const resposta = await fetch("http://localhost:5000/equipments", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
