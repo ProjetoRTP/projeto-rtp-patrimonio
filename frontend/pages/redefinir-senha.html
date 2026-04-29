@@ -23,25 +23,19 @@
             <section class="col-md-6 login-form-container" aria-labelledby="titulo-login">
                 <div class="w-100 mx-auto" style="max-width: 400px;">
                     <h1 id="titulo-login" class="login-title text-center">Redefinir Senha</h1>
-                        <div class="text-center mt-3">
-                            <!-- <h2 class="form-label mb-4">
-                                Para redefinir sua senha, informe o e-mail
-                                <br/> cadastrado na sua conta e lhe enviaremos 
-                                <br/> um TOKEN para redefinição.
-                            </h2> -->
-                        
-                        </div>
 
-                    <form id="_______">
+                    <form id="form-redefinir-senha" action="/redefinir-senha" method="POST">
                         <div class="mb-3">
-                            <label for="____" class="form-label">Token</label>
-                            <input type="------" class="form-control " id="___________" placeholder="Digite o token recebido" required>
+                            <label for="senha" class="form-label">Token</label>
+                            <input type="password" class="form-control " id="senha" placeholder="Digite o token recebido" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="____" class="form-label">Senha</label>
-                            <input type="password" class="form-control mb-3" id="___________" placeholder="Digite sua nova senha" required>
-                            <input type="password" class="form-control " id="___________" placeholder="Confirme sua senha" required>
+                            <label for="nova-senha" class="form-label">Senha</label>
+                            <input type="password" class="form-control mb-3" id="nova-senha" placeholder="Digite sua nova senha" required>
+                            
+                            <label for="confirmar-senha" class="form-label">Confirmar Senha</label>
+                            <input type="password" class="form-control " id="confirmar-senha" placeholder="Digite novamente sua senha" required>
                         </div>
 
                         <button type="submit" class="btn btn-login">Redefinir</button>
