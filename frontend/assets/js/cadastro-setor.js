@@ -1,68 +1,98 @@
-// URL base da API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000/sectors';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     
     // 1. VERIFICAÇÃO DE SEGURANÇA
-       const token = sessionStorage.getItem('token_procape');
-       if (!token) {
-           alert("Acesso negado. Por favor, faça o login.");
-         window.location.href = 'index.html';
-         return; 
-     }
+    const token = sessionStorage.getItem('token_procape');
+    if (!token) {
+        alert("Acesso negado. Por favor, faça o login.");
+        window.location.href = '../index.html';
+        return; 
+    }
 
-    // 2. AÇÃO DO BOTÃO CANCELAR
+    // 2. DETECTAR SE É EDIÇÃO (Busca ID na URL)
+    const params = new URLSearchParams(window.location.search);
+    const sectorId = params.get('id'); 
+    
+    const formCadastro = document.getElementById('form-cadastro-setor');
+    const btnSalvar = document.getElementById('btn-salvar-setor');
+    const tituloPagina = document.querySelector('h2');
+    const inputNome = document.getElementById('inp-nome-setor');
+    const inputDescricao = document.getElementById('inp-descricao-setor');
+
+    // Se houver ID, entramos no modo EDIÇÃO
+    if (sectorId) {
+        if (tituloPagina) tituloPagina.innerText = 'Editar Setor';
+        if (btnSalvar) btnSalvar.innerText = 'Atualizar';
+        
+        try {
+            const resposta = await fetch(`${API_BASE_URL}/${sectorId}`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (resposta.ok) {
+                const setor = await resposta.json();
+                inputNome.value = setor.nome || '';
+                // Preenche a descrição se o seu backend retornar esse campo
+                inputDescricao.value = setor.descricao || '';
+            }
+        } catch (erro) {
+            console.error('Erro ao carregar dados para edição:', erro);
+        }
+    }
+
+    // 3. AÇÃO DO BOTÃO CANCELAR
     const btnCancelar = document.getElementById('btn-cancelar');
     if (btnCancelar) {
         btnCancelar.addEventListener('click', () => {
-            window.location.href = '../pages/setores.html'; // Volta para a listagem
+            window.location.href = 'setores.html';
         });
     }
 
-    // 3. LÓGICA DE CADASTRO (Envio do Formulário)
-    const formCadastro = document.getElementById('form-cadastro-setor');
-    
+    // 4. LÓGICA DE SALVAR (POST ou PUT)
     if (formCadastro) {
         formCadastro.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Impede o reload da página
+            e.preventDefault();
 
-            // Captura os dados dos inputs
-            const nomeSetor = document.getElementById('inp-nome-setor').value.trim();
-            const descricaoSetor = document.getElementById('inp-descricao-setor').value.trim();
+            const nomeSetor = inputNome.value.trim();
+            const descricaoSetor = inputDescricao.value.trim();
 
-            // Desativa o botão temporariamente
-            const btnSalvar = document.getElementById('btn-salvar-setor');
             const textoOriginal = btnSalvar.innerText;
             btnSalvar.innerText = 'Salvando...';
             btnSalvar.disabled = true;
 
             try {
-                // Requisição POST para criar o setor
-                const resposta = await fetch(`${API_BASE_URL}/sectors`, {
-                    method: 'POST',
+                // Define se vai para /sectors (POST) ou /sectors/ID (PUT)
+                const url = sectorId ? `${API_BASE_URL}/${sectorId}` : API_BASE_URL;
+                const metodo = sectorId ? 'PUT' : 'POST';
+
+                const resposta = await fetch(url, {
+                    method: metodo,
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify({
                         nome: nomeSetor,
-                        descricao: descricaoSetor
+                        descricao: descricaoSetor // O backend precisa tratar esse campo
                     })
                 });
 
+                const resultado = await resposta.json();
+
                 if (resposta.ok) {
-                    alert('Setor cadastrado com sucesso!');
-                    window.location.href = 'setores.html'; // Retorna para a lista atualizada
+                    alert(sectorId ? 'Setor atualizado com sucesso!' : 'Setor cadastrado com sucesso!');
+                    window.location.href = 'setores.html';
                 } else {
-                    const erro = await resposta.json();
-                    alert(`Erro ao cadastrar: ${erro.mensagem || 'Falha no servidor'}`);
+                    const msgErro = resultado.erro || resultado.msg || 'Falha na operação';
+                    alert(`Erro: ${msgErro}`);
                 }
 
             } catch (erro) {
-                console.error('Erro:', erro);
-                alert('Erro de conexão com o servidor.');
+                console.error('Erro na requisição:', erro);
+                alert('Erro de conexão com o servidor. O backend está rodando?');
             } finally {
-                // Restaura o botão caso dê erro (se for sucesso a tela vai redirecionar)
                 btnSalvar.innerText = textoOriginal;
                 btnSalvar.disabled = false;
             }

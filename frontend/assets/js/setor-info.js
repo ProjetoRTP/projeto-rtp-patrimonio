@@ -1,64 +1,75 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000/sectors';
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. VERIFICAÇÃO DE SEGURANÇA
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // 1. VERIFICAÇÃO DE SEGURANÇA E PARÂMETROS
     const token = sessionStorage.getItem('token_procape');
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
     if (!token) {
-        alert("Acesso negado. Por favor, inicie sessão.");
         window.location.href = '../index.html';
         return;
     }
 
-    // 2. OBTER ID DO SETOR A PARTIR DA URL
-    const params = new URLSearchParams(window.location.search);
-    const setorId = params.get('id');
-
-    if (!setorId) {
-        mostrarErro('ID do setor não fornecido na URL.');
+    if (!id) {
+        exibirErro("ID do setor não fornecido.");
         return;
     }
 
-    // 3. CARREGAR OS DADOS DO SETOR
-    async function carregarSetor() {
-        try {
-            const resposta = await fetch(`${API_BASE_URL}/sectors/${setorId}`, {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+    // Elementos da interface
+    const divCarregando = document.getElementById('carregando');
+    const divConteudo = document.getElementById('conteudo');
+    const divErro = document.getElementById('erro');
+    
+    // Campos do formulário
+    const inputId = document.getElementById('setor-id');
+    const inputNome = document.getElementById('setor-nome');
+    const inputDescricao = document.getElementById('setor-descricao');
+    const inputStatus = document.getElementById('setor-status');
+    const btnEditar = document.getElementById('btn-editar');
 
-            if (!resposta.ok) {
-                throw new Error('Erro ao buscar setor. Status: ' + resposta.status);
+    try {
+        // 2. BUSCA OS DADOS NO BACKEND
+        const resposta = await fetch(`${API_BASE_URL}/${id}`, {
+            method: 'GET',
+            headers: { 
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
+        });
 
+        if (resposta.ok) {
             const setor = await resposta.json();
 
-            // Preencher os campos do formulário
-            document.getElementById('setor-id').value = setor.id;
-            document.getElementById('setor-nome').value = setor.nome;
-            document.getElementById('setor-descricao').value = setor.descricao || '';
-            document.getElementById('setor-status').value = setor.ativo ? 'Ativo' : 'Inativo';
+            // 3. PREENCHE OS CAMPOS
+            inputId.value = setor.id;
+            inputNome.value = setor.nome;
+            inputDescricao.value = setor.descricao || "Sem descrição disponível.";
+            
+            // Lógica de status (baseada em soft delete ou campo ativo)
+            inputStatus.value = setor.ativo === false ? "Inativo" : "Ativo";
 
-            // Atualizar link do botão editar
-            document.getElementById('btn-editar').href = `cadastro-setor.html?id=${setor.id}`;
+            // Atualiza o link do botão editar com o ID correto
+            btnEditar.href = `cadastro-setor.html?id=${setor.id}`;
 
-            // Mostrar conteúdo e esconder carregamento
-            document.getElementById('carregando').style.display = 'none';
-            document.getElementById('conteudo').style.display = 'block';
+            // Mostra o conteúdo e esconde o loading
+            divCarregando.style.display = 'none';
+            divConteudo.style.display = 'block';
 
-        } catch (erro) {
-            console.error('Erro:', erro);
-            mostrarErro('Não foi possível carregar as informações do setor.');
+        } else {
+            const erroDados = await resposta.json();
+            exibirErro(erroDados.erro || "Erro ao carregar informações do setor.");
         }
+
+    } catch (erro) {
+        console.error("Erro na requisição:", erro);
+        exibirErro("Não foi possível conectar ao servidor.");
     }
 
-    // 4. FUNÇÃO PARA MOSTRAR ERRO
-    function mostrarErro(mensagem) {
-        document.getElementById('carregando').style.display = 'none';
-        document.getElementById('conteudo').style.display = 'none';
-        document.getElementById('erro').textContent = mensagem;
-        document.getElementById('erro').style.display = 'block';
+    function exibirErro(mensagem) {
+        divCarregando.style.display = 'none';
+        divErro.innerText = mensagem;
+        divErro.style.display = 'block';
     }
-
-    // Carregar dados do setor
-    carregarSetor();
 });
