@@ -22,8 +22,8 @@ async function carregarRelatorio(token) {
         // ✅ 3 fetches paralelos
         const [resComputadores, resImpressoras, resPerifericos] = await Promise.all([
             fetch(`${API_BASE}/computers`, { headers }),
-            fetch(`${API_BASE}/printer`,   { headers }),
-            fetch(`${API_BASE}/peripheral`,{ headers })
+            fetch(`${API_BASE}/printer`, { headers }),
+            fetch(`${API_BASE}/peripheral`, { headers })
         ]);
 
         if (!resComputadores.ok || !resImpressoras.ok || !resPerifericos.ok) {
@@ -46,6 +46,13 @@ async function carregarRelatorio(token) {
         preencherResumo(todos);
         preencherTabela(todos);
 
+        // expulsa o usuário se o token expirar
+        if (resComputadores.status === 401 || resImpressoras.status === 401 || resPerifericos.status === 401) {
+            sessionStorage.removeItem("token_procape");
+            window.location.href = "../index.html";
+            return;
+        }
+
     } catch (erro) {
         console.error("Erro ao carregar relatório:", erro);
         document.getElementById("tabela-equipamentos").innerHTML = `
@@ -63,14 +70,14 @@ function preencherResumo(todos) {
     document.getElementById("setor").textContent = setores.length > 0 ? setores.join(", ") : "Todos";
 
     // Contagens por status
-    const total    = todos.length;
-    const emUso    = todos.filter(e => e.status === "ativo").length;
-    const manut    = todos.filter(e => e.status === "em_manutencao").length;
-    const estoque  = todos.filter(e => e.status === "inativo").length;
+    const total = todos.length;
+    const emUso = todos.filter(e => e.status === "ativo").length;
+    const manut = todos.filter(e => e.status === "em_manutencao").length;
+    const estoque = todos.filter(e => e.status === "inativo").length;
 
-    document.getElementById("total").textContent   = total;
-    document.getElementById("uso").textContent     = emUso;
-    document.getElementById("manut").textContent   = manut;
+    document.getElementById("total").textContent = total;
+    document.getElementById("uso").textContent = emUso;
+    document.getElementById("manut").textContent = manut;
     document.getElementById("estoque").textContent = estoque;
 }
 
@@ -99,12 +106,12 @@ function preencherTabela(todos) {
 
 function formatarStatus(status) {
     const mapa = {
-        "ativo":          `<span class="badge bg-success">Ativo</span>`,
-        "emprestado":     `<span class="badge bg-info text-dark">Emprestado</span>`,
-        "em_manutencao":  `<span class="badge bg-warning text-dark">Manutenção</span>`,
-        "inativo":        `<span class="badge bg-secondary">Inativo</span>`,
-        "desativado":     `<span class="badge bg-dark">Desativado</span>`,
-        "descartado":     `<span class="badge bg-danger">Descartado</span>`
+        "ativo": `<span class="badge bg-success">Ativo</span>`,
+        "emprestado": `<span class="badge bg-info text-dark">Emprestado</span>`,
+        "em_manutencao": `<span class="badge bg-warning text-dark">Manutenção</span>`,
+        "inativo": `<span class="badge bg-secondary">Inativo</span>`,
+        "desativado": `<span class="badge bg-dark">Desativado</span>`,
+        "descartado": `<span class="badge bg-danger">Descartado</span>`
     };
     return mapa[status] ?? `<span class="badge bg-light text-dark">${status ?? "—"}</span>`;
 }

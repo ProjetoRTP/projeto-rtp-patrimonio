@@ -1,3 +1,5 @@
+const API_URL = ''
+
 document.addEventListener("DOMContentLoaded", () => {
     const token = sessionStorage.getItem("token_procape");
 
@@ -29,6 +31,12 @@ async function carregarRelatorios(token) {
         const dados = await resposta.json();
         montarTabelaRelatorios(dados);
 
+        if (resposta.status === 401) {
+            sessionStorage.removeItem("token_procape"); // Limpa o token inválido
+            window.location.href = "../index.html";
+            return;
+        }
+
     } catch (erro) {
         console.error("Erro ao carregar relatórios:", erro);
         tbody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-danger">Erro ao carregar relatórios.</td></tr>`;
@@ -48,7 +56,7 @@ function montarTabelaRelatorios(relatorios) {
             <td>${relatorio.tipo_evento ?? "—"}</td>      
             <td>${formatarData(relatorio.data_evento)}</td>
             <td class="text-end">
-                <a href="relatorio-detalhe.html?id=${relatorio.id}" class="btn-acao btn-info-red">
+                <a href="relatorio-info.html?id=${relatorio.id}" class="btn-acao btn-info-red">
                     <i class="bi bi-eye"></i>
                 </a>
                 <a onclick="imprimirRelatorio(${relatorio.id})" class="btn-acao btn-editar" style="cursor:pointer;">
