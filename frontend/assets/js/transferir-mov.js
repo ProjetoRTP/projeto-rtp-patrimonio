@@ -1,5 +1,5 @@
 // transferir-mov.js
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "http://localhost:5000/movement";
 const token = sessionStorage.getItem("token_procape");
 
 if (!token) {
@@ -20,11 +20,14 @@ async function carregarEquipamentos() {
         const resposta = await fetch(`${API_BASE_URL}/equipments`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        const dados = await resposta.json();
 
+        const dados = await resposta.json();
         const lista = document.getElementById("lista-equipamentos");
+
+        if (!lista) return;
+
         lista.innerHTML = dados.map(eq =>
-            `<option value="${eq.id}" data-nome="${eq.num_patrimonio}">${eq.num_patrimonio}</option>`
+            `<option value="${eq.id}">${eq.num_patrimonio}</option>`
         ).join('');
 
     } catch (erro) {
@@ -38,11 +41,14 @@ async function carregarColaboradores() {
         const resposta = await fetch(`${API_BASE_URL}/collaborators`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        const dados = await resposta.json();
 
+        const dados = await resposta.json();
         const lista = document.getElementById("lista-colaboradores");
+
+        if (!lista) return;
+
         lista.innerHTML = dados.map(col =>
-            `<option value="${col.id}" data-nome="${col.nome}">${col.nome}</option>`
+            `<option value="${col.id}">${col.nome}</option>`
         ).join('');
 
     } catch (erro) {
@@ -56,17 +62,15 @@ async function carregarSetores() {
         const resposta = await fetch(`${API_BASE_URL}/sectors`, {
             headers: { Authorization: `Bearer ${token}` }
         });
+
         const dados = await resposta.json();
+        const lista = document.getElementById("lista-setores");
 
-        const listaOrigem  = document.getElementById("lista-setores-origem");
-        const listaDestino = document.getElementById("lista-setores-destino");
+        if (!lista) return;
 
-        const options = dados.map(setor =>
+        lista.innerHTML = dados.map(setor =>
             `<option value="${setor.id}">${setor.nome}</option>`
         ).join('');
-
-        if (listaOrigem)  listaOrigem.innerHTML  = options;
-        if (listaDestino) listaDestino.innerHTML = options;
 
     } catch (erro) {
         console.error("Erro ao carregar setores:", erro);
@@ -77,14 +81,26 @@ async function carregarSetores() {
 function configurarBotaoSalvar() {
     const btCriar = document.getElementById('btCriar');
 
+    if (!btCriar) {
+        console.error("Botão btCriar não encontrado");
+        return;
+    }
+
     btCriar.addEventListener('click', async (event) => {
         event.preventDefault();
 
-        const equipamento_id    = document.getElementById("equipamento").value;
-        const colaborador_id    = document.getElementById("colaborador").value;
-        const setor_origem_id   = document.getElementById("setor-origem").value;
-        const setor_destino_id  = document.getElementById("setor-destino").value;
+        const equipamento_id    = document.getElementById("equipamento")?.value;
+        const colaborador_id    = document.getElementById("colaborador")?.value;
+        const setor_origem_id   = document.getElementById("setorOrigem")?.value;
+        const setor_destino_id  = document.getElementById("setorDestino")?.value;
         const observacao        = document.getElementById("observacao")?.value || "";
+
+        console.log({
+            equipamento_id,
+            colaborador_id,
+            setor_origem_id,
+            setor_destino_id
+        });
 
         if (!equipamento_id) {
             alert("Selecione um equipamento.");
