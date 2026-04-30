@@ -16,7 +16,6 @@ _token_lock = threading.Lock()
 # CREATE
 @user_bp.route("", methods=["POST"])
 @jwt_required()
-@check_role("admin")
 @swag_from("../../docs/user/create_user.yml")
 def create_user():
     dados = request.get_json()
