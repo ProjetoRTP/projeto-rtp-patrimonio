@@ -1,27 +1,55 @@
-// Página 2 - redefinir-senha.js
+const API_BASE_URL = "http://localhost:5000";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("form-redefinir-senha");
+  const emailField = document.getElementById("email");
+  const tokenField = document.getElementById("token");
   const novaSenha = document.getElementById("nova-senha");
   const confirmarSenha = document.getElementById("confirmar-senha");
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
     limparErros();
 
     if (!isSenhaValida(novaSenha.value)) {
-      e.preventDefault();
       mostrarFeedback("A senha deve ter no mínimo 8 caracteres, com letras e números.", "danger");
       novaSenha.classList.add("is-invalid");
       return;
     }
 
     if (novaSenha.value !== confirmarSenha.value) {
-      e.preventDefault();
       mostrarFeedback("As senhas não coincidem.", "danger");
       confirmarSenha.classList.add("is-invalid");
       return;
     }
 
-    // Se tudo ok, o form envia normalmente para o backend
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/reset-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: emailField.value.trim(),
+          token: tokenField.value.trim(),
+          senha: novaSenha.value,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.erro || "Erro ao redefinir senha");
+      }
+
+      mostrarFeedback("Senha redefinida com sucesso!", "success");
+
+      setTimeout(() => {
+        window.location.href = "../index.html";
+      }, 2000);
+    } catch (error) {
+      mostrarFeedback(error.message, "danger");
+    }
   });
 
   [novaSenha, confirmarSenha].forEach((campo) => {
