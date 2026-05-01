@@ -59,13 +59,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                tbody.innerHTML = movimentacoes.map(mov => `
+                tbody.innerHTML = movimentacoes.map(mov => {
+                    const dataMovimentacao = mov.data_movimentacao
+                        ? new Date(mov.data_movimentacao).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        })
+                        : 'Sem data';
+
+                    return `
                     <tr style="border-bottom: 1px solid #f1f1f1;">
                         <td style="color: #1D4587; padding: 15px 0; font-weight: 500;">
                             ${String(mov.id).padStart(7, '0')}
                         </td>
                         <td style="color: #1D4587; padding: 15px 0; text-align: center; font-weight: 500;">
-                            ${mov.descricao || `Equipamento #${mov.equipamento_id}`}
+                            ${dataMovimentacao}
                         </td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-danger" onclick="verInfoMovimentacao(${mov.id})">
@@ -73,7 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             </button>
                         </td>
                     </tr>
-                `).join('');
+                `;
+                }).join('');
             }
 
         } catch (erro) {
