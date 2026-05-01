@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <option value="">Selecione tipo</option>
         <option value="admin">Administrador</option>
         <option value="gerente">Gerente</option>
-        <option value="usuario">Usuário</option>
     `;
 
     // ===============================
