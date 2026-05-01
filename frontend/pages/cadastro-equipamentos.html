@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <!-- CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/cadastro.css">
     <link rel="shortcut icon" href="../assets/imagens/favicon.ico" type="image/x-icon">
@@ -17,7 +17,7 @@
 
 <body>
     <div class="d-flex flex-column flex-lg-row vh-100">
-    
+
         <!-- Navbar -->
         <div id="espaco-da-navbar"></div>
 
@@ -32,140 +32,155 @@
                     Cadastro de Equipamentos</h2>
 
                 <form>
-                        <div class="col-md-6 mb-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <label class="label-azul mb-0 fs-5">Tipo:</label>
-                                <select id="tipoEquipamento" class="form-select input-vermelho flex-grow-1 w-100" style="background-color: #ffeaea; color: #D32F2F;">
-                                    <option selected>Selecione</option>
-                                    <option value="1">Computador</option>
-                                    <option value="2">Impressora</option>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="label-azul mb-0 fs-5">Tipo:</label>
+                            <select id="tipoEquipamento" class="form-select input-vermelho flex-grow-1 w-100"
+                                style="background-color: #ffeaea; color: #D32F2F;">
+                                <option selected>Selecione</option>
+                                <option value="1">Computador</option>
+                                <option value="2">Impressora</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="label-azul mb-0 fs-5">Setor:</label>
+
+                            <select id="setor" class="form-select input-vermelho">
+                                <option value="">Selecione um setor</option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <!-- Campo oculto para num_patrimonio -->
+                    <input type="hidden" id="num_patrimonio" value="">
+
+
+                    <div class="row g-4">
+                        <!-- CAMPOS COMPUTADOR -->
+                        <div id="campos-computador" class="row g-4 d-none">
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Tombamento</label>
+                                <input id="tombamento" type="text" class="form-control input-vermelho w-100"
+                                    placeholder="00000.00000.000-00">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Sistema operacional</label>
+                                <input id="sistema" type="text" class="form-control input-vermelho w-100"
+                                    placeholder="Sistema">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Memória interna CPU</label>
+                                <input id="memoria-interna" type="text" class="form-control input-vermelho w-100"
+                                    placeholder="Memória">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Memória RAM</label>
+                                <input id="memoria-ram" type="text" class="form-control input-vermelho w-100"
+                                    placeholder="Memória RAM">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Armazenamento</label>
+                                <input id="armazenamento" type="text" class="form-control input-vermelho w-100"
+                                    placeholder="Armazenamento">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Número IP</label>
+                                <input id="numero-ip" type="text" class="form-control input-vermelho w-100"
+                                    placeholder="Número">
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <label class="label-azul d-block">Observações</label>
+                                <textarea id="observacoes" class="form-control input-vermelho w-100" rows="4"
+                                    placeholder="Detalhes adicionais"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- CAMPOS IMPRESSORA -->
+                        <div id="campos-impressora" class="row g-4 d-none">
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Modelo</label>
+                                <input id="modelo" type="text" class="form-control input-vermelho">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Tipo</label>
+                                <select id="tipo" class="form-select input-vermelho">
+                                    <option>Laser</option>
+                                    <option>Jato de tinta</option>
+                                    <option>Térmica</option>
+                                    <option>Plotter</option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center gap-3">
-                                <label class="label-azul mb-0 fs-5">Setor:</label>
-
-                                <input id="setor" list="lista-setores" class="form-control input-vermelho">
-                                <datalist id="lista-setores"></datalist>
-
-                            </div>
-                        </div>
-
-                        <div class="row g-4">
-                            <!-- CAMPOS COMPUTADOR -->
-                            <div id="campos-computador" class="row g-4 d-none">
-                                <div class="col-md-6">
-                                    <label class="label-azul d-block">Tombamento</label>
-                                    <input id="tombamento" type="text" class="form-control input-vermelho w-100"
-                                        placeholder="00000.00000.000-00">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul d-block">Sistema operacional</label>
-                                    <input id="sistema" type="text" class="form-control input-vermelho w-100" placeholder="Sistema">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul d-block">Memória interna CPU</label>
-                                    <input id="memoria-interna" type="text" class="form-control input-vermelho w-100" placeholder="Memória">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul d-block">Memória RAM</label>
-                                    <input id="memoria-ram" type="text" class="form-control input-vermelho w-100" placeholder="Memória RAM">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul d-block">Armazenamento</label>
-                                    <input id="armazenamento" type="text" class="form-control input-vermelho w-100" placeholder="Armazenamento">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul d-block">Número IP</label>
-                                    <input id="numero-ip" type="text" class="form-control input-vermelho w-100" placeholder="Número">
-                                </div>
-
-                                <div class="col-12 mt-4">
-                                    <label class="label-azul d-block">Observações</label>
-                                    <textarea id="observacoes" class="form-control input-vermelho w-100" rows="4" placeholder="Detalhes adicionais"></textarea>
-                                </div>
+                            <div class="col-md-6">
+                                <label class="label-azul">Coloração</label>
+                                <select id="coloracao" class="form-select input-vermelho">
+                                    <option>Monocromática</option>
+                                    <option>Colorida</option>
+                                </select>
                             </div>
 
-                            <!-- CAMPOS IMPRESSORA -->
-                            <div id="campos-impressora" class="row g-4 d-none">
-
-                                <div class="col-md-6">
-                                    <label class="label-azul">Modelo</label>
-                                    <input id="modelo" type="text" class="form-control input-vermelho">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul">Tipo</label>
-                                    <select id="tipo" class="form-select input-vermelho">
-                                        <option>Laser</option>
-                                        <option>Jato de tinta</option>
-                                        <option>Térmica</option>
-                                        <option>Plotter</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul">Coloração</label>
-                                    <select id="coloracao" class="form-select input-vermelho">
-                                        <option>Monocromática</option>
-                                        <option>Colorida</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul">Conectividade</label>
-                                    <input id="conectividade" type="text" class="form-control input-vermelho" placeholder="USB / Wi-Fi / Rede">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul">Endereço IP</label>
-                                    <input id="endereco-ip" type="text" class="form-control input-vermelho">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="label-azul">Insumo principal</label>
-                                    <input id="insumo" type="text" class="form-control input-vermelho" placeholder="Toner / Tinta">
-                                </div>
-
+                            <div class="col-md-6">
+                                <label class="label-azul">Conectividade</label>
+                                <input id="conectividade" type="text" class="form-control input-vermelho"
+                                    placeholder="USB / Wi-Fi / Rede">
                             </div>
 
-                        </div>
-                    
+                            <div class="col-md-6">
+                                <label class="label-azul">Endereço IP</label>
+                                <input id="endereco-ip" type="text" class="form-control input-vermelho">
+                            </div>
 
-                        <!-- BOTÕES -->
-                        <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
-                            <a href="computadores.html" class="text-decoration-none text-center">
-                                <button type="button" class="btn text-white fw-bold w-100" style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
-                                    Cancelar
-                                </button>
-                            </a>
+                            <div class="col-md-6">
+                                <label class="label-azul">Insumo principal</label>
+                                <input id="insumo" type="text" class="form-control input-vermelho"
+                                    placeholder="Toner / Tinta">
+                            </div>
 
-                            <button type="submit" class="btn text-white fw-bold "
-                                style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
-                                Cadastrar
-                            </button>
                         </div>
 
                     </div>
-                </form>
+
+
+                    <!-- BOTÕES -->
+                    <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
+                        <a href="computadores.html" class="text-decoration-none text-center">
+                            <button type="button" class="btn text-white fw-bold w-100"
+                                style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
+                                Cancelar
+                            </button>
+                        </a>
+
+                        <button type="submit" class="btn text-white fw-bold "
+                            style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
+                            Cadastrar
+                        </button>
+                    </div>
 
             </div>
+            </form>
 
-            <img src="../assets/imagens/logo.png" alt="Logo Coração"
-                class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
-                style="width: 70px; z-index: 0; opacity: 0.9;">
-        </main>
+    </div>
+
+    <img src="../assets/imagens/logo.png" alt="Logo Coração"
+        class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
+        style="width: 70px; z-index: 0; opacity: 0.9;">
+    </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script src="../assets/js/cadastro-equipamentos.js"></script>
 
     <script src="../assets/js/navbar.js"></script>
