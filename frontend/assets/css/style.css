@@ -244,3 +244,57 @@ body {
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.05);
 }
+
+
+/* Ajuste para o container principal não cortar conteúdo */
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* Troca vh-100 (fixo) por min-vh-100 (flexível) */
+    min-height: 100vh; 
+    /* Adiciona respiro nas bordas para o card não colar no navegador */
+    padding: 40px 20px; 
+    background-color: #EAF2F8;
+    overflow-y: auto;
+}
+
+/* Garante que o card seja legível e centralizado */
+.info-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 950px; /* Um pouco mais largo para acomodar os labels lado a lado */
+    margin: auto;
+}
+
+/* Estilização dos inputs desabilitados para melhor leitura */
+.form-control:disabled, .form-select:disabled {
+    background-color: #f1f3f5 !important;
+    color: #495057 !important;
+    opacity: 1; /* Remove o esmaecido padrão do navegador */
+    border: 1px solid #dee2e6;
+    font-weight: 500;
+}
+
+/* Evita que o título fique muito colado ao topo */
+h2 {
+    color: #1D4587;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* Personalização da barra de rolagem para o sistema ficar moderno */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #1D4587;
+    border-radius: 10px;
+}

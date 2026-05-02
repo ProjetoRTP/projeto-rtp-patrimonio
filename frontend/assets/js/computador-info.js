@@ -37,23 +37,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     const setValue = (id, value) => {
       const element = document.getElementById(id);
       if (element) {
-        element.value = value ?? "";
+        element.value = value ?? "N/A";
       }
     };
 
-    setValue(
-      "info-tombamento",
-      data.num_patrimonio || data.tombamento || "Não informado",
-    );
-    setValue(
-      "info-serie",
-      data.serie || data.numero_serie || data.serial || "Não informado",
-    );
-    setValue("info-modelo", data.modelo || "Não informado");
-    setValue(
-      "info-subsetor",
-      data.subsetor_nome || data.setor_nome || "Não alocado",
-    );
+    // Preencher campos principais
+    setValue("info-tombamento", data.num_patrimonio || "N/A");
+    setValue("info-status", data.status || "N/A");
+    setValue("info-os", data.os || "N/A");
+    setValue("info-ram", data.mem_ram || "N/A");
+    setValue("info-cpu", data.mem_cpu || "N/A");
+    setValue("info-armazenamento", data.armazenamento || "N/A");
+    setValue("info-ip", data.endereco_ip || "Sem IP");
+    setValue("info-setor", data.setor_nome || "N/A");
+    setValue("info-subsetor", data.subsetor_nome || "N/A");
+    setValue("info-colaborador", data.colaborador_nome || "Não atribuído");
+    setValue("info-data-aquisicao", data.data_aquisicao || "N/A");
+    setValue("info-data-cadastro", data.data_cadastro || "N/A");
+
+    // Preencher observação (textarea)
+    const obs = document.getElementById("info-observacao");
+    if (obs) {
+      obs.value = data.observacao || "";
+    }
   } catch (err) {
     console.error("Erro de conexão:", err);
     alert(
