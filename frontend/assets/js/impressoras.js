@@ -2,12 +2,19 @@
 // CONFIG
 // ===============================
 const API_URL = "http://localhost:5000/printer";
+const token = sessionStorage.getItem("token_procape");
+
+if (!token) {
+    alert("Acesso negado. Por favor, faça o login.");
+    window.location.href = "../index.html";
+}
 
 // ===============================
 // ELEMENTOS DO DOM
 // ===============================
 const tbody = document.getElementById("tbody-equipamentos");
-const btnAplicar = document.getElementById("btn-aplicar"); // Seletor do botão que criamos no HTML
+const btnAplicar = document.getElementById("btn-aplicar");
+const btnLimpar = document.getElementById("btn-limpar");
 
 // ===============================
 // INIT
@@ -15,12 +22,19 @@ const btnAplicar = document.getElementById("btn-aplicar"); // Seletor do botão 
 document.addEventListener("DOMContentLoaded", () => {
     carregarEquipamentos();
 
-    // Ouvinte para o botão de aplicar filtros
     if (btnAplicar) {
         btnAplicar.addEventListener("click", () => {
             const setor = document.getElementById("filtro-setor").value;
             const status = document.getElementById("filtro-status").value;
             carregarEquipamentos(setor, status);
+        });
+    }
+
+    if (btnLimpar) {
+        btnLimpar.addEventListener("click", () => {
+            document.getElementById("filtro-setor").value = "";
+            document.getElementById("filtro-status").value = "";
+            carregarEquipamentos();
         });
     }
 });
@@ -32,19 +46,26 @@ async function carregarEquipamentos(setor = "", status = "") {
     try {
         mostrarLoading();
 
-        // Exemplo de como passar filtros para a sua API (se ela suportar)
-        // const url = `${API_URL}?setor=${setor}&status=${status}`;
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            mostrarErro();
+            return;
+        }
+
         const dados = await response.json();
 
-        // Se a API não filtrar, você pode filtrar no JS:
+        // Filtragem no frontend
         let dadosFiltrados = dados;
-        if(setor) dadosFiltrados = dadosFiltrados.filter(d => d.setor === setor);
-        
+        if (setor)  dadosFiltrados = dadosFiltrados.filter(d => String(d.setor_id) === setor);
+        if (status) dadosFiltrados = dadosFiltrados.filter(d => d.status === status);
+
         renderizarTabela(dadosFiltrados);
 
     } catch (erro) {
-        console.error("Erro ao carregar equipamentos:", erro);
+        console.error("Erro ao carregar impressoras:", erro);
         mostrarErro();
     }
 }
@@ -57,19 +78,18 @@ function renderizarTabela(lista) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="2" class="text-center py-4 text-muted">
-                    Nenhum equipamento encontrado
+                    Nenhuma impressora encontrada
                 </td>
             </tr>
         `;
         return;
     }
 
-    // MELHORIA DE PERFORMANCE: Criamos a lista completa primeiro
-    const htmlCompleto = lista.map(eq => `
+    tbody.innerHTML = lista.map(eq => `
         <tr data-id="${eq.id}" style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
                 <a href="#" onclick="abrirHistorico(${eq.id})" style="text-decoration: none; color: #1D4587; font-weight: 500;">
-                    ${eq.nome}
+                    ${eq.modelo || eq.num_patrimonio || "Sem nome"}
                 </a>
             </td>
             <td class="text-end">
@@ -83,10 +103,43 @@ function renderizarTabela(lista) {
                 </div>
             </td>
         </tr>
-    `).join(''); // Transforma o array em uma única string
-
-    // Injeta tudo de uma vez (Apenas 1 re-render do navegador)
-    tbody.innerHTML = htmlCompleto;
+    `).join('');
 }
 
-// As outras funções (Loading, Erro, Ações) permanecem iguais...
+// ===============================
+// ESTADOS DA TABELA
+// ===============================
+function mostrarLoading() {
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="2" class="text-center text-muted py-4">
+                Carregando impressoras...
+            </td>
+        </tr>
+    `;
+}
+
+function mostrarErro() {
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="2" class="text-center text-danger py-4">
+                Erro ao carregar impressoras. Verifique se o servidor está rodando.
+            </td>
+        </tr>
+    `;
+}
+
+// ===============================
+// AÇÕES
+// ===============================
+function abrirHistorico(id) {
+    window.location.href = `historico-equipamento.html?id=${id}`;
+}
+
+function editarEquipamento(id) {
+    window.location.href = `editar-impressora.html?id=${id}`;
+}
+
+function verDetalhes(id) {
+    window.location.href = `detalhes-impressora.html?id=${id}`;
+}
