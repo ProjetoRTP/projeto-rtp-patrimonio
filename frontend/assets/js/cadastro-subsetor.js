@@ -2,7 +2,6 @@
 const API_BASE_URL = "http://localhost:5000";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. VERIFICAÇÃO DE SEGURANÇA
   const token = sessionStorage.getItem("token_procape");
   if (!token) {
     alert("Acesso negado. Por favor, faça o login.");
@@ -10,10 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // 2. PREENCHER O DROPDOWN (CAIXA DE SELEÇÃO) COM OS SETORES
-  async function carregarSetoresParaDropdown() {
-    const selectSetor = document.getElementById("sel-setor-pai");
+  const subsectorId = new URLSearchParams(window.location.search).get("id");
+  const selectSetor = document.getElementById("sel-setor-pai");
+  const btnSalvar = document.getElementById("btn-salvar-subsetor");
 
+  async function carregarSetoresParaDropdown(selectedSetorId = null) {
     try {
       const resposta = await fetch(`${API_BASE_URL}/sectors`, {
         method: "GET",
@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (resposta.ok) {
         const setores = await resposta.json();
-
         selectSetor.innerHTML =
           '<option value="" disabled selected>Selecione</option>';
 
@@ -30,8 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
           const option = document.createElement("option");
           option.value = setor.id;
           option.textContent = setor.nome;
+          if (selectedSetorId && String(setor.id) === String(selectedSetorId)) {
+            option.selected = true;
+          }
           selectSetor.appendChild(option);
         });
+
+        if (selectedSetorId && !selectSetor.value) {
+          selectSetor.innerHTML +=
+            '<option value="" disabled selected>Setor atual não encontrado</option>';
+        }
       } else {
         selectSetor.innerHTML =
           '<option value="" disabled>Erro ao carregar setores</option>';
@@ -43,9 +50,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  carregarSetoresParaDropdown();
+  async function carregarDadosSubsetor(id) {
+    try {
+      const resposta = await fetch(`${API_BASE_URL}/subsectors/${id}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-  // 3. AÇÃO DO BOTÃO CANCELAR
+      if (resposta.ok) {
+        const subsector = await resposta.json();
+        document.getElementById("inp-nome-subsetor").value =
+          subsector.nome || "";
+        document.getElementById("inp-descricao-subsetor").value =
+          subsector.descricao || "";
+        await carregarSetoresParaDropdown(subsector.setor_id);
+        btnSalvar.innerText = "Atualizar";
+      } else {
+        alert("Não foi possível carregar o subsetor para edição.");
+        window.location.href = "subsetores.html";
+      }
+    } catch (erro) {
+      console.error("Erro ao carregar subsetor:", erro);
+      alert("Erro de conexão ao carregar subsetor.");
+      window.location.href = "subsetores.html";
+    }
+  }
+
+  async function inicializarFormulario() {
+    if (subsectorId) {
+      await carregarDadosSubsetor(subsectorId);
+    } else {
+      await carregarSetoresParaDropdown();
+    }
+  }
+
   const btnCancelar = document.getElementById("btn-cancelar");
   if (btnCancelar) {
     btnCancelar.addEventListener("click", () => {
@@ -53,9 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 4. LÓGICA DE CADASTRO (Envio do Formulário)
   const formCadastro = document.getElementById("form-cadastro-subsetor");
-
   if (formCadastro) {
     formCadastro.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -68,31 +104,39 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("inp-descricao-subsetor")
         .value.trim();
 
-      const btnSalvar = document.getElementById("btn-salvar-subsetor");
       const textoOriginal = btnSalvar.innerText;
-      btnSalvar.innerText = "Salvando...";
+      btnSalvar.innerText = subsectorId ? "Atualizando..." : "Salvando...";
       btnSalvar.disabled = true;
 
+      const metodo = subsectorId ? "PUT" : "POST";
+      const url = subsectorId
+        ? `${API_BASE_URL}/subsectors/${subsectorId}`
+        : `${API_BASE_URL}/subsectors`;
+
       try {
-        const resposta = await fetch(`${API_BASE_URL}/subsectors`, {
-          method: "POST",
+        const resposta = await fetch(url, {
+          method: metodo,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            setor_id: parseInt(setorId),
+            setor_id: parseInt(setorId, 10),
             nome: nomeSubsetor,
             descricao: descricaoSubsetor,
           }),
         });
 
         if (resposta.ok) {
-          alert("Subsetor cadastrado com sucesso!");
+          alert(
+            subsectorId
+              ? "Subsetor atualizado com sucesso!"
+              : "Subsetor cadastrado com sucesso!",
+          );
           window.location.href = "subsetores.html";
         } else {
           const erro = await resposta.json();
-          alert(`Erro ao cadastrar: ${erro.mensagem || "Falha no servidor"}`);
+          alert(`Erro: ${erro.erro || erro.mensagem || "Falha no servidor"}`);
         }
       } catch (erro) {
         console.error("Erro:", erro);
@@ -103,4 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  inicializarFormulario();
 });
