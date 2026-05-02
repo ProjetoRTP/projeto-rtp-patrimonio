@@ -89,7 +89,7 @@ function renderizarTabela(lista) {
         <tr data-id="${eq.id}" style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
                 <a href="#" onclick="abrirHistorico(${eq.id})" style="text-decoration: none; color: #1D4587; font-weight: 500;">
-                    ${eq.modelo || eq.num_patrimonio || "Sem nome"}
+                    ${eq.num_patrimonio || "Sem número"}
                 </a>
             </td>
             <td class="text-end">
