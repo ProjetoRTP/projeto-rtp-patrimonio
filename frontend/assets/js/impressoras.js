@@ -137,9 +137,9 @@ function abrirHistorico(id) {
 }
 
 function editarEquipamento(id) {
-    window.location.href = `editar-impressora.html?id=${id}`;
+    window.location.href = `cadastro-equipamentos.html?id=${id}`;
 }
 
 function verDetalhes(id) {
-    window.location.href = `detalhes-impressora.html?id=${id}`;
+    window.location.href = `impressora-info.html?id=${id}`;
 }

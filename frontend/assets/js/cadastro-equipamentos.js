@@ -1,6 +1,6 @@
 const API_BASE = "http://localhost:5000";
 const API_COMPUTERS = `${API_BASE}/computers`;
-const API_PRINTERS = `${API_BASE}/printers`;
+const API_PRINTERS = `${API_BASE}/printer`;
 const API_PERIPHERALS = `${API_BASE}/peripherals`;
 const API_SECTORS = `${API_BASE}/sectors`;
 
@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const titulo = document.querySelector("h2");
   const btnSalvar = document.querySelector('button[type="submit"]');
+  const btnCancelarLink = document.getElementById("btnCancelarLink");
   const tipoEquipamento = document.getElementById("tipoEquipamento");
   const setorSelect = document.getElementById("setor");
   const formCadastro = document.querySelector("form");
@@ -97,11 +98,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Detectar tipo baseado no que foi retornado
         if (res.url.includes("/computers")) {
           tipoEquipamento.value = "1";
-        } else if (res.url.includes("/printers")) {
+        } else if (res.url.includes("/printer")) {
           tipoEquipamento.value = "2";
         }
 
         mostrarCamposPorTipo();
+
+        if (tipoEquipamento.value === "2" && btnCancelarLink) {
+          btnCancelarLink.href = "impressoras.html";
+        }
 
         // Preencher setor
         if (data.setor_id) {
@@ -140,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.getElementById("modelo").value = data.modelo || "";
         }
         if (document.getElementById("tipo")) {
-          document.getElementById("tipo").value = data.tipo_impressora || "";
+          document.getElementById("tipo").value = data.tipo_imp || "";
         }
         if (document.getElementById("coloracao")) {
           document.getElementById("coloracao").value = data.coloracao || "";
@@ -212,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         payload = {
           ...payload,
           modelo: document.getElementById("modelo")?.value || "",
-          tipo_impressora: document.getElementById("tipo")?.value || "",
+          tipo_imp: document.getElementById("tipo")?.value || "",
           coloracao: document.getElementById("coloracao")?.value || "",
           conectividade: document.getElementById("conectividade")?.value || "",
           endereco_ip: document.getElementById("endereco-ip")?.value || "",
@@ -234,7 +239,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           alert(
             equipmentId ? "Equipamento atualizado!" : "Equipamento cadastrado!",
           );
-          window.location.href = "computadores.html";
+          const redirectUrl = tipo === "1" ? "computadores.html" : "impressoras.html";
+          window.location.href = redirectUrl;
         } else {
           const erro = await res.json();
           alert(`Erro: ${erro.erro || "Falha ao salvar"}`);

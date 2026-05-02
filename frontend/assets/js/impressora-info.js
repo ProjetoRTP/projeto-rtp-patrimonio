@@ -1,78 +1,53 @@
-document.addEventListener("DOMContentLoaded", () => {
+const API_BASE = "http://localhost:5000";
 
-    // Pegar ID da URL
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = sessionStorage.getItem("token_procape");
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-    if (!id) {
-        console.error("ID não encontrado na URL");
-        return;
+  const btnEditar = document.getElementById("btnEditar");
+  if (btnEditar && id) {
+    btnEditar.href = `cadastro-equipamentos.html?id=${id}`;
+  }
+
+  if (!token || !id) {
+    window.location.href = "impressoras.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/printer/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error("Resposta não OK ao buscar impressora:", res.status, res.statusText);
+      alert("Não foi possível buscar a impressora. Retornando para a lista.");
+      window.location.href = "impressoras.html";
+      return;
     }
 
-    // FUNÇÃO para preencher os campos
-    function preencherCampos(impressora) {
-        document.getElementById("modelo").value = impressora.modelo || "";
-        document.getElementById("tipo").value = impressora.tipo || "";
-        document.getElementById("coloracao").value = impressora.coloracao || "";
-        document.getElementById("conectividade").value = impressora.conectividade || "";
-        document.getElementById("ip").value = impressora.ip || "";
-        document.getElementById("insumo").value = impressora.insumo || "";
-    }
+    const data = await res.json();
+    console.log("Dados da impressora:", data);
 
-    //  MOCK
-    const impressorasMock = [
-        {
-            id: "1",
-            modelo: "HP LaserJet",
-            tipo: "Laser",
-            coloracao: "Monocromática",
-            conectividade: "Wi-Fi",
-            ip: "192.168.0.10",
-            insumo: "Toner"
-        },
-        {
-            id: "2",
-            modelo: "Epson EcoTank",
-            tipo: "Jato de tinta",
-            coloracao: "Colorida",
-            conectividade: "USB",
-            ip: "192.168.0.20",
-            insumo: "Tinta"
-        }
-    ];
+    const setValue = (id, value) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.value = value ?? "";
+      }
+    };
 
-    // BUSCAR DO BACKEND
-    fetch(`http://localhost:5000/printer/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro no backend");
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Dados do backend:", data);
-            preencherCampos(data);
-        })
-        .catch(error => {
-            console.warn("Usando mock por erro no backend:", error);
-
-            // 🔹 fallback pro mock
-            const impressora = impressorasMock.find(i => i.id === id);
-
-            if (impressora) {
-                preencherCampos(impressora);
-            } else {
-                console.error("Impressora não encontrada");
-            }
-        });
-
+    setValue("modelo", data.modelo || "Não informado");
+    setValue("tipo", data.tipo_imp || "Não informado");
+    setValue("coloracao", data.coloracao || "Não informado");
+    setValue("conectividade", data.conectividade || "Não informado");
+    setValue("ip", data.endereco_ip || "Não informado");
+    setValue("insumo", data.insumo || "Não informado");
+  } catch (err) {
+    console.error("Erro ao carregar impressora:", err);
+    alert("Erro de conexão com o servidor.");
+    window.location.href = "impressoras.html";
+  }
 });
-
-
-
-
-const btnEditar = document.getElementById("btnEditar");
-
-if (btnEditar) {
-    btnEditar.href = `usuario-editar.html?id=${id}`;
-}

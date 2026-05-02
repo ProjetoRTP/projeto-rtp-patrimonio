@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="../assets/css/cadastro-usuario.css">
     <link rel="shortcut icon" href="../assets/imagens/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/usuario-info.css">
-
 </head>
 
 <body class="fundo-tela">
@@ -41,18 +40,18 @@
                 <div class="col-md-6">
                     <label class="label-azul">Tipo</label>
                     <select disabled id="tipo" class="form-select input-vermelho">
-                        <option>Laser</option>
-                        <option>Jato de tinta</option>
-                        <option>Térmica</option>
-                        <option>Plotter</option>
+                        <option value="laser">Laser</option>
+                        <option value="jato de tinta">Jato de tinta</option>
+                        <option value="termica">Térmica</option>
+                        <option value="plotter">Plotter</option>
                     </select>
                 </div>
 
                 <div class="col-md-6">
                     <label class="label-azul">Coloração</label>
                     <select disabled id="coloracao" class="form-select input-vermelho">
-                        <option>Monocromática</option>
-                        <option>Colorida</option>
+                        <option value="monocromatica">Monocromática</option>
+                        <option value="colorida">Colorida</option>
                     </select>
                 </div>
 
@@ -75,9 +74,8 @@
         </form>
 
             <div class="d-flex justify-content-center gap-4 mt-2">
-                <button id="btCancelar" type="button" class="btn btn-cancelar px-5 py-2 rounded-3">Voltar</button>
-                <a id="btnEditar" href="impressora-editar.html?id=1" class="btn btn-cadastrar px-5 py-2 rounded-3">Editar</a>
-            </div>
+                    <button id="btCancelar" type="button" class="btn btn-cancelar px-5 py-2 rounded-3" onclick="window.location.href='impressoras.html'">Voltar</button>
+                    <a id="btnEditar" href="#" class="btn btn-cadastrar px-5 py-2 rounded-3">Editar</a>
 
         </div>
         
@@ -92,7 +90,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/frontend/assets/js/usuario-info.js"></script>
+    <script src="../assets/js/impressora-info.js"></script>
     <script src="../assets/js/navbar.js"></script>
 </body>
 </html>
