@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
+  const btnEditar = document.getElementById("btn-editar-comp");
+  if (btnEditar && id) {
+    btnEditar.href = `cadastro-equipamentos.html?id=${id}`;
+    console.log("Edit link definido para:", btnEditar.href);
+  }
+
   if (!token || !id) {
     window.location.href = "computadores.html";
     return;
@@ -15,41 +21,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch(`${API_BASE}/computers/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
     });
 
-    if (res.ok) {
-      const comp = await res.json();
-      console.log("Dados recebidos:", comp);
-
-      // Preencher campos com os dados do banco
-      document.getElementById("info-tombamento").value =
-        comp.num_patrimonio || comp.tombamento || "N/A";
-      document.getElementById("info-serie").value =
-        comp.serie || "Não informado";
-      document.getElementById("info-modelo").value =
-        comp.modelo || "Não informado";
-      document.getElementById("info-subsetor").value =
-        comp.subsetor_nome || comp.setor_nome || "Não alocado";
-
-      // Configura o link do botão editar
-      const btnEditar = document.getElementById("btn-editar-comp");
-      if (btnEditar) {
-        btnEditar.href = `cadastro-equipamentos.html?id=${id}`;
-      }
-    } else {
-      console.error("Erro na resposta:", res.status, res.statusText);
-      const erro = await res.json().catch(() => ({}));
-      alert(
-        "Não foi possível encontrar este equipamento: " +
-          (erro.erro || "Erro desconhecido"),
-      );
+    if (!res.ok) {
+      console.error("Resposta não OK:", res.status, res.statusText);
+      alert("Não foi possível buscar o equipamento. Retornando para a lista.");
       window.location.href = "computadores.html";
+      return;
     }
+
+    const data = await res.json();
+    console.log("JSON recebido da API:", data);
+
+    const setValue = (id, value) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.value = value ?? "";
+      }
+    };
+
+    setValue(
+      "info-tombamento",
+      data.num_patrimonio || data.tombamento || "Não informado",
+    );
+    setValue(
+      "info-serie",
+      data.serie || data.numero_serie || data.serial || "Não informado",
+    );
+    setValue("info-modelo", data.modelo || "Não informado");
+    setValue(
+      "info-subsetor",
+      data.subsetor_nome || data.setor_nome || "Não alocado",
+    );
   } catch (err) {
     console.error("Erro de conexão:", err);
-    alert("Erro de conexão: Verifique se o servidor Python está ligado!");
+    alert(
+      "Erro de conexão com o servidor. Verifique se o backend está rodando.",
+    );
     window.location.href = "computadores.html";
   }
 });

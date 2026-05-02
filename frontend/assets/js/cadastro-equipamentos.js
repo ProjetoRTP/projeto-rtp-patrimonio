@@ -1,6 +1,8 @@
-const API_URL = "http://localhost:5000/equipments";
 const API_BASE = "http://localhost:5000";
-const API_SECTORS = "http://localhost:5000/sectors";
+const API_COMPUTERS = `${API_BASE}/computers`;
+const API_PRINTERS = `${API_BASE}/printers`;
+const API_PERIPHERALS = `${API_BASE}/peripherals`;
+const API_SECTORS = `${API_BASE}/sectors`;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = sessionStorage.getItem("token_procape");
@@ -12,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const params = new URLSearchParams(window.location.search);
   const equipmentId = params.get("id");
+  console.log("equipmentId do query string:", equipmentId);
 
   const titulo = document.querySelector("h2");
   const btnSalvar = document.querySelector('button[type="submit"]');
@@ -69,20 +72,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       // Tentar buscar como computador primeiro
-      let res = await fetch(`${API_BASE}/computers/${equipmentId}`, {
+      let res = await fetch(`${API_COMPUTERS}/${equipmentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       // Se não encontrar, tentar impressora
       if (!res.ok) {
-        res = await fetch(`${API_BASE}/printers/${equipmentId}`, {
+        res = await fetch(`${API_PRINTERS}/${equipmentId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
 
       // Se ainda não encontrar, tentar periférico
       if (!res.ok) {
-        res = await fetch(`${API_BASE}/peripherals/${equipmentId}`, {
+        res = await fetch(`${API_PERIPHERALS}/${equipmentId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
@@ -173,12 +176,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const metodo = equipmentId ? "PUT" : "POST";
 
-      // Determinar a rota correta baseado no tipo
-      let rotaBase = API_URL; // fallback padrão
+      let rotaBase = "";
       if (tipo === "1") {
-        rotaBase = `${API_BASE}/computers`;
+        rotaBase = API_COMPUTERS;
       } else if (tipo === "2") {
-        rotaBase = `${API_BASE}/printers`;
+        rotaBase = API_PRINTERS;
+      }
+
+      if (!rotaBase) {
+        alert("Selecione o tipo de equipamento.");
+        return;
       }
 
       const urlFinal = equipmentId ? `${rotaBase}/${equipmentId}` : rotaBase;
