@@ -1,13 +1,16 @@
-// gerar-relatorio.js
+// relatorio-gerar.js
 const API_BASE_URL = "http://localhost:5000";
-const token = sessionStorage.getItem("token_procape");
-
-if (!token) {
-    alert("Acesso negado. Por favor, faça o login.");
-    window.location.href = "../index.html";
-}
+let token;
 
 document.addEventListener("DOMContentLoaded", () => {
+    token = sessionStorage.getItem("token_procape");
+
+    if (!token) {
+        alert("Acesso negado. Por favor, faça o login.");
+        window.location.href = "../index.html";
+        return;
+    }
+
     carregarSetores();
     configurarPeriodo();
 
@@ -15,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "relatorios.html";
     });
 
-    document.getElementById("form-relatorio").addEventListener("submit", async (e) => {
+    document.getElementById("form-relatorio").addEventListener("submit", (e) => {
         e.preventDefault();
-        await gerarRelatorio();
+        gerarRelatorio();
     });
 });
 
@@ -104,7 +107,7 @@ function calcularDatas(periodo) {
 // ===============================
 // GERAR RELATÓRIO
 // ===============================
-async function gerarRelatorio() {
+function gerarRelatorio() {
     const tipo    = document.getElementById("tipo-relatorio").value;
     const periodo = document.getElementById("periodo").value;
     const setor   = document.getElementById("filtro-setor").value;
@@ -123,15 +126,14 @@ async function gerarRelatorio() {
     const datas = calcularDatas(periodo);
     if (!datas) return;
 
-    // Monta os parâmetros e redireciona para a página de resultado
     const params = new URLSearchParams({
         tipo,
         dataInicio: datas.dataInicio,
         dataFim:    datas.dataFim,
     });
 
-    if (setor)  params.append("setor", setor);
-    if (equip)  params.append("equipamento", equip);
+    if (setor) params.append("setor", setor);
+    if (equip) params.append("equipamento", equip);
 
-    window.location.href = `relatorio-resultado.html?${params.toString()}`;
+    window.location.href = `relatorio-info.html?${params.toString()}`;
 }
