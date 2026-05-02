@@ -239,7 +239,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           alert(
             equipmentId ? "Equipamento atualizado!" : "Equipamento cadastrado!",
           );
-          const redirectUrl = tipo === "1" ? "computadores.html" : "impressoras.html";
+          const redirectUrl =
+            tipo === "1" ? "computadores.html" : "impressoras.html";
           window.location.href = redirectUrl;
         } else {
           const erro = await res.json();

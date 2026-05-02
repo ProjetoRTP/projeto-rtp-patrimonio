@@ -23,7 +23,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     if (!res.ok) {
-      console.error("Resposta não OK ao buscar impressora:", res.status, res.statusText);
+      console.error(
+        "Resposta não OK ao buscar impressora:",
+        res.status,
+        res.statusText,
+      );
       alert("Não foi possível buscar a impressora. Retornando para a lista.");
       window.location.href = "impressoras.html";
       return;
