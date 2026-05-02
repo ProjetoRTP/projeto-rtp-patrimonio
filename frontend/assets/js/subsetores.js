@@ -1,43 +1,41 @@
 // URL base da API
+// URL base da API
 const API_BASE_URL = "http://localhost:5000";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. VERIFICAÇÃO DE SEGURANÇA
-  const token = sessionStorage.getItem("token_procape");
-  if (!token) {
-    alert("Acesso negado. Por favor, faça o login.");
-    window.location.href = "index.html";
-    return;
-  }
+    // 1. VERIFICAÇÃO DE SEGURANÇA
+    const token = sessionStorage.getItem("token_procape");
+    if (!token) {
+        alert("Acesso negado. Por favor, faça o login.");
+        window.location.href = "index.html";
+        return;
+    }
 
-  // 2. FUNÇÃO PARA CARREGAR OS SUBSETORES
-  async function carregarSubsetores() {
-    const tbody = document.getElementById("tbody-subsetores");
+    // 2. FUNÇÃO PARA CARREGAR OS SUBSETORES
+    async function carregarSubsetores() {
+        const tbody = document.getElementById("tbody-subsetores");
 
-    try {
-      // Requisição GET para buscar os subsetores (Rota fictícia: /api/subsetores)
-      const resposta = await fetch(`${API_BASE_URL}/subsectors`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+        try {
+            const resposta = await fetch(`${API_BASE_URL}/subsectors`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-      if (resposta.ok) {
-        const subsetores = await resposta.json();
-        tbody.innerHTML = "";
+            if (resposta.ok) {
+                const subsetores = await resposta.json();
+                tbody.innerHTML = "";
 
-        if (subsetores.length === 0) {
-          tbody.innerHTML =
-            '<tr><td colspan="3" class="text-center py-4">Nenhum subsetor registado.</td></tr>';
-          return;
-        }
+                if (subsetores.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4">Nenhum subsetor registado.</td></tr>';
+                    return;
+                }
 
-        // Cria as linhas da tabela
-        subsetores.forEach((subsetor) => {
-          const tr = document.createElement("tr");
+                subsetores.forEach((subsetor) => {
+                    const tr = document.createElement("tr");
 
-          tr.innerHTML = `
+                    tr.innerHTML = `
                         <td>${subsetor.nome}</td>
                         <td>${subsetor.setor_nome || "Não definido"}</td>
                         <td class="text-end">
@@ -49,28 +47,30 @@ document.addEventListener("DOMContentLoaded", () => {
                             </button>
                         </td>
                     `;
-          tbody.appendChild(tr);
-        });
-      } else {
-        tbody.innerHTML =
-          '<tr><td colspan="3" class="text-center text-danger py-4">Erro ao buscar subsetores.</td></tr>';
-      }
-    } catch (erro) {
-      console.error("Erro de ligação:", erro);
-      tbody.innerHTML =
-        '<tr><td colspan="3" class="text-center text-danger py-4">Não foi possível ligar ao servidor da base de dados.</td></tr>';
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Erro ao buscar subsetores.</td></tr>';
+            }
+        } catch (erro) {
+            console.error("Erro de ligação:", erro);
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Não foi possível ligar ao servidor.</td></tr>';
+        }
     }
-  }
 
-  // Chama a função
-  carregarSubsetores();
+    carregarSubsetores();
 });
 
-// Funções para os botões de ação
-function editarSubsetor(id) {
-  window.location.href = `cadastro-subsetor.html?id=${id}`;
-}
+// ==========================================
+// FUNÇÕES DE AÇÃO (AJUSTADAS)
+// ==========================================
 
-function verInfoSubsetor(id) {
-  alert(`A abrir informações do subsetor ID: ${id}`);
-}
+// Usamos window. para garantir que o HTML encontre a função
+window.editarSubsetor = function(id) {
+    window.location.href = `cadastro-subsetor.html?id=${id}`;
+};
+
+window.verInfoSubsetor = function(id) {
+    // Agora redireciona corretamente para a página de informações
+    window.location.href = `subsetor-info.html?id=${id}`;
+};
