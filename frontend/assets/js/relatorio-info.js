@@ -1,121 +1,115 @@
-const API_BASE = "http://localhost:5000";
+// relatorio-info.js
+const API_BASE_URL = "http://localhost:5000";
+const token = sessionStorage.getItem("token_procape");
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const token = sessionStorage.getItem("token_procape");
+if (!token) {
+    alert("Acesso negado. Por favor, faça o login.");
+    window.location.href = "../index.html";
+}
 
-    if (!token) {
-        alert("Acesso negado. Por favor, inicie sessão.");
-        window.location.href = "../index.html";
-        return;
-    }
+// Mapeamento de tipo_evento para label legível
+const LABELS_TIPO = {
+    cadastro:            "Cadastro",
+    movimentacao:        "Movimentação",
+    manutencao_entrada:  "Manutenção (Entrada)",
+    manutencao_saida:    "Manutenção (Saída)",
+    mudanca_status:      "Mudança de Status"
+};
 
-    await carregarRelatorio(token);
+document.addEventListener("DOMContentLoaded", () => {
+    const params     = new URLSearchParams(window.location.search);
+    const tipo       = params.get("tipo");
+    const dataInicio = params.get("dataInicio");
+    const dataFim    = params.get("dataFim");
+    const setor      = params.get("setor");
+    const equipamento = params.get("equipamento");
+
+    // Exibe os filtros aplicados no cabeçalho
+    document.getElementById("data").textContent =
+        `${formatarData(dataInicio)} até ${formatarData(dataFim)}`;
+
+    carregarRelatorio({ tipo, dataInicio, dataFim, setor, equipamento });
 });
 
-async function carregarRelatorio(token) {
-    const headers = {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-    };
+// ===============================
+// BUSCA E FILTRA OS DADOS
+// ===============================
+async function carregarRelatorio({ tipo, dataInicio, dataFim, setor, equipamento }) {
+    const tabela = document.getElementById("tabela-equipamentos");
+    tabela.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">A carregar...</td></tr>`;
 
     try {
-        // ✅ 3 fetches paralelos
-        const [resComputadores, resImpressoras, resPerifericos] = await Promise.all([
-            fetch(`${API_BASE}/computers`, { headers }),
-            fetch(`${API_BASE}/printer`, { headers }),
-            fetch(`${API_BASE}/peripheral`, { headers })
-        ]);
+        // Escolhe o endpoint conforme o tipo
+        let url = `${API_BASE_URL}/history`;
 
-        if (!resComputadores.ok || !resImpressoras.ok || !resPerifericos.ok) {
-            throw new Error("Erro ao buscar dados do servidor.");
+        if (tipo === "movimentacoes") url = `${API_BASE_URL}/history/type/movimentacao`;
+        else if (tipo === "manutencoes") url = `${API_BASE_URL}/history/type/manutencao_entrada`;
+        else if (tipo === "equipamentos") url = `${API_BASE_URL}/history/type/cadastro`;
+        // "geral" usa /history sem filtro de tipo
+
+        const resposta = await fetch(url, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!resposta.ok) throw new Error(`Erro ${resposta.status}`);
+
+        let dados = await resposta.json();
+
+        // Filtra por data no frontend
+        dados = dados.filter(item => {
+            const dataEvento = item.data_evento?.split("T")[0];
+            return dataEvento >= dataInicio && dataEvento <= dataFim;
+        });
+
+        // Filtra por equipamento (num_patrimonio ou equipamento_id)
+        if (equipamento) {
+            dados = dados.filter(item =>
+                String(item.equipamento_id).includes(equipamento) ||
+                item.descricao?.toLowerCase().includes(equipamento.toLowerCase())
+            );
         }
 
-        const [computadores, impressoras, perifericos] = await Promise.all([
-            resComputadores.json(),
-            resImpressoras.json(),
-            resPerifericos.json()
-        ]);
+        // Atualiza resumo
+        document.getElementById("total").textContent = dados.length;
+        document.getElementById("uso").textContent   = dados.filter(d => d.tipo_evento === "movimentacao").length;
+        document.getElementById("manut").textContent = dados.filter(d => d.tipo_evento?.startsWith("manutencao")).length;
+        document.getElementById("estoque").textContent = dados.filter(d => d.tipo_evento === "cadastro").length;
 
-        // Junta tudo em uma lista única
-        const todos = [
-            ...computadores.map(e => ({ ...e, _tipo: "Computador" })),
-            ...impressoras.map(e => ({ ...e, _tipo: "Impressora" })),
-            ...perifericos.map(e => ({ ...e, _tipo: "Periférico" }))
-        ];
-
-        preencherResumo(todos);
-        preencherTabela(todos);
-
-        // expulsa o usuário se o token expirar
-        if (resComputadores.status === 401 || resImpressoras.status === 401 || resPerifericos.status === 401) {
-            sessionStorage.removeItem("token_procape");
-            window.location.href = "../index.html";
-            return;
-        }
+        renderizarTabela(dados);
 
     } catch (erro) {
         console.error("Erro ao carregar relatório:", erro);
-        document.getElementById("tabela-equipamentos").innerHTML = `
-            <tr><td colspan="7" class="text-center py-4 text-danger">Erro ao carregar dados.</td></tr>
-        `;
+        tabela.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger">Erro ao carregar dados.</td></tr>`;
     }
 }
 
-function preencherResumo(todos) {
-    // Data atual
-    document.getElementById("data").textContent = new Date().toLocaleDateString("pt-BR");
-
-    // Setor — exibe todos os setores únicos presentes
-    const setores = [...new Set(todos.map(e => e.setor_id).filter(Boolean))];
-    document.getElementById("setor").textContent = setores.length > 0 ? setores.join(", ") : "Todos";
-
-    // Contagens por status
-    const total = todos.length;
-    const emUso = todos.filter(e => e.status === "ativo").length;
-    const manut = todos.filter(e => e.status === "em_manutencao").length;
-    const estoque = todos.filter(e => e.status === "inativo").length;
-
-    document.getElementById("total").textContent = total;
-    document.getElementById("uso").textContent = emUso;
-    document.getElementById("manut").textContent = manut;
-    document.getElementById("estoque").textContent = estoque;
-}
-
-function preencherTabela(todos) {
+// ===============================
+// RENDERIZA A TABELA
+// ===============================
+function renderizarTabela(lista) {
     const tabela = document.getElementById("tabela-equipamentos");
 
-    if (!todos || todos.length === 0) {
-        tabela.innerHTML = `
-            <tr><td colspan="7" class="text-center py-4 text-muted">Nenhum equipamento encontrado.</td></tr>
-        `;
+    if (!lista || lista.length === 0) {
+        tabela.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Nenhum registro encontrado.</td></tr>`;
         return;
     }
 
-    tabela.innerHTML = todos.map(eq => `
+    tabela.innerHTML = lista.map(item => `
         <tr>
-            <td>${eq.id ?? "—"}</td>
-            <td>${eq._tipo}</td>
-            <td>${eq.modelo ?? eq.tipo_per ?? eq.os ?? "—"}</td>
-            <td>${eq.num_patrimonio ?? "—"}</td>
-            <td>${formatarStatus(eq.status)}</td>
-            <td>${formatarData(eq.data_cadastro)}</td>
-            <td>${formatarData(eq.data_movimentacao ?? null)}</td>
+            <td>${item.id}</td>
+            <td>${LABELS_TIPO[item.tipo_evento] ?? item.tipo_evento}</td>
+            <td>${item.equipamento_id ?? "—"}</td>
+            <td>${item.referencia_id ?? "—"}</td>
+            <td>${item.usuario_id ?? "—"}</td>
+            <td>${formatarData(item.data_evento)}</td>
+            <td>${item.descricao ?? "—"}</td>
         </tr>
     `).join("");
 }
 
-function formatarStatus(status) {
-    const mapa = {
-        "ativo": `<span class="badge bg-success">Ativo</span>`,
-        "emprestado": `<span class="badge bg-info text-dark">Emprestado</span>`,
-        "em_manutencao": `<span class="badge bg-warning text-dark">Manutenção</span>`,
-        "inativo": `<span class="badge bg-secondary">Inativo</span>`,
-        "desativado": `<span class="badge bg-dark">Desativado</span>`,
-        "descartado": `<span class="badge bg-danger">Descartado</span>`
-    };
-    return mapa[status] ?? `<span class="badge bg-light text-dark">${status ?? "—"}</span>`;
-}
-
+// ===============================
+// FORMATAR DATA
+// ===============================
 function formatarData(dataISO) {
     if (!dataISO) return "—";
     return new Date(dataISO).toLocaleDateString("pt-BR");
