@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     data_nascimento  DATE         NOT NULL,
     email            VARCHAR(150) NOT NULL UNIQUE,
     senha            VARCHAR(255) NOT NULL,
-    perfil           ENUM('admin', 'gerente', 'usuario') DEFAULT 'usuario',
+    perfil           ENUM('admin', 'gerente') DEFAULT 'gerente',
     ativo            BOOLEAN      DEFAULT TRUE,
     data_criacao     DATETIME     DEFAULT CURRENT_TIMESTAMP,
     data_encerramento DATETIME    DEFAULT NULL
