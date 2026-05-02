@@ -44,7 +44,7 @@ def create_user():
 @swag_from("../../docs/user/list_user.yml")
 def list_user():
     user_model = User()
-    return jsonify(user_model.get_all()), 200
+    return jsonify([user_model.serialize_user(u) for u in user_model.get_all()]), 200
 
 
 # READ SELF
@@ -59,7 +59,7 @@ def get_self(url_id):
     if not user:
         return jsonify({"erro": "Usuário não encontrado"}), 404
 
-    return jsonify(user), 200
+    return jsonify(user_model.serialize_user(user)), 200
 
 
 # UPDATE

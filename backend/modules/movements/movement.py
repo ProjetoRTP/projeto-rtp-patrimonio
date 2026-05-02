@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from database.connection import meta, engine
 from modules.crud.base import BaseCRUD
 from sqlalchemy import select, text
@@ -55,3 +57,12 @@ class Movement(BaseCRUD):
             )
             result = conn.execute(query)
             return [dict(r._mapping) for r in result]
+    
+    def serialize_movement(self, movement: dict):
+        if not movement:
+            return None
+
+        if isinstance(movement.get("data_nascimento"), (datetime.date, datetime)):
+            movement["data_nascimento"] = movement["data_nascimento"].isoformat()
+
+        return movement

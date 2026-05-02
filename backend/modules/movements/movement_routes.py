@@ -39,7 +39,7 @@ def create_movement():
 @swag_from("../../docs/movements/list_movements.yml")
 def list_movements():
     movement_model = Movement()
-    return jsonify(movement_model.get_all()), 200
+    return jsonify([movement_model.serialize_movement(m) for m in movement_model.get_all()]), 200
 
 
 # READ BY ID
@@ -53,7 +53,7 @@ def get_movement(movement_id):
     if not movement:
         return jsonify({"error": "Movement not found"}), 404
 
-    return jsonify(movement), 200
+    return jsonify(movement_model.serialize_movement(movement)), 200
 
 
 # READ BY EQUIPMENT
@@ -62,4 +62,4 @@ def get_movement(movement_id):
 @swag_from("../../docs/movements/get_movements_by_equipment.yml")
 def get_movements_by_equipment(equipment_id):
     movement_model = Movement()
-    return jsonify(movement_model.get_by_equipment(equipment_id)), 200
+    return jsonify([movement_model.serialize_movement(m) for m in movement_model.get_by_equipment(equipment_id)]), 200

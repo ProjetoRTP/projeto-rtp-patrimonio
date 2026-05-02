@@ -1,3 +1,4 @@
+import datetime
 from database.connection import meta, engine
 from modules.crud.base import BaseCRUD
 from sqlalchemy import update, select
@@ -46,3 +47,12 @@ class User(BaseCRUD):
                 return dict(result._mapping)
 
             return None
+    
+    def serialize_user(self, user: dict):
+        if not user:
+            return None
+
+        if isinstance(user.get("data_nascimento"), (datetime.date, datetime)):
+            user["data_nascimento"] = user["data_nascimento"].isoformat()
+
+        return user
