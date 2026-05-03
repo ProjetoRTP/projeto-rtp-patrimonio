@@ -208,10 +208,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         payload = {
           ...payload,
           num_patrimonio: document.getElementById("tombamento")?.value || "",
-          sistema_operacional: document.getElementById("sistema")?.value || "",
-          memoria_interna:
+          os: document.getElementById("sistema")?.value || "",
+          mem_cpu:
             document.getElementById("memoria-interna")?.value || "",
-          memoria_ram: document.getElementById("memoria-ram")?.value || "",
+          mem_ram: document.getElementById("memoria-ram")?.value || "",
           armazenamento: document.getElementById("armazenamento")?.value || "",
           endereco_ip: document.getElementById("numero-ip")?.value || "",
           observacao: document.getElementById("observacoes")?.value || "",
