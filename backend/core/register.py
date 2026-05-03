@@ -9,7 +9,7 @@ from modules.equipments.peripheral_routes import peripheral_bp
 from modules.maintenance.maintenance_routes import maintenances_bp
 from modules.movements.movement_routes import movements_bp
 from modules.history.history_routes import history_bp
-from modules.reports.routes import reports_bp
+from modules.reports.routes_reports import reports_bp
 
 
 def register_routes(app):
