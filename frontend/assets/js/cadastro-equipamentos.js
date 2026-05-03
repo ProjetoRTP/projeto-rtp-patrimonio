@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (tipo === "1") {
         payload = {
           ...payload,
-          tombamento: document.getElementById("tombamento")?.value || "",
+          num_patrimonio: document.getElementById("tombamento")?.value || "",
           sistema_operacional: document.getElementById("sistema")?.value || "",
           memoria_interna:
             document.getElementById("memoria-interna")?.value || "",
