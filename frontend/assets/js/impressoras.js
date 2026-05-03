@@ -93,7 +93,7 @@ function renderizarTabela(lista) {
       (eq) => `
         <tr data-id="${eq.id}" style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
-                <a href="#" onclick="abrirHistorico(${eq.id})" style="text-decoration: none; color: #1D4587; font-weight: 500;">
+                <a href="#" onclick="verDetalhes(${eq.id})" style="text-decoration: none; color: #1D4587; font-weight: 500;">
                     ${eq.num_patrimonio || "Sem número"}
                 </a>
             </td>
@@ -139,10 +139,6 @@ function mostrarErro() {
 // ===============================
 // AÇÕES
 // ===============================
-function abrirHistorico(id) {
-  window.location.href = `historico-equipamento.html?id=${id}`;
-}
-
 function editarEquipamento(id) {
   window.location.href = `cadastro-equipamentos.html?id=${id}`;
 }

@@ -52,12 +52,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (tipoEquipamento.value === "1") {
       camposComputador.classList.remove("d-none");
       camposImpressora.classList.add("d-none");
+      if (btnCancelarLink) btnCancelarLink.href = "computadores.html";
     } else if (tipoEquipamento.value === "2") {
       camposComputador.classList.add("d-none");
       camposImpressora.classList.remove("d-none");
+      if (btnCancelarLink) btnCancelarLink.href = "impressoras.html";
     } else {
       camposComputador.classList.add("d-none");
       camposImpressora.classList.add("d-none");
+      if (btnCancelarLink) btnCancelarLink.href = "computadores.html";
     }
   }
 
