@@ -2,11 +2,10 @@
 const API_BASE_URL = "http://localhost:5000";
 
 const LABELS_TIPO = {
-    cadastro:           "Cadastro",
-    movimentacao:       "Movimentação",
-    manutencao_entrada: "Manutenção (Entrada)",
-    manutencao_saida:   "Manutenção (Saída)",
-    mudanca_status:     "Mudança de Status"
+    geral:          "Geral",
+    movimentacoes:  "Movimentações",
+    manutencoes:    "Manutenções",
+    equipamentos:   "Equipamentos"
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,7 +26,7 @@ async function carregarRelatorios(token) {
     try {
         tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">A carregar...</td></tr>`;
 
-        const resposta = await fetch(`${API_BASE_URL}/history`, {
+        const resposta = await fetch(`${API_BASE_URL}/reports`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -44,7 +43,7 @@ async function carregarRelatorios(token) {
         if (!resposta.ok) throw new Error(`Erro ${resposta.status}`);
 
         const dados = await resposta.json();
-        montarTabelaRelatorios(dados);
+        montarTabela(dados);
 
     } catch (erro) {
         console.error("Erro ao carregar relatórios:", erro);
@@ -52,21 +51,22 @@ async function carregarRelatorios(token) {
     }
 }
 
-function montarTabelaRelatorios(relatorios) {
+function montarTabela(relatorios) {
     const tbody = document.getElementById("tbody-subsetores");
 
     if (!relatorios || relatorios.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Nenhum registro encontrado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Nenhum relatório gerado ainda.</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = relatorios.map(relatorio => `
+    tbody.innerHTML = relatorios.map(r => `
         <tr>
-            <td>${LABELS_TIPO[relatorio.tipo_evento] ?? relatorio.tipo_evento ?? "—"}</td>
-            <td>${formatarData(relatorio.data_evento)}</td>
-            <td>${relatorio.equipamento_id ?? "—"}</td>
+            <td>${LABELS_TIPO[r.tipo] ?? r.tipo ?? "—"}</td>
+            <td>${formatarData(r.data_criacao)}</td>
+            <td>${formatarData(r.data_inicio)} → ${formatarData(r.data_fim)}</td>
             <td class="text-end">
-                <button onclick="verDetalhes(${relatorio.id})" class="btn btn-sm btn-outline-danger" style="cursor:pointer;">
+                <button onclick="verDetalhes(${r.id}, '${r.tipo}', '${r.data_inicio}', '${r.data_fim}', '${r.setor_id ?? ''}', '${r.equipamento ?? ''}')"
+                    class="btn btn-sm btn-outline-danger" style="cursor:pointer;">
                     <i class="bi bi-info-circle"></i>
                 </button>
             </td>
@@ -79,6 +79,9 @@ function formatarData(dataISO) {
     return new Date(dataISO).toLocaleDateString("pt-BR");
 }
 
-function verDetalhes(id) {
-    window.location.href = `relatorio-info.html?id=${id}`;
+function verDetalhes(id, tipo, dataInicio, dataFim, setor, equipamento) {
+    const params = new URLSearchParams({ id, tipo, dataInicio, dataFim });
+    if (setor)      params.append("setor", setor);
+    if (equipamento) params.append("equipamento", equipamento);
+    window.location.href = `relatorio-info.html?${params.toString()}`;
 }

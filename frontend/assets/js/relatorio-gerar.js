@@ -24,9 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// ===============================
-// MOSTRA/ESCONDE DATAS PERSONALIZADAS
-// ===============================
 function configurarPeriodo() {
     const selectPeriodo = document.getElementById("periodo");
     const camposPersonalizados = document.getElementById("campos-data-personalizada");
@@ -40,9 +37,6 @@ function configurarPeriodo() {
     });
 }
 
-// ===============================
-// CARREGAR SETORES
-// ===============================
 async function carregarSetores() {
     try {
         const resposta = await fetch(`${API_BASE_URL}/sectors`, {
@@ -66,9 +60,6 @@ async function carregarSetores() {
     }
 }
 
-// ===============================
-// CALCULAR DATAS DO PERÍODO
-// ===============================
 function calcularDatas(periodo) {
     const hoje = new Date();
     let dataInicio, dataFim;
@@ -77,15 +68,12 @@ function calcularDatas(periodo) {
 
     if (periodo === "hoje") {
         dataInicio = dataFim;
-
     } else if (periodo === "semana") {
         const inicioSemana = new Date(hoje);
         inicioSemana.setDate(hoje.getDate() - hoje.getDay());
         dataInicio = inicioSemana.toISOString().split("T")[0];
-
     } else if (periodo === "mes") {
         dataInicio = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-01`;
-
     } else if (periodo === "personalizado") {
         dataInicio = document.getElementById("data-inicio").value;
         dataFim    = document.getElementById("data-fim").value;
@@ -104,36 +92,67 @@ function calcularDatas(periodo) {
     return { dataInicio, dataFim };
 }
 
-// ===============================
-// GERAR RELATÓRIO
-// ===============================
-function gerarRelatorio() {
+async function gerarRelatorio() {
     const tipo    = document.getElementById("tipo-relatorio").value;
     const periodo = document.getElementById("periodo").value;
     const setor   = document.getElementById("filtro-setor").value;
     const equip   = document.getElementById("filtro-equipamento").value.trim();
 
-    if (!tipo) {
-        alert("Selecione o tipo de relatório.");
-        return;
-    }
-
-    if (!periodo) {
-        alert("Selecione o período.");
-        return;
-    }
+    if (!tipo)    { alert("Selecione o tipo de relatório."); return; }
+    if (!periodo) { alert("Selecione o período."); return; }
 
     const datas = calcularDatas(periodo);
     if (!datas) return;
 
-    const params = new URLSearchParams({
-        tipo,
-        dataInicio: datas.dataInicio,
-        dataFim:    datas.dataFim,
-    });
+    const btGerar = document.getElementById("btGerar");
+    btGerar.disabled  = true;
+    btGerar.innerText = "Gerando...";
 
-    if (setor) params.append("setor", setor);
-    if (equip) params.append("equipamento", equip);
+    try {
+        const payload = {
+            tipo,
+            periodo,
+            data_inicio: datas.dataInicio,
+            data_fim:    datas.dataFim,
+        };
 
-    window.location.href = `relatorio-info.html?${params.toString()}`;
+        if (setor) payload.setor_id    = parseInt(setor);
+        if (equip) payload.equipamento = equip;
+
+        const resposta = await fetch(`${API_BASE_URL}/reports`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!resposta.ok) {
+            const erro = await resposta.json();
+            alert(`Erro ao salvar relatório: ${erro.erro || "Falha no servidor"}`);
+            return;
+        }
+
+        const resultado = await resposta.json();
+
+        const params = new URLSearchParams({
+            id:         resultado.id,
+            tipo,
+            dataInicio: datas.dataInicio,
+            dataFim:    datas.dataFim,
+        });
+
+        if (setor) params.append("setor", setor);
+        if (equip) params.append("equipamento", equip);
+
+        window.location.href = `relatorio-info.html?${params.toString()}`;
+
+    } catch (erro) {
+        console.error("Erro:", erro);
+        alert("Erro ao conectar com o servidor.");
+    } finally {
+        btGerar.disabled  = false;
+        btGerar.innerText = "Gerar";
+    }
 }

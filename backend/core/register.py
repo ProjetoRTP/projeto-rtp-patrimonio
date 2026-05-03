@@ -9,6 +9,8 @@ from modules.equipments.peripheral_routes import peripheral_bp
 from modules.maintenance.maintenance_routes import maintenances_bp
 from modules.movements.movement_routes import movements_bp
 from modules.history.history_routes import history_bp
+from modules.reports.routes import reports_bp
+
 
 def register_routes(app):
     app.register_blueprint(user_bp)
@@ -19,8 +21,10 @@ def register_routes(app):
     app.register_blueprint(sectors_bp)
     app.register_blueprint(subsectors_bp)
     app.register_blueprint(peripheral_bp)
+    app.register_blueprint(reports_bp)
     app.register_blueprint(maintenances_bp)
     app.register_blueprint(movements_bp)
     app.register_blueprint(history_bp)
+    
 
 

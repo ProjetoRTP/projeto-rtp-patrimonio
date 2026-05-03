@@ -537,3 +537,29 @@ INSERT INTO colaboradores (nome, cpf, email, telefone, setor_id) VALUES
 INSERT INTO usuarios (nome, cpf, email, data_nascimento, senha, perfil) VALUES
 ('Administrador', '12345678910', 'admin@empresa.com', '2000-01-01',
  '$2b$12$7A6MPa6v5fEBPZ/qALa/aO94GYuSdIDoFg2TeHnse33Strwr374jC', 'admin');
+
+
+
+ -- -------------------------------------------------------
+-- relatorios
+-- Armazena os relatórios gerados pelos usuários.
+-- Adicione este trecho no patrimonio.sql antes dos ÍNDICES.
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS relatorios (
+    id           INT          AUTO_INCREMENT PRIMARY KEY,
+    usuario_id   INT,
+    tipo         ENUM('geral', 'movimentacoes', 'manutencoes', 'equipamentos') NOT NULL,
+    periodo      VARCHAR(50),
+    data_inicio  DATE,
+    data_fim     DATE,
+    setor_id     INT,
+    equipamento  VARCHAR(50),
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+ 
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (setor_id)   REFERENCES setores(id)
+);
+ 
+CREATE INDEX idx_relatorio_usuario ON relatorios(usuario_id);
+CREATE INDEX idx_relatorio_tipo    ON relatorios(tipo);
+CREATE INDEX idx_relatorio_data    ON relatorios(data_criacao);
