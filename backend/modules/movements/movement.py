@@ -62,7 +62,11 @@ class Movement(BaseCRUD):
         if not movement:
             return None
 
-        if isinstance(movement.get("data_nascimento"), (datetime.date, datetime)):
-            movement["data_nascimento"] = movement["data_nascimento"].isoformat()
+
+
+
+        for key, value in movement.items():
+            if hasattr(value, 'isoformat'):
+                movement[key] = value.isoformat()
 
         return movement
