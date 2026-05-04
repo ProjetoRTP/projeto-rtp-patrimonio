@@ -3,6 +3,7 @@ const API_COMPUTERS = `${API_BASE}/computers`;
 const API_PRINTERS = `${API_BASE}/printer`;
 const API_PERIPHERALS = `${API_BASE}/peripherals`;
 const API_SECTORS = `${API_BASE}/sectors`;
+const API_SUBSECTORS = `${API_BASE}/subsectors`;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = sessionStorage.getItem("token_procape");
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const btnCancelarLink = document.getElementById("btnCancelarLink");
   const tipoEquipamento = document.getElementById("tipoEquipamento");
   const setorSelect = document.getElementById("setor");
+  const subsetorSelect = document.getElementById("subsetor");
   const formCadastro = document.querySelector("form");
 
   // 1. CARREGAR SETORES
@@ -41,6 +43,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch (err) {
       console.error("Erro ao carregar setores:", err);
+    }
+  }
+
+  // 1.1 CARREGAR SUBSETORES POR SETOR
+  async function carregarSubSetores(setorId) {
+    if (!setorId) {
+      subsetorSelect.innerHTML = '<option value="">Selecione um subsetor</option>';
+      subsetorSelect.disabled = true;
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_SUBSECTORS}/sector/${setorId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const subsetores = await res.json();
+        subsetorSelect.innerHTML = '<option value="">Selecione um subsetor</option>';
+        subsetores.forEach((subsetor) => {
+          const option = document.createElement("option");
+          option.value = subsetor.id;
+          option.textContent = subsetor.nome;
+          subsetorSelect.appendChild(option);
+        });
+        subsetorSelect.disabled = false;
+      }
+    } catch (err) {
+      console.error("Erro ao carregar subsetores:", err);
+      subsetorSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+      subsetorSelect.disabled = true;
     }
   }
 
@@ -65,6 +97,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   tipoEquipamento.addEventListener("change", mostrarCamposPorTipo);
+
+  // Event listener para carregar subsetores quando setor muda
+  setorSelect.addEventListener("change", (e) => {
+    const setorId = e.target.value;
+    carregarSubSetores(setorId);
+  });
 
   // Carregar setores no início
   await carregarSetores();
@@ -111,9 +149,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           btnCancelarLink.href = "impressoras.html";
         }
 
-        // Preencher setor
+        // Preencher setor e subsetor
         if (data.setor_id) {
           setorSelect.value = data.setor_id;
+          // Carregar subsetores do setor selecionado
+          await carregarSubSetores(data.setor_id);
+          
+          // Preencher subsetor após carregar as opções
+          if (data.subsetor_id) {
+            subsetorSelect.value = data.subsetor_id;
+          }
         }
 
         // Preencher campos do computador
@@ -176,6 +221,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const tipo = tipoEquipamento.value;
       const setor_id = parseInt(setorSelect.value, 10);
+      const subsetor_id = subsetorSelect.value ? parseInt(subsetorSelect.value, 10) : null;
 
       if (!tipo || !setor_id) {
         alert("Selecione tipo e setor");
@@ -201,6 +247,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let payload = {
         tipo: tipo === "1" ? "computador" : "impressora",
         setor_id: setor_id,
+        subsetor_id: subsetor_id,
       };
 
       // Adicionar campos específicos
