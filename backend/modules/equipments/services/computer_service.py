@@ -26,7 +26,6 @@ class ComputerService(EquipmentService):
         # Enriquece com informações de setor, subsetor e colaborador
         setores = meta.tables.get('setores')
         subsetores = meta.tables.get('subsetores')
-        colaboradores = meta.tables.get('colaboradores')
         
         with engine.connect() as conn:
             # Buscar nome do setor
@@ -42,13 +41,6 @@ class ComputerService(EquipmentService):
                     select(subsetores.c.nome).where(subsetores.c.id == data['subsetor_id'])
                 ).fetchone()
                 data['subsetor_nome'] = result[0] if result else 'N/A'
-            
-            # Buscar nome do colaborador
-            if data.get('colaborador_id'):
-                result = conn.execute(
-                    select(colaboradores.c.nome).where(colaboradores.c.id == data['colaborador_id'])
-                ).fetchone()
-                data['colaborador_nome'] = result[0] if result else 'N/A'
         
         return data
     
@@ -83,7 +75,7 @@ class ComputerService(EquipmentService):
         self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
 
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
-                            "data_aquisicao", "valor", "status", "setor_id", "subsetor_id", "colaborador_id"}
+                            "data_aquisicao", "valor", "status", "setor_id", "subsetor_id"}
         computer_fields = {"os", "mem_cpu", "mem_ram", "armazenamento"}
 
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}

@@ -1,6 +1,8 @@
 from modules.equipments.classes.equipments import Equipment
 from modules.equipments.classes.printer import Printer
 from modules.equipments.services.base_service import EquipmentService
+from database.connection import engine, meta
+from sqlalchemy import select
 
 
 class PrinterService(EquipmentService):
@@ -9,6 +11,38 @@ class PrinterService(EquipmentService):
         super().__init__('impressoras')
         self.equipment = Equipment()
         self.printer = Printer()
+
+    def get_by_id(self, id):
+        """
+        Retorna dados completos da impressora com informações de relacionamentos
+        (setor, subsetor, colaborador).
+        """
+        # Primeiro, pega os dados básicos da impressora
+        data = super().get_by_id(id)
+        
+        if not data:
+            return None
+        
+        # Enriquece com informações de setor, subsetor e colaborador
+        setores = meta.tables.get('setores')
+        subsetores = meta.tables.get('subsetores')
+        
+        with engine.connect() as conn:
+            # Buscar nome do setor
+            if data.get('setor_id'):
+                result = conn.execute(
+                    select(setores.c.nome).where(setores.c.id == data['setor_id'])
+                ).fetchone()
+                data['setor_nome'] = result[0] if result else 'N/A'
+            
+            # Buscar nome do subsetor
+            if data.get('subsetor_id'):
+                result = conn.execute(
+                    select(subsetores.c.nome).where(subsetores.c.id == data['subsetor_id'])
+                ).fetchone()
+                data['subsetor_nome'] = result[0] if result else 'N/A'
+        
+        return data
 
     def create(self, data):
         if not data.get("num_patrimonio"):
