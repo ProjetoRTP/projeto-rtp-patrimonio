@@ -10,7 +10,7 @@ USE patrimonio;
 -- =============================================================
 -- TABELAS
 -- Ordem respeita dependências de chave estrangeira:
--- setores → subsetores → colaboradores → equipamentos → ...
+-- setores → subsetores →  equipamentos → ...
 -- =============================================================
 
 -- -------------------------------------------------------
@@ -62,22 +62,6 @@ CREATE TABLE IF NOT EXISTS subsetores (
 );
 
 -- -------------------------------------------------------
--- colaboradores
--- Funcionários que podem ser responsáveis por equipamentos.
--- cpf, email e telefone únicos mas opcionais (legados sem dado completo).
--- -------------------------------------------------------
-CREATE TABLE IF NOT EXISTS colaboradores (
-    id       INT          AUTO_INCREMENT PRIMARY KEY,
-    nome     VARCHAR(150) NOT NULL,
-    cpf      VARCHAR(14)  UNIQUE,
-    email    VARCHAR(150) UNIQUE,
-    telefone VARCHAR(20)  UNIQUE,
-    setor_id INT,
-    ativo    BOOLEAN      DEFAULT TRUE,
-    FOREIGN KEY (setor_id) REFERENCES setores(id)
-);
-
--- -------------------------------------------------------
 -- equipamentos
 -- Tabela base para todos os tipos de equipamento.
 -- Usa herança de tabela: computadores, impressoras e perifericos
@@ -85,7 +69,6 @@ CREATE TABLE IF NOT EXISTS colaboradores (
 --
 -- setor_id     → localização principal (obrigatória)
 -- subsetor_id  → localização refinada (ex: sala), opcional
--- colaborador_id → responsável direto pelo equipamento
 --
 -- Soft delete via status='desativado' (nunca DELETE físico).
 -- -------------------------------------------------------
@@ -110,14 +93,12 @@ CREATE TABLE IF NOT EXISTS equipamentos (
 
     setor_id       INT,
     subsetor_id    INT NULL,      -- opcional: localização dentro do setor
-    colaborador_id INT,
 
     data_cadastro  DATETIME DEFAULT CURRENT_TIMESTAMP,
     data_exclusao  DATETIME NULL,
 
     FOREIGN KEY (setor_id)       REFERENCES setores(id),
-    FOREIGN KEY (subsetor_id)    REFERENCES subsetores(id),
-    FOREIGN KEY (colaborador_id) REFERENCES colaboradores(id)
+    FOREIGN KEY (subsetor_id)    REFERENCES subsetores(id)
 );
 
 -- -------------------------------------------------------
@@ -191,7 +172,6 @@ CREATE TABLE IF NOT EXISTS movimentacoes (
     subsetor_origem_id  INT NULL,
     setor_destino_id    INT,
     subsetor_destino_id INT NULL,
-    colaborador_id      INT,
     data_movimentacao   DATETIME DEFAULT CURRENT_TIMESTAMP,
     observacao          TEXT,
 
@@ -199,8 +179,7 @@ CREATE TABLE IF NOT EXISTS movimentacoes (
     FOREIGN KEY (setor_origem_id)     REFERENCES setores(id),
     FOREIGN KEY (subsetor_origem_id)  REFERENCES subsetores(id),
     FOREIGN KEY (setor_destino_id)    REFERENCES setores(id),
-    FOREIGN KEY (subsetor_destino_id) REFERENCES subsetores(id),
-    FOREIGN KEY (colaborador_id)      REFERENCES colaboradores(id)
+    FOREIGN KEY (subsetor_destino_id) REFERENCES subsetores(id)
 );
 
 -- -------------------------------------------------------
@@ -298,8 +277,6 @@ CREATE INDEX idx_equipamento_status      ON equipamentos(status);
 CREATE INDEX idx_equipamento_setor       ON equipamentos(setor_id);
 -- Filtro de equipamentos por subsetor
 CREATE INDEX idx_equipamento_subsetor    ON equipamentos(subsetor_id);
--- Filtro de equipamentos por colaborador responsável
-CREATE INDEX idx_equipamento_colaborador ON equipamentos(colaborador_id);
 
 -- Subsetores por setor (usado em get_by_sector e validação de integridade)
 CREATE INDEX idx_subsetor_setor          ON subsetores(setor_id);
@@ -388,7 +365,6 @@ BEGIN
     DECLARE v_patrimonio  VARCHAR(50);
     DECLARE v_setor_saida VARCHAR(100);
     DECLARE v_setor_entrada VARCHAR(100);
-    DECLARE v_colaborador VARCHAR(150);
 
     -- Atualiza a localização atual do equipamento
     UPDATE equipamentos
@@ -408,9 +384,6 @@ BEGIN
         SELECT nome INTO v_setor_entrada
         FROM setores WHERE id = NEW.setor_destino_id LIMIT 1;
 
-        SELECT nome INTO v_colaborador
-        FROM colaboradores WHERE id = NEW.colaborador_id LIMIT 1;
-
         INSERT INTO historico_equipamentos (
             equipamento_id,
             usuario_id,
@@ -426,8 +399,7 @@ BEGIN
             CONCAT(
                 'Equipamento ', IFNULL(v_patrimonio, 'N/A'),
                 ' transferido de "', IFNULL(v_setor_saida, 'N/A'),
-                '" para "', IFNULL(v_setor_entrada, 'N/A'),
-                '" por ', IFNULL(v_colaborador, 'N/A')
+                '" para "', IFNULL(v_setor_entrada, 'N/A')
             )
         );
 
@@ -549,10 +521,6 @@ INSERT INTO subsetores (nome, descricao, setor_id) VALUES
 ('Infraestrutura', 'Servidores e redes', 1),
 ('Contabilidade', 'Gestão contábil', 2),
 ('Recrutamento', 'Seleção de pessoal', 3);
-
-INSERT INTO colaboradores (nome, cpf, email, telefone, setor_id) VALUES
-('João Silva',  '123.456.789-00', 'joao@empresa.com',  '(81)99999-1111', 1),
-('Maria Souza', '987.654.321-00', 'maria@empresa.com', '(81)99999-2222', 2);
 
 -- Credenciais iniciais: admin@empresa.com / admin123
 -- A senha abaixo é o hash bcrypt de "admin123" (gerado via Python bcrypt)
