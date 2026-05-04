@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
 
+    const divCarregando = document.getElementById('carregando');
+    const divConteudo  = document.getElementById('conteudo');
+    const divErro      = document.getElementById('erro');
+
     if (!token) {
         window.location.href = '../index.html';
         return;
@@ -17,11 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         exibirErro("ID da movimentação não fornecido.");
         return;
     }
-
-    // Elementos da interface
-    const divCarregando = document.getElementById('carregando');
-    const divConteudo  = document.getElementById('conteudo');
-    const divErro      = document.getElementById('erro');
 
     // Campos do formulário
     const inputId            = document.getElementById('movimentacao-id');
@@ -54,9 +53,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (inputSetorDestino) inputSetorDestino.value = mov.setor_destino_id ?? '';
             if (inputObservacao)   inputObservacao.value   = mov.observacao       ?? '';
 
-            // Mostra o conteúdo e esconde o loading
-            divCarregando.style.display = 'none';
-            divConteudo.style.display   = 'block';
+            // 4. ALTERAÇÃO VISUAL: Troca de d-none
+            divCarregando.classList.add('d-none');
+            divConteudo.classList.remove('d-none');
 
         } else {
             const erroDados = await resposta.json();
@@ -69,10 +68,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function exibirErro(mensagem) {
-        if (divCarregando) divCarregando.style.display = 'none';
+        // Esconde o loading e mostra o erro usando classes do Bootstrap
+        if (divCarregando) divCarregando.classList.add('d-none');
         if (divErro) {
-            divErro.innerText      = mensagem;
-            divErro.style.display  = 'block';
+            divErro.innerText = mensagem;
+            divErro.classList.remove('d-none');
         }
     }
 });
