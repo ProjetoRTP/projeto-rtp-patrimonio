@@ -15,7 +15,7 @@ class PrinterService(EquipmentService):
     def get_by_id(self, id):
         """
         Retorna dados completos da impressora com informações de relacionamentos
-        (setor, subsetor, colaborador).
+        (setor e subsetor).
         """
         # Primeiro, pega os dados básicos da impressora
         data = super().get_by_id(id)
@@ -23,9 +23,10 @@ class PrinterService(EquipmentService):
         if not data:
             return None
         
-        # Enriquece com informações de setor, subsetor e colaborador
+        # Enriquece com informações de setor e subsetor
         setores = meta.tables.get('setores')
         subsetores = meta.tables.get('subsetores')
+        colaboradores = meta.tables.get('colaboradores')
         
         with engine.connect() as conn:
             # Buscar nome do setor
@@ -41,7 +42,7 @@ class PrinterService(EquipmentService):
                     select(subsetores.c.nome).where(subsetores.c.id == data['subsetor_id'])
                 ).fetchone()
                 data['subsetor_nome'] = result[0] if result else 'N/A'
-        
+
         return data
 
     def create(self, data):
@@ -50,7 +51,7 @@ class PrinterService(EquipmentService):
 
         self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
-                            "data_aquisicao", "valor", "setor_id", "subsetor_id", "colaborador_id"}
+                            "data_aquisicao", "valor", "setor_id", "subsetor_id"}
         printer_fields = {"modelo", "tipo_imp", "coloracao",
                           "conectividade", "insumo", "descricao"}
 

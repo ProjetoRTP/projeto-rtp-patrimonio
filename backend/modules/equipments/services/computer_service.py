@@ -15,7 +15,7 @@ class ComputerService(EquipmentService):
     def get_by_id(self, id):
         """
         Retorna dados completo do computador com informações de relacionamentos
-        (setor, subsetor, colaborador).
+        (setor e subsetor).
         """
         # Primeiro, pega os dados básicos do computador
         data = super().get_by_id(id)
@@ -23,7 +23,7 @@ class ComputerService(EquipmentService):
         if not data:
             return None
         
-        # Enriquece com informações de setor, subsetor e colaborador
+        # Enriquece com informações de setor e subsetor
         setores = meta.tables.get('setores')
         subsetores = meta.tables.get('subsetores')
         
@@ -51,7 +51,7 @@ class ComputerService(EquipmentService):
         self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
 
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
-                            "data_aquisicao", "valor", "setor_id", "subsetor_id", "colaborador_id"}
+                            "data_aquisicao", "valor", "setor_id", "subsetor_id"}
         computer_fields = {"os", "mem_cpu", "mem_ram", "armazenamento"}
 
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}

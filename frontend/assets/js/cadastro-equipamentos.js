@@ -255,10 +255,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (tipo === "1") {
         payload = {
           ...payload,
-          num_patrimonio: document.getElementById("tombamento")?.value || "",
+          num_patrimonio: document.getElementById("tombamento-computador")?.value || "",
           os: document.getElementById("sistema")?.value || "",
-          mem_cpu:
-            document.getElementById("memoria-interna")?.value || "",
+          mem_cpu: document.getElementById("memoria-interna")?.value || "",
           mem_ram: document.getElementById("memoria-ram")?.value || "",
           armazenamento: document.getElementById("armazenamento")?.value || "",
           endereco_ip: document.getElementById("numero-ip")?.value || "",
@@ -267,6 +266,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else if (tipo === "2") {
         payload = {
           ...payload,
+          num_patrimonio: document.getElementById("tombamento-impressora")?.value || "",
           modelo: document.getElementById("modelo")?.value || "",
           tipo_imp: document.getElementById("tipo")?.value || "",
           coloracao: document.getElementById("coloracao")?.value || "",
