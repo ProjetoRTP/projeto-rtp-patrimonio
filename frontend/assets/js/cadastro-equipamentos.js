@@ -189,8 +189,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Preencher campos da impressora
-        if (document.getElementById("modelo")) {
-          document.getElementById("modelo").value = data.modelo || "";
+       if (document.getElementById("tombamento")) {
+          document.getElementById("tombamento").value =
+            data.num_patrimonio || data.tombamento || "";
         }
         if (document.getElementById("tipo")) {
           document.getElementById("tipo").value = data.tipo_imp || "";
