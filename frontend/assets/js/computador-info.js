@@ -11,6 +11,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Edit link definido para:", btnEditar.href);
   }
 
+  const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("pt-BR");
+  };
+
   if (!token || !id) {
     window.location.href = "computadores.html";
     return;
@@ -51,9 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     setValue("info-ip", data.endereco_ip || "Sem IP");
     setValue("info-setor", data.setor_nome || "N/A");
     setValue("info-subsetor", data.subsetor_nome || "N/A");
-    setValue("info-colaborador", data.colaborador_nome || "Não atribuído");
-    setValue("info-data-aquisicao", data.data_aquisicao || "N/A");
-    setValue("info-data-cadastro", data.data_cadastro || "N/A");
+    setValue("info-data-cadastro", formatDate(data.data_cadastro));
 
     // Preencher observação (textarea)
     const obs = document.getElementById("info-observacao");
