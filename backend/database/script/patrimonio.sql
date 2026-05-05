@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS subsetores (
 CREATE TABLE IF NOT EXISTS equipamentos (
     id             INT            AUTO_INCREMENT PRIMARY KEY,
     num_patrimonio VARCHAR(50)    NOT NULL UNIQUE,
-    tipo           ENUM('computador', 'impressora', 'periferico'),
+    tipo           ENUM('computador', 'impressora', 'periferico', 'generico'),
     endereco_ip    VARCHAR(50)    UNIQUE NULL,
     observacao     TEXT,
     data_aquisicao DATE,
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS tipo_generico (
     id              INT       AUTO_INCREMENT PRIMARY KEY,
     nome            VARCHAR(50),
     descricao       TEXT      
-)
+);
 
 -- -------------------------------------------------------
 -- equipamentos_generico
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS equipamentos_generico (
     observacao      TEXT,
 
     FOREIGN KEY (tipo_id) REFERENCES tipo_generico(id)
-)
+);
 
 -- -------------------------------------------------------
 -- movimentacoes
