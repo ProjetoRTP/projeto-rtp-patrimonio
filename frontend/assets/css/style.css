@@ -1,7 +1,8 @@
-*{
+* {
     box-sizing: border-box;
     font-family: 'Quicksand', sans-serif;
 }
+
 /* VARIÁVEIS DE CORES */
 :root {
     --azul-principal: #1D4587;
@@ -145,13 +146,13 @@ body {
 
 /* Botão sair */
 .btn-sair {
-        transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 /* Botão Sair Navbar */
 .btn-sair:hover {
-        color: #ff6b6b !important;
-        transform: scale(1.05);/
+    color: #ff6b6b !important;
+    transform: scale(1.05);/
 }
 
 .link-text {
@@ -253,9 +254,9 @@ main {
     justify-content: center;
     width: 100%;
     /* Troca vh-100 (fixo) por min-vh-100 (flexível) */
-    min-height: 100vh; 
+    min-height: 100vh;
     /* Adiciona respiro nas bordas para o card não colar no navegador */
-    padding: 40px 20px; 
+    padding: 40px 20px;
     background-color: #EAF2F8;
     overflow-y: auto;
 }
@@ -267,15 +268,18 @@ main {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     padding: 2.5rem;
     width: 100%;
-    max-width: 950px; /* Um pouco mais largo para acomodar os labels lado a lado */
+    max-width: 950px;
+    /* Um pouco mais largo para acomodar os labels lado a lado */
     margin: auto;
 }
 
 /* Estilização dos inputs desabilitados para melhor leitura */
-.form-control:disabled, .form-select:disabled {
+.form-control:disabled,
+.form-select:disabled {
     background-color: #f1f3f5 !important;
     color: #495057 !important;
-    opacity: 1; /* Remove o esmaecido padrão do navegador */
+    opacity: 1;
+    /* Remove o esmaecido padrão do navegador */
     border: 1px solid #dee2e6;
     font-weight: 500;
 }
@@ -291,10 +295,18 @@ h2 {
 ::-webkit-scrollbar {
     width: 8px;
 }
+
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
+
 ::-webkit-scrollbar-thumb {
     background: #1D4587;
     border-radius: 10px;
+}
+
+main.login-main {
+    display: block;
+    padding: 0;
+    min-height: 100vh;
 }
