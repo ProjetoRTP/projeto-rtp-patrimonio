@@ -250,7 +250,7 @@ body {
 /* Ajuste para o container principal não cortar conteúdo */
 main {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 100%;
     /* Troca vh-100 (fixo) por min-vh-100 (flexível) */

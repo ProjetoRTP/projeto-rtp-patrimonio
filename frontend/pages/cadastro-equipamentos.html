@@ -25,47 +25,48 @@
         <main class="flex-grow-1 position-relative p-3 p-lg-5"
             style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
 
-            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm mx-auto"
+            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm m-auto w-100"
                 style="max-width: 900px; z-index: 1; position: relative;">
 
                 <h2 class="text-center text-lg-start" style="color: #1D4587; font-weight: bold; margin-bottom: 40px;">
                     Cadastro de Equipamentos</h2>
 
                 <form>
-                    <div class="col-md-6 mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <label class="label-azul mb-0 fs-5">Tipo:</label>
-                            <select id="tipoEquipamento" class="form-select input-vermelho flex-grow-1 w-100"
-                                style="background-color: #ffeaea; color: #D32F2F;">
-                                <option value="" selected>Selecione</option>
-                                <option value="1">Computador</option>
-                                <option value="2">Impressora</option>
-                            </select>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="label-azul mb-0 fs-5">Tipo:</label>
+                                <select id="tipoEquipamento" class="form-select input-vermelho flex-grow-1 w-100"
+                                    style="background-color: #ffeaea; color: #D32F2F;">
+                                    <option value="" selected>Selecione</option>
+                                    <option value="1">Computador</option>
+                                    <option value="2">Impressora</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="label-azul mb-0 fs-5">Setor:</label>
+
+                                <select id="setor" class="form-select input-vermelho">
+                                    <option value="">Selecione um setor</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="label-azul mb-0 fs-5">Subsetor:</label>
+
+                                <select id="subsetor" class="form-select input-vermelho" disabled>
+                                    <option value="">Selecione um subsetor</option>
+                                </select>
+
+                            </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-3">
-                            <label class="label-azul mb-0 fs-5">Setor:</label>
-
-                            <select id="setor" class="form-select input-vermelho">
-                                <option value="">Selecione um setor</option>
-                            </select>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-3">
-                            <label class="label-azul mb-0 fs-5">Subsetor:</label>
-
-                            <select id="subsetor" class="form-select input-vermelho" disabled>
-                                <option value="">Selecione um subsetor</option>
-                            </select>
-
-                        </div>
-                    </div>
-
 
                     <div class="row g-4">
                         <!-- CAMPOS COMPUTADOR -->
