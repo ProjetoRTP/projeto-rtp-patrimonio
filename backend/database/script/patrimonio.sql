@@ -159,6 +159,30 @@ CREATE TABLE IF NOT EXISTS equipamentos_componentes (
 );
 
 -- -------------------------------------------------------
+-- tipo_generico
+-- tabela associada com equipamentos_generico N:1
+-- tabela criada para definição de tipos de equipamentos (roteador, switch, cadeiras e etc)
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS tipo_generico (
+    id              INT       AUTO_INCREMENT PRIMARY KEY,
+    nome            VARCHAR(50),
+    descricao       TEXT      
+)
+
+-- -------------------------------------------------------
+-- equipamentos_generico
+-- tabela usada para sistema ser mais expansivo, aceitando adição de novos tipos de equipamentos
+-- mas com menos detalhes do que equipamentos definidos
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS equipamentos_generico (
+    id              INT       AUTO_INCREMENT PRIMARY KEY,
+    tipo_id         INT       NOT NULL,
+    observacao      TEXT,
+
+    FOREIGN KEY (tipo_id) REFERENCES tipo_generico(id)
+)
+
+-- -------------------------------------------------------
 -- movimentacoes
 -- Registro de transferências de equipamentos entre setores/subsetores.
 -- O trigger trg_movimentacao (AFTER INSERT) é responsável por:
