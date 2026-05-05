@@ -1,0 +1,40 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS - TELA DE USUÁRIOS
+   ========================================== */
+
+/* Garante que a tabela tenha um bom respiro */
+.table th {
+    padding-bottom: 15px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    color: #1D4587; /* Azul principal do sistema */
+    font-weight: 500;
+    vertical-align: middle;
+    padding: 15px 10px;
+    border-bottom: 1px solid #f8f9fa; /* Linha sutil separando os usuários */
+}
+
+/* Efeito ao passar o mouse nas linhas da tabela (opcional, mas fica elegante) */
+.table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* Estilização dos botões de ação na tabela gerados pelo JS */
+.btn-outline-primary, .btn-outline-danger {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Aumenta levemente o botão de "Cadastrar" ao passar o mouse */
+.btn-outline-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(211, 47, 47, 0.2);
+}
+
+/* Ajuste para o scroll da tabela em telas pequenas */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 8px;
+}
