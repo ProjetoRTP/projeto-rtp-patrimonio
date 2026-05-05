@@ -6,6 +6,15 @@ function carregarNavbar() {
             
             // Chamamos a configuração logo após injetar o HTML
             configurarHoverGavetas();
+
+            // Controle de acesso por perfil
+            const perfilUsuario = sessionStorage.getItem("usuario_perfil") || "";
+            if (perfilUsuario.toLowerCase() !== "admin") {
+                document.querySelectorAll('[data-role="admin-only"]').forEach(el => {
+                    el.style.display = "none";
+                });
+            }
+
         })
         .catch(erro => console.error('Erro ao carregar a navbar:', erro));
 }
