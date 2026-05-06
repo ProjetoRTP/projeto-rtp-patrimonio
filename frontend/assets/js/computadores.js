@@ -1,7 +1,7 @@
 const API_BASE = "http://localhost:5000";
-const tbody = document.getElementById("tbody-equipamentos");
-const filtroSetor = document.getElementById("filtro-setor");
-const filtroStatus = document.getElementById("filtro-status");
+let tbody;
+let filtroSetor;
+let filtroStatus;
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = sessionStorage.getItem("token_procape");
@@ -136,13 +136,14 @@ function mostrarErro() {
   tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-danger fw-bold">Erro de conexão com o servidor.</td></tr>`;
 }
 
+
 // ===============================
 // AÇÕES
 // ===============================
-function editarComputador(id) {
-  window.location.href = `cadastro-equipamentos.html?id=${id}`; // ✅ URL corrigida
+function verDetalhes(id, tipo) {
+    window.location.href = `equipamento-info.html?id=${id}&tipo=${tipo}`;
 }
 
-function verDetalhes(id) {
-  window.location.href = `computador-info.html?id=${id}`; // ✅ navega ao invés de alert
+function editarEquipamento(id, tipo) {
+    window.location.href = `cadastro-equipamentos.html?id=${id}&tipo=${tipo}`;
 }

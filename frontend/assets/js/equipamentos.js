@@ -77,7 +77,7 @@ async function buscarEndpoint(path) {
     }
 }
 
-// ===============================
+/// ===============================
 // RENDERIZAÇÃO DA TABELA
 // ===============================
 function renderizarTabela(lista) {
@@ -93,29 +93,34 @@ function renderizarTabela(lista) {
         return;
     }
 
-    tbody.innerHTML = lista.map(item => `
+    tbody.innerHTML = lista.map(item => {
+        // Garantimos que o tipo exista. Se não existir, forçamos um valor seguro.
+        const tipoSeguro = item.tipo || "computador"; 
+        
+        return `
         <tr style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
-                <a href="#" onclick="verDetalhes(${item.id}, '${item.tipo}')"
+                <a href="#" onclick="verDetalhes(${item.id}, '${tipoSeguro}')"
                     style="color: #1D4587; text-decoration: none; font-weight: 500;">
                     ${item.num_patrimonio ?? "—"}
                 </a>
                 <span class="badge ms-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.75rem;">
-                    ${LABELS_TIPO[item.tipo] ?? item.tipo ?? "—"}
+                    ${LABELS_TIPO[tipoSeguro] ?? tipoSeguro}
                 </span>
             </td>
             <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
-                    <button class="btn btn-sm btn-outline-primary" onclick="editarEquipamento(${item.id}, '${item.tipo}')">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editarEquipamento(${item.id}, '${tipoSeguro}')">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="verDetalhes(${item.id}, '${item.tipo}')">
+                    <!-- AQUI ESTÁ A CORREÇÃO PRINCIPAL: Passando tipoSeguro com aspas -->
+                    <button class="btn btn-sm btn-outline-danger" onclick="verDetalhes(${item.id}, '${tipoSeguro}')">
                         <i class="bi bi-info"></i>
                     </button>
                 </div>
             </td>
         </tr>
-    `).join("");
+    `}).join("");
 }
 
 // ===============================
@@ -141,17 +146,11 @@ function mostrarErro() {
         </tr>`;
 }
 
-// ===============================
+/// ===============================
 // AÇÕES
 // ===============================
 function verDetalhes(id, tipo) {
-    const rotas = {
-        computador: `computador-info.html?id=${id}`,
-        impressora: `impressora-info.html?id=${id}`,
-        periferico: `periferico-info.html?id=${id}`,
-        generico:   `equipamento-info.html?id=${id}`,
-    };
-    window.location.href = rotas[tipo] ?? `equipamento-info.html?id=${id}`;
+    window.location.href = `equipamento-info.html?id=${id}&tipo=${tipo}`;
 }
 
 function editarEquipamento(id, tipo) {
