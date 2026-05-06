@@ -46,7 +46,7 @@ class GenericService(EquipmentService):
 
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
                             "data_aquisicao", "valor", "setor_id", "subsetor_id"}
-        generic_fields = {"tipo_id","observacao"}
+        generic_fields = {"tipo_id", "observacao", "atributos_dinamicos"}
 
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
         generic_data = {k: v for k, v in data.items() if k in generic_fields}
@@ -70,7 +70,7 @@ class GenericService(EquipmentService):
 
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
                             "data_aquisicao", "valor", "status", "setor_id", "subsetor_id"}
-        generic_fields = {"tipo_id","observacao"}
+        generic_fields = {"tipo_id", "observacao", "atributos_dinamicos"}
 
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
         generic_data = {k: v for k, v in data.items() if k in generic_fields}

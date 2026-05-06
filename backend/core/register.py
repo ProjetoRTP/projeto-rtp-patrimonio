@@ -9,7 +9,11 @@ from modules.maintenance.maintenance_routes import maintenances_bp
 from modules.movements.movement_routes import movements_bp
 from modules.history.history_routes import history_bp
 from modules.reports.routes_reports import reports_bp
+
+# Importa o blueprint de genéricos E o módulo de rotas de equipamentos genéricos
+# (os dois usam o mesmo blueprint generics_bp — o import do equip_routes registra as rotas nele)
 from modules.equipments.generic_type_routes import generics_bp
+from modules.equipments import generic_equip_routes  # noqa: registra POST/PUT/DELETE /generics
 
 
 def register_routes(app):
@@ -25,6 +29,3 @@ def register_routes(app):
     app.register_blueprint(movements_bp)
     app.register_blueprint(history_bp)
     app.register_blueprint(generics_bp)
-    
-
-
