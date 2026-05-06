@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROCAPE - Equipamentos</title>
+    <title>PROCAPE - Criar Tipo de Equipamentos</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,58 +30,61 @@
 
         <div id="espaco-da-navbar"></div>
 
-        <main class="d-flex align-items-center justify-content-center min-vh-100 position-relative w-100">
+    <main class="flex-grow-1 position-relative p-3 p-lg-5" style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
 
-            <div class="card shadow border-0 p-5 rounded-4 bg-white" style="max-width: 800px; width: 100%;">
+            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm m-auto w-100"
+                style="max-width: 900px; z-index: 1; position: relative;">
 
-                <h2 class="fw-bold mb-4 texto-azul-escuro">Nova Movimentação</h2>
+                <h2 class="text-center text-lg-start" style="color: #1D4587; font-weight: bold; margin-bottom: 40px;">
+                    Criar Tipo de Equipamento</h2>
 
-                <form id="formMovimentacao">
+                <form>
+                    <div class="row g-4">
+                        <div id="##" class="row g-4 ">
 
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label class="fw-bold mb-2 texto-azul-escuro">Data de transferência</label>
-                            <input id="dataTransferencia" type="date" class="form-control input-personalizado p-2">
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Nome do equipamento</label>
+                                <input id="###" type="text" class=" input-vermelho w-100" placeholder="Nome do tipo de equipamento">
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <label class="label-azul d-block">Observações</label>
+                                <textarea id="###" class=" input-vermelho w-100" rows="4" placeholder="Digite os detalhes"></textarea>
+                            </div>
                         </div>
 
-                        <div class="col-md-6 mt-3 mt-md-0">
-                            <label class="fw-bold mb-2 texto-azul-escuro">Equipamento (Nº Patrimônio)</label>
-                            <!-- O valor digitado será o num_patrimonio; o JS resolve o ID -->
-                            <input id="equipamento" list="lista-equipamentos" class="form-control input-personalizado p-2" placeholder="Digite ou selecione..." autocomplete="off">
-                            <datalist id="lista-equipamentos"></datalist>
-                        </div>
                     </div>
 
-                    <div class="row mb-5">
-                        <div class="col-md-6">
-                            <label class="fw-bold mb-2 texto-azul-escuro">Setor de origem</label>
-                            <!-- IDs diferentes para origem e destino -->
-                            <input id="setorOrigem" list="lista-setores-origem" class="form-control input-personalizado p-2" placeholder="Digite ou selecione..." autocomplete="off">
-                            <datalist id="lista-setores-origem"></datalist>
-                        </div>
-                        <div class="col-md-6 mt-3 mt-md-0">
-                            <label class="fw-bold mb-2 texto-azul-escuro">Setor de destino</label>
-                            <input id="setorDestino" list="lista-setores-destino" class="form-control input-personalizado p-2" placeholder="Digite ou selecione..." autocomplete="off">
-                            <datalist id="lista-setores-destino"></datalist>
-                        </div>
-                    </div>
 
-                    <div class="d-flex justify-content-center gap-4 mt-3">
-                        <button id="btCancelar" type="button" class="btn btn-cancelar px-5 py-2 rounded-3">Cancelar</button>
-                        <button id="btCriar" type="submit" class="btn btn-cadastrar px-5 py-2 rounded-3">Transferir</button>
+                    <!-- BOTÕES -->
+                    <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
+                        <a id="btnCancelarLink" href="computadores.html" class="text-decoration-none text-center">
+                            <button type="button" class="btn text-white fw-bold w-100"
+                                style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
+                                Cancelar
+                            </button>
+                        </a>
+
+                        <button id="btnSubmit" type="submit" class="btn text-white fw-bold "
+                            style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
+                            Criar Tipo
+                        </button>
                     </div>
-                </form>
             </div>
+            </form>
 
-            <div class="position-absolute bottom-0 end-0 p-4">
-                <img src="../assets/imagens/logo.png" alt="Logo do sistema" style="width: 60px;">
-            </div>
+    </div>
 
-        </main>
+    <img src="../assets/imagens/logo.png" alt="Logo Coração"
+        class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
+        style="width: 70px; z-index: 0; opacity: 0.9;">
+    </main>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/computadores.js"></script>
+   <script src="../assets/js/equipamento-generico.js"></script>
+   
     <script src="../assets/js/navbar.js"></script>
 </body>
 
