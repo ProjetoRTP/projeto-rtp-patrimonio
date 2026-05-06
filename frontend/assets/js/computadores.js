@@ -1,7 +1,7 @@
 const API_BASE = "http://localhost:5000";
-let tbody;
-let filtroSetor;
-let filtroStatus;
+const tbody = document.getElementById("tbody-equipamentos");
+const filtroSetor = document.getElementById("filtro-setor");
+const filtroStatus = document.getElementById("filtro-status");
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = sessionStorage.getItem("token_procape");
@@ -30,25 +30,30 @@ document.addEventListener("DOMContentLoaded", () => {
 // CARREGAR SETORES DINAMICAMENTE
 // ===============================
 async function carregarSetores(token) {
+  const setorSelect = document.getElementById("filtro-setor")
   try {
-    const res = await fetch(`${API_BASE}/sectors`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+        const res = await fetch(`${API_BASE}/sectors`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-    if (!res.ok) return;
+        if (!res.ok) return;
 
-    const setores = await res.json();
+        const setores = await res.json();
 
-    setores.forEach((setor) => {
-      const option = document.createElement("option");
-      option.value = setor.id;
-      option.textContent = setor.nome;
-      filtroSetor.appendChild(option);
-    });
-  } catch (erro) {
-    console.error("Erro ao carregar setores:", erro);
-  }
-}
+        setorSelect.innerHTML = '<option value="">Todos os setores</option>';
+
+        setores.forEach(setor => {
+            const option = document.createElement("option");
+            option.value = setor.id;
+            option.textContent = setor.nome;
+            setorSelect.appendChild(option);
+        });
+      }
+
+      catch (err) {
+        console.error("Erro setores:", err);
+    }
+    }
 
 // ===============================
 // CARREGAR COMPUTADORES
@@ -59,9 +64,17 @@ async function carregarComputadores(
   statusFiltro = "",
 ) {
   mostrarLoading();
+  const status = document.getElementById("filtro-status")?.value || "";
+  const setor = document.getElementById("filtro-setor")?.value || "";
 
+  const query = new URLSearchParams();
+
+  if (status) query.append("status", status);
+  if (setor) query.append("setor", setor);
+
+  const qs = query.toString();
   try {
-    const res = await fetch(`${API_BASE}/computers`, {
+    const res = await fetch(`${API_BASE}/computers?${qs}`, {
       headers: {
         Authorization: `Bearer ${token}`, // ✅ token adicionado
         "Content-Type": "application/json",
@@ -105,16 +118,16 @@ function renderizarTabela(lista, token) {
       (item) => `
         <tr style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
-                <a href="#" onclick="verDetalhes(${item.id})" style="color: #1D4587; text-decoration: none; font-weight: 500;">
+                <a href="#" onclick="verDetalhes(${item.id}, 'computador')" style="color: #1D4587; text-decoration: none; font-weight: 500;">
                     ${item.num_patrimonio ?? "—"}
                 </a>
             </td>
             <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
-                    <button class="btn btn-sm btn-outline-primary" onclick="editarComputador(${item.id})">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editarEquipamento(${item.id}, 'computador')">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="verDetalhes(${item.id})">
+                    <button class="btn btn-sm btn-outline-danger" onclick="verDetalhes(${item.id}, 'computador')">
                         <i class="bi bi-info"></i>
                     </button>
                 </div>

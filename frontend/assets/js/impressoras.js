@@ -2,6 +2,7 @@
 // CONFIG
 // ===============================
 const API_URL = "http://localhost:5000/printer";
+const API_BASE = "http://localhost:5000"
 const token = sessionStorage.getItem("token_procape");
 
 if (!token) {
@@ -21,6 +22,7 @@ const btnLimpar = document.getElementById("btn-limpar");
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   carregarEquipamentos();
+  carregarSetores();
 
   if (btnAplicar) {
     btnAplicar.addEventListener("click", () => {
@@ -42,33 +44,35 @@ document.addEventListener("DOMContentLoaded", () => {
 // ===============================
 // FUNÇÃO PRINCIPAL (GET)
 // ===============================
-async function carregarEquipamentos(setor = "", status = "") {
-  try {
-    mostrarLoading();
+async function carregarEquipamentos(
+  setorFiltro = "",
+  statusFiltro = "",
+) {
+  mostrarLoading();
+  const status = document.getElementById("filtro-status")?.value || "";
+  const setor = document.getElementById("filtro-setor")?.value || "";
 
-    const response = await fetch(API_URL, {
-      headers: { Authorization: `Bearer ${token}` },
+  const query = new URLSearchParams();
+
+  if (status) query.append("status", status);
+  if (setor) query.append("setor", setor);
+
+  const qs = query.toString();
+  try {
+    const res = await fetch(`${API_URL}/lista?${qs}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ token adicionado
+        "Content-Type": "application/json",
+      },
     });
 
-    if (!response.ok) {
-      mostrarErro();
-      return;
-    }
+    if (!res.ok) throw new Error(`Erro ${res.status}`);
 
-    const dados = await response.json();
+    let dados = await res.json();
 
-    // Filtragem no frontend
-    let dadosFiltrados = dados;
-    if (setor)
-      dadosFiltrados = dadosFiltrados.filter(
-        (d) => String(d.setor_id) === setor,
-      );
-    if (status)
-      dadosFiltrados = dadosFiltrados.filter((d) => d.status === status);
-
-    renderizarTabela(dadosFiltrados);
+    renderizarTabela(dados, token);
   } catch (erro) {
-    console.error("Erro ao carregar impressoras:", erro);
+    console.error("Erro ao carregar as impressoras:", erro);
     mostrarErro();
   }
 }
@@ -146,3 +150,29 @@ function editarEquipamento(id) {
 function verDetalhes(id) {
   window.location.href = `impressora-info.html?id=${id}`;
 }
+
+async function carregarSetores() {
+  const setorSelect = document.getElementById("filtro-setor")
+  try {
+        const res = await fetch(`${API_BASE}/sectors`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!res.ok) return;
+
+        const setores = await res.json();
+
+        setorSelect.innerHTML = '<option value="">Todos os setores</option>';
+
+        setores.forEach(setor => {
+            const option = document.createElement("option");
+            option.value = setor.id;
+            option.textContent = setor.nome;
+            setorSelect.appendChild(option);
+        });
+      }
+
+      catch (err) {
+        console.error("Erro setores:", err);
+    }
+    }
