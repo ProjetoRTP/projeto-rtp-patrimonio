@@ -4,8 +4,8 @@ const API_PRINTERS = `${API_BASE}/printer`;
 const API_PERIPHERALS = `${API_BASE}/peripherals`;
 const API_SECTORS = `${API_BASE}/sectors`;
 const API_SUBSECTORS = `${API_BASE}/subsectors`;
-const API_GENERIC = `${API_BASE}/generics`
-const API_GENERIC_TYPES = `${API_BASE}/generic-types`; //Alterar assim que a rota para genéricos for definida
+const API_GENERIC = `${API_BASE}/generics`;
+const API_GENERIC_TYPES = `${API_BASE}/types`; //Alterar assim que a rota para genéricos for definida
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = sessionStorage.getItem("token_procape");
@@ -253,7 +253,7 @@ function mostrarCamposPorTipo() {
         
         // Preencher campos genérico
         if (document.getElementById("tombamento-generico")) {
-            document.getElementById("tombamento-generico").value = data.num_patrimonio || data.tombamento || "";
+            document.getElementById("tombamento-generico").value = data.num_patrimonio || "";
         }
         if (document.getElementById("tipo-generico")) {
             document.getElementById("tipo-generico").value = data.tipo_id || "";
@@ -332,6 +332,11 @@ function mostrarCamposPorTipo() {
           insumo: document.getElementById("insumo")?.value || "",
         };
       } else if (tipo === "3") {
+        if (!tipoIdElement.value || !tombamentoElement.value) {
+            alert("Para equipamentos genéricos, o Tipo e o Tombamento são obrigatórios.");
+            return;
+        }
+        const ipValue = document.getElementById("ip-generico")?.value.trim();
         payload = {
           ...payload,
           num_patrimonio: document.getElementById("tombamento-generico")?.value || "",
