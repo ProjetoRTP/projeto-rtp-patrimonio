@@ -49,6 +49,19 @@ def get_peripheral(url_id):
     return jsonify(peripheral), 200
 
 
+# READ BY STATUS
+@peripheral_bp.route("/lista", methods=["GET"])
+@jwt_required()
+def listar():
+    status = request.args.get("status")
+    setor = request.args.get("setor")
+
+    service = PeripheralService()
+    periferico = service.listar(status=status, setor=setor)
+
+    return jsonify(periferico), 200
+
+
 # READ BY COMPUTER
 @peripheral_bp.route("/computer/<int:computador_id>", methods=["GET"])
 @jwt_required()

@@ -38,6 +38,32 @@ class PeripheralService(EquipmentService):
         })
 
         return {"id": equipment_id}
+    
+    def get_by_status(self, status):
+        data = super().get_by_status(status)
+        
+        if not data:
+            return None
+        
+        setores = meta.tables.get('setores')
+        subsetores = meta.tables.get('subsetores')
+        
+        with engine.connect() as conn:
+            # Buscar nome do setor
+            if data.get('setor_id'):
+                result = conn.execute(
+                    select(setores.c.nome).where(setores.c.id == data['setor_id'])
+                ).fetchone()
+                data['setor_nome'] = result[0] if result else 'N/A'
+            
+            # Buscar nome do subsetor
+            if data.get('subsetor_id'):
+                result = conn.execute(
+                    select(subsetores.c.nome).where(subsetores.c.id == data['subsetor_id'])
+                ).fetchone()
+                data['subsetor_nome'] = result[0] if result else 'N/A'
+        
+        return data
 
     # Vincula periférico a um computador
     def link(self, computador_id, periferico_id):

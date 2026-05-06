@@ -51,6 +51,19 @@ def get_computer(url_id):
     return jsonify(computer), 200
 
 
+# READ BY STATUS
+@computers_bp.route("/lista", methods=["GET"])
+@jwt_required()
+def listar():
+    status = request.args.get("status")
+    setor = request.args.get("setor")
+
+    service = ComputerService()
+    computadores = service.listar(status=status, setor=setor)
+
+    return jsonify(computadores), 200
+
+
 # UPDATE — gerente ou admin
 @computers_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()

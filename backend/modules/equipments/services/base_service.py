@@ -50,6 +50,19 @@ class EquipmentService:
             query = self._base_query().where(self.eq.c.id == id)
             result = conn.execute(query).fetchone()
             return dict(result._mapping) if result else None
+    
+    def listar(self, status=None, setor=None):
+        with engine.connect() as conn:
+            query = self._base_query()
+
+            if status:
+                query = query.where(self.eq.c.status == status)
+
+            if setor:
+                query = query.where(self.eq.c.setor_id == setor)
+
+            result = conn.execute(query).fetchall()
+            return [dict(r._mapping) for r in result]
 
     def delete(self, id):
         with engine.begin() as conn:
@@ -58,3 +71,4 @@ class EquipmentService:
                 .where(self.eq.c.id == id)
                 .values(status='desativado')
             )
+    

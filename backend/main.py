@@ -11,7 +11,7 @@ def create_app():
     load_dotenv()
 
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, supports_credentials=True)
 
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "fallback-inseguro")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]

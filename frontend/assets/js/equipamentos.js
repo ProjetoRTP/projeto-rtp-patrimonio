@@ -1,5 +1,6 @@
 // equipamentos-lista.js
 const API_BASE = "http://localhost:5000";
+
 let token;
 let todosEquipamentos = [];
 
@@ -7,7 +8,7 @@ const LABELS_TIPO = {
     computador: "Computador",
     impressora: "Impressora",
     periferico: "Periférico",
-    generico:   "Genérico"
+    generico: "Genérico"
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    carregarfiltros();
+    initFiltros();
     carregarTodosEquipamentos();
 });
 
@@ -28,29 +31,43 @@ document.addEventListener("DOMContentLoaded", () => {
 async function carregarTodosEquipamentos() {
     mostrarLoading();
 
-    try {
-        // Busca todos os tipos em paralelo
-        // ⚠️ Quando o endpoint de genéricos estiver pronto,
-        // adicione: buscarEndpoint("/equipamentos?tipo=generico")
-        const [computadores, impressoras, perifericos, genericos] = await Promise.all([
-            buscarEndpoint("/computers"),
-            buscarEndpoint("/printer"),
-            buscarEndpoint("/peripherals"),
-            buscarEndpoint("/generics"),
-        ]);
+    const status = document.getElementById("filtro-status")?.value || "";
+    const setor = document.getElementById("filtro-setor")?.value || "";
 
-        // Junta tudo e adiciona o tipo em cada item (caso não venha do backend)
+    const query = new URLSearchParams();
+
+    if (status) query.append("status", status);
+    if (setor) query.append("setor", setor);
+
+    const qs = query.toString();
+
+    try {
+        const endpoints = [
+            "/computers/lista",
+            "/printer/lista",
+            "/peripherals/lista",
+            "/generics/lista"
+        ];
+
+        const results = await Promise.all(
+            endpoints.map(ep =>
+                buscarEndpoint(qs ? `${ep}?${qs}` : ep)
+            )
+        );
+
+        const [computadores, impressoras, perifericos, genericos] = results;
+
         todosEquipamentos = [
-            ...computadores.map(e => ({ ...e, tipo: e.tipo ?? "computador" })),
-            ...impressoras.map(e => ({ ...e, tipo: e.tipo ?? "impressora" })),
-            ...perifericos.map(e => ({ ...e, tipo: e.tipo ?? "periferico" })),
-            ...genericos.map(e => ({ ...e, tipo: e.tipo ?? "generico" })),
+            ...computadores.map(e => ({ ...e, tipo: "computador" })),
+            ...impressoras.map(e => ({ ...e, tipo: "impressora" })),
+            ...perifericos.map(e => ({ ...e, tipo: "periferico" })),
+            ...genericos.map(e => ({ ...e, tipo: "generico" })),
         ];
 
         renderizarTabela(todosEquipamentos);
 
-    } catch (erro) {
-        console.error("Erro ao carregar equipamentos:", erro);
+    } catch (err) {
+        console.error("Erro ao carregar equipamentos:", err);
         mostrarErro();
     }
 }
@@ -64,16 +81,13 @@ async function buscarEndpoint(path) {
             headers: { Authorization: `Bearer ${token}` }
         });
 
-        if (!res.ok) {
-            console.warn(`Endpoint ${path} retornou ${res.status}`);
-            return [];
-        }
+        if (!res.ok) return [];
 
         return await res.json();
 
-    } catch (erro) {
-        console.warn(`Falha ao buscar ${path}:`, erro);
-        return []; // Retorna vazio sem quebrar os outros
+    } catch (err) {
+        console.warn("Erro endpoint:", path, err);
+        return [];
     }
 }
 
@@ -96,7 +110,7 @@ function renderizarTabela(lista) {
     tbody.innerHTML = lista.map(item => {
         // Garantimos que o tipo exista. Se não existir, forçamos um valor seguro.
         const tipoSeguro = item.tipo || "computador"; 
-        
+
         return `
         <tr style="border-bottom: 1px solid #f1f1f1;">
             <td style="color: #1D4587; padding: 15px 0;">
@@ -112,11 +126,11 @@ function renderizarTabela(lista) {
                 <div class="d-flex justify-content-end gap-2">
                     <button class="btn btn-sm btn-outline-primary" onclick="editarEquipamento(${item.id}, '${tipoSeguro}')">
                         <i class="bi bi-pencil"></i>
-                    </button>
+                </button>
                     <!-- AQUI ESTÁ A CORREÇÃO PRINCIPAL: Passando tipoSeguro com aspas -->
                     <button class="btn btn-sm btn-outline-danger" onclick="verDetalhes(${item.id}, '${tipoSeguro}')">
                         <i class="bi bi-info"></i>
-                    </button>
+                </button>
                 </div>
             </td>
         </tr>
@@ -155,4 +169,54 @@ function verDetalhes(id, tipo) {
 
 function editarEquipamento(id, tipo) {
     window.location.href = `cadastro-equipamentos.html?id=${id}&tipo=${tipo}`;
+}
+/// ================================
+// FILTROS
+// =================================
+async function carregarfiltros() {
+    const setorSelect = document.getElementById("filtro-setor");
+
+    if (!setorSelect) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/sectors`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!res.ok) return;
+
+        const setores = await res.json();
+
+        setorSelect.innerHTML = '<option value="">Todos os setores</option>';
+
+        setores.forEach(setor => {
+            const option = document.createElement("option");
+            option.value = setor.id;
+            option.textContent = setor.nome;
+            setorSelect.appendChild(option);
+        });
+
+    } catch (err) {
+        console.error("Erro setores:", err);
+    }
+}
+
+function initFiltros() {
+    document
+        .getElementById("filtro-status")
+        ?.addEventListener("change", carregarTodosEquipamentos);
+
+    document
+        .getElementById("filtro-setor")
+        ?.addEventListener("change", carregarTodosEquipamentos);
+}
+
+function mostrarLoading() {
+    document.getElementById("tbody-equipamentos").innerHTML =
+        `<tr><td colspan="2">Carregando...</td></tr>`;
+}
+
+function mostrarErro() {
+    document.getElementById("tbody-equipamentos").innerHTML =
+        `<tr><td colspan="2">Erro ao carregar</td></tr>`;
 }
