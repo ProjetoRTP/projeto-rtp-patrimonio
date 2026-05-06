@@ -3,9 +3,14 @@ from database.connection import engine, meta
 from sqlalchemy import select
 
 class GenericTypeService():
-    def __init__(self):
-        self.type = Generic_type()
-        self.table = meta.tables['tipo_generico']
+    
+    @property
+    def type(self):
+        return Generic_type()
+    
+    @property
+    def table(self):
+        return meta.tables['tipo_generico']
 
     def get_by_id(self, id):
         with engine.connect() as conn:
