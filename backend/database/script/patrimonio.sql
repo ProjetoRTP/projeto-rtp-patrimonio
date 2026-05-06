@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS historico_equipamentos (
 CREATE TABLE IF NOT EXISTS relatorios (
     id           INT          AUTO_INCREMENT PRIMARY KEY,
     usuario_id   INT,
-    tipo         ENUM('geral', 'movimentacoes', 'manutencoes', 'equipamentos') NOT NULL,
+    tipo         ENUM('geral', 'movimentacoes', 'manutencoes', 'equipamentos', 'genericos') NOT NULL,
     periodo      VARCHAR(50),
     data_inicio  DATE,
     data_fim     DATE,

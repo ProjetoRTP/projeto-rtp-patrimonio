@@ -56,6 +56,10 @@ class Report(BaseCRUD):
                 query = query.where(hist_table.c.tipo_evento.in_(['manutencao_entrada', 'manutencao_saida']))
             elif report.get('tipo') == 'equipamentos':
                 query = query.where(hist_table.c.tipo_evento == 'cadastro')
+                query = query.where(equip_table.c.tipo != 'generico')
+            elif report.get('tipo') == 'genericos':
+                query = query.where(hist_table.c.tipo_evento == 'cadastro')
+                query = query.where(equip_table.c.tipo == 'generico')
             
             if report.get('data_inicio'):
                 query = query.where(cast(hist_table.c.data_evento, Date) >= report['data_inicio'])

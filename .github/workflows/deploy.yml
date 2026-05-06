@@ -1,22 +1,29 @@
 name: RTP Patrimonio Deploy
 
-o:
+on:
   push:
-    branches: ["main"]
+    tags:
+      - 'v*'
 
 jobs:
   deploy-local:
     runs-on: self-hosted
+    if: github.event.base_ref == 'refs/heads/main' || github.ref_name == 'main'
+    
     steps:
-      - name: Chekout do código
+      - name: Checkout do código
         uses: actions/checkout@v4
       
       - name: Preparar ambiente
-        run:
-          echo "ambiente preparado no servidor SRVPROJETO"
-        
+        run: echo "ambiente preparado no servidor SRVPROJETO"
+            
+      - name: Criar arquivo .env
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "Arquivo .env gerado com sucesso!"
+          
       - name: Build e Deploy com Docker
-        run:
+        run: |
           docker compose down
-          docker compose up -d --build
-          echo "Deploy finalizado com sucesso!" 
+          docker compose up --build -d
+          echo "Deploy finalizado com sucesso!"

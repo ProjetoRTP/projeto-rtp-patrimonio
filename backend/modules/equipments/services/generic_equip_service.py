@@ -62,6 +62,17 @@ class GenericService(EquipmentService):
             **generic_data
         })
 
+        # Registrar evento no histórico para aparecer nos relatórios
+        hist_table = meta.tables.get('historico_equipamentos')
+        if hist_table is not None:
+            with engine.begin() as conn:
+                conn.execute(hist_table.insert().values(
+                    equipamento_id=equipment_id,
+                    usuario_id=None,
+                    tipo_evento='cadastro',
+                    descricao=f"Equipamento genérico '{data.get('num_patrimonio')}' cadastrado."
+                ))
+
         return {"id": equipment_id}
 
 
