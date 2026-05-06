@@ -105,29 +105,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 2. MOSTRAR/OCULTAR CAMPOS POR TIPO
-  function mostrarCamposPorTipo() {
+function mostrarCamposPorTipo() {
     const camposComputador = document.getElementById("campos-computador");
     const camposImpressora = document.getElementById("campos-impressora");
-    const camposGenerico = document.getElementById("campos-generico");
+    const camposGenerico   = document.getElementById("campos-generico");
 
+    // Esconde todos primeiro
+    camposComputador.classList.add("d-none");
+    camposImpressora.classList.add("d-none");
+    camposGenerico.classList.add("d-none");
+
+    // Mostra só o correto
     if (tipoEquipamento.value === "1") {
-      camposComputador.classList.remove("d-none");
-      camposImpressora.classList.add("d-none");
-      if (btnCancelarLink) btnCancelarLink.href = "computadores.html";
-    } else if (tipoEquipamento.value === "2") {
-      camposComputador.classList.add("d-none");
-      camposImpressora.classList.remove("d-none");
-      if (btnCancelarLink) btnCancelarLink.href = "impressoras.html";
-    }
-    // Preencher quando tiver as divs do front bem definidas
-    if (tipoEquipamento.value === "3") {
+        camposComputador.classList.remove("d-none");
+        if (btnCancelarLink) btnCancelarLink.href = "computadores.html";
 
-    } else {
-      camposComputador.classList.add("d-none");
-      camposImpressora.classList.add("d-none");
-      if (btnCancelarLink) btnCancelarLink.href = "computadores.html";
+    } else if (tipoEquipamento.value === "2") {
+        camposImpressora.classList.remove("d-none");
+        if (btnCancelarLink) btnCancelarLink.href = "impressoras.html";
+
+    } else if (tipoEquipamento.value === "3") {
+        camposGenerico.classList.remove("d-none");
+        if (btnCancelarLink) btnCancelarLink.href = "genericos.html";
     }
-  }
+}
 
   tipoEquipamento.addEventListener("change", mostrarCamposPorTipo);
 
