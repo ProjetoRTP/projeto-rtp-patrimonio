@@ -41,6 +41,7 @@
                                     <option value="" selected>Selecione</option>
                                     <option value="1">Computador</option>
                                     <option value="2">Impressora</option>
+                                    <option value="3">Genérico</option>
                                 </select>
                             </div>
                         </div>
@@ -160,6 +161,31 @@
 
                         </div>
 
+                        <!-- CAMPOS GENÉRICO -->
+                        <div id="campos-generico" class="row g-4 d-none">
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Tombamento</label>
+                                <input id="tombamento-generico" type="text" class="form-control input-vermelho w-100" placeholder="00000.00000.000-00">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Tipo do Equipamento</label>
+                                <!-- Idealmente, esse select será preenchido via API (tabela tipo_generico) assim como os setores -->
+                                <select id="tipo-generico" class="form-select input-vermelho">
+                                    <option value="">Selecione um tipo</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Número IP (Opcional)</label>
+                                <input id="ip-generico" type="text" class="form-control input-vermelho w-100" placeholder="Número IP se aplicável">
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <label class="label-azul d-block">Observações</label>
+                                <textarea id="observacao-generico" class="form-control input-vermelho w-100" rows="4" placeholder="Detalhes adicionais do equipamento genérico"></textarea>
+                            </div>
+                        </div>
                     </div>
 
 

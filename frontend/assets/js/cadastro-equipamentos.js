@@ -4,7 +4,8 @@ const API_PRINTERS = `${API_BASE}/printer`;
 const API_PERIPHERALS = `${API_BASE}/peripherals`;
 const API_SECTORS = `${API_BASE}/sectors`;
 const API_SUBSECTORS = `${API_BASE}/subsectors`;
-const API_GENERIC = `${API_BASE}/` //Alterar assim que a rota para genéricos for definida
+const API_GENERIC = `${API_BASE}/generics`
+const API_GENERIC_TYPES = `${API_BASE}/generic-types`; //Alterar assim que a rota para genéricos for definida
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = sessionStorage.getItem("token_procape");
@@ -77,10 +78,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // 1.2 CARREGAR TIPOS GENÉRICOS
+  async function carregarTiposGenericos() {
+    const selectTipoGenerico = document.getElementById("tipo-generico");
+    if (!selectTipoGenerico) return; 
+
+    try {
+      const res = await fetch(API_GENERIC_TYPES, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (res.ok) {
+        const tipos = await res.json();
+        selectTipoGenerico.innerHTML = '<option value="">Selecione um tipo</option>';
+        
+        tipos.forEach((tipo) => {
+          const option = document.createElement("option");
+          option.value = tipo.id;
+          option.textContent = tipo.nome;
+          selectTipoGenerico.appendChild(option);
+        });
+      }
+    } catch (err) {
+      console.error("Erro ao carregar tipos genéricos:", err);
+    }
+  }
+
   // 2. MOSTRAR/OCULTAR CAMPOS POR TIPO
   function mostrarCamposPorTipo() {
     const camposComputador = document.getElementById("campos-computador");
     const camposImpressora = document.getElementById("campos-impressora");
+    const camposGenerico = document.getElementById("campos-generico");
 
     if (tipoEquipamento.value === "1") {
       camposComputador.classList.remove("d-none");
@@ -109,8 +137,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     carregarSubSetores(setorId);
   });
 
-  // Carregar setores no início
+  // Carregar setores e tipos de genéricos no início
   await carregarSetores();
+  await carregarTiposGenericos();
 
   // 3. SE FOR EDIÇÃO, CARREGAR DADOS
   if (equipmentId) {
@@ -137,6 +166,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       }
 
+      if (!res.ok) {
+        res = await fetch(`${API_GENERIC}/${equipmentId}`, { headers: { Authorization: `Bearer ${token}` } });
+      }
+
       if (res.ok) {
         const data = await res.json();
         console.log("Dados carregados para edição:", data);
@@ -146,6 +179,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           tipoEquipamento.value = "1";
         } else if (res.url.includes("/printer")) {
           tipoEquipamento.value = "2";
+        } else if (res.url.includes("/generics")) {
+          tipoEquipamento.value = "3";
         }
 
         mostrarCamposPorTipo();
@@ -214,7 +249,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById("insumo")) {
           document.getElementById("insumo").value = data.insumo || "";
         }
-        // Adicionar campos de coleta de dados quando o front tiver as divs definidas
+        
+        // Preencher campos genérico
+        if (document.getElementById("tombamento-generico")) {
+            document.getElementById("tombamento-generico").value = data.num_patrimonio || data.tombamento || "";
+        }
+        if (document.getElementById("tipo-generico")) {
+            document.getElementById("tipo-generico").value = data.tipo_id || "";
+        }
+        if (document.getElementById("ip-generico")) {
+            document.getElementById("ip-generico").value = data.endereco_ip || "";
+        }
+        if (document.getElementById("observacao-generico")) {
+            document.getElementById("observacao-generico").value = data.observacao || "";
+        }
       }
     } catch (err) {
       console.error("Erro ao carregar equipamento para edição:", err);
@@ -283,7 +331,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           insumo: document.getElementById("insumo")?.value || "",
         };
       } else if (tipo === "3") {
-        // Adicionar com campos confirmados
+        payload = {
+          ...payload,
+          num_patrimonio: document.getElementById("tombamento-generico")?.value || "",
+          tipo_id: parseInt(document.getElementById("tipo-generico")?.value, 10) || null, // Chave estrangeira NOT NULL
+          endereco_ip: document.getElementById("ip-generico")?.value || null,
+          observacao: document.getElementById("observacao-generico")?.value || "",
+        };
       }
 
       try {
@@ -297,11 +351,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (res.ok) {
-          alert(
-            equipmentId ? "Equipamento atualizado!" : "Equipamento cadastrado!",
-          );
-          const redirectUrl =
-            tipo === "1" ? "computadores.html" : "impressoras.html";
+          alert(equipmentId ? "Equipamento atualizado!" : "Equipamento cadastrado!");
+          
+          let redirectUrl = "computadores.html";
+          if(tipo === "2") redirectUrl = "impressoras.html";
+          else if(tipo === "3") redirectUrl = "genericos.html"; // Tela de listagem correspondente
+
           window.location.href = redirectUrl;
         } else {
           const erro = await res.json();
