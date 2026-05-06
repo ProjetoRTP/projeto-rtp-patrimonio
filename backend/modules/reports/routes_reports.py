@@ -51,6 +51,19 @@ def get_report(report_id):
     return jsonify(report_model.serialize(report)), 200
 
 
+# GET REPORT DATA
+@reports_bp.route("/<int:report_id>/data", methods=["GET"])
+@jwt_required()
+def get_report_data(report_id):
+    report_model = Report()
+    data = report_model.get_report_data(report_id)
+
+    if data is None:
+        return jsonify({"erro": "Relatório não encontrado"}), 404
+
+    return jsonify([report_model.serialize(item) for item in data]), 200
+
+
 # DELETE
 @reports_bp.route("/<int:report_id>", methods=["DELETE"])
 @jwt_required()
