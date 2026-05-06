@@ -5,7 +5,7 @@ const API_PERIPHERALS = `${API_BASE}/peripherals`;
 const API_SECTORS = `${API_BASE}/sectors`;
 const API_SUBSECTORS = `${API_BASE}/subsectors`;
 const API_GENERIC = `${API_BASE}/generics`;
-const API_GENERIC_TYPES = `${API_BASE}/types`; //Alterar assim que a rota para genéricos for definida
+const API_GENERIC_TYPES = `${API_BASE}/generics/types`;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = sessionStorage.getItem("token_procape");
@@ -132,6 +132,69 @@ function mostrarCamposPorTipo() {
 
   tipoEquipamento.addEventListener("change", mostrarCamposPorTipo);
 
+  // 1.3 CARREGAR ATRIBUTOS DO TIPO GENÉRICO SELECIONADO
+  async function loadAtributosDinamicos(tipoId, valoresExistentes = null) {
+      const containerAtributos = document.getElementById("container-atributos-genericos");
+      if (!containerAtributos) return;
+      
+      containerAtributos.innerHTML = ""; // Limpa os campos antigos
+      if (!tipoId) return;
+
+      try {
+          const res = await fetch(`${API_GENERIC_TYPES}/${tipoId}/atributos`, {
+              headers: { Authorization: `Bearer ${token}` }
+          });
+          if (res.ok) {
+              const data = await res.json();
+              data.atributos.forEach(attr => {
+                  const divCol = document.createElement('div');
+                  divCol.className = 'col-md-6';
+                  
+                  const label = document.createElement('label');
+                  label.className = 'label-azul d-block';
+                  label.innerText = attr.label + (attr.obrigatorio ? ' *' : '');
+                  divCol.appendChild(label);
+                  
+                  let input;
+                  if (attr.tipo_dado === 'lista' || attr.tipo_dado === 'booleano') {
+                      input = document.createElement('select');
+                      input.className = 'form-select input-vermelho atributo-dinamico-input';
+                      input.add(new Option('Selecione...', ''));
+                      
+                      if (attr.tipo_dado === 'booleano') {
+                          input.add(new Option('Sim', 'true'));
+                          input.add(new Option('Não', 'false'));
+                      } else if (attr.opcoes) {
+                          attr.opcoes.forEach(opt => input.add(new Option(opt, opt)));
+                      }
+                  } else {
+                      input = document.createElement('input');
+                      input.className = 'form-control input-vermelho w-100 atributo-dinamico-input';
+                      input.type = attr.tipo_dado === 'numero' ? 'number' : (attr.tipo_dado === 'data' ? 'date' : 'text');
+                  }
+                  
+                  input.id = `dinamico_${attr.chave}`;
+                  input.dataset.chave = attr.chave;
+                  if (attr.obrigatorio) input.required = true;
+                  
+                  if (valoresExistentes && valoresExistentes[attr.chave] !== undefined) {
+                      input.value = valoresExistentes[attr.chave];
+                  }
+                  
+                  divCol.appendChild(input);
+                  containerAtributos.appendChild(divCol);
+              });
+          }
+      } catch (err) {
+          console.error("Erro ao buscar atributos do tipo:", err);
+      }
+  }
+
+  const selectTipoGenerico = document.getElementById("tipo-generico");
+  if (selectTipoGenerico) {
+      selectTipoGenerico.addEventListener("change", (e) => loadAtributosDinamicos(e.target.value));
+  }
+
   // Event listener para carregar subsetores quando setor muda
   setorSelect.addEventListener("change", (e) => {
     const setorId = e.target.value;
@@ -257,6 +320,11 @@ function mostrarCamposPorTipo() {
         }
         if (document.getElementById("tipo-generico")) {
             document.getElementById("tipo-generico").value = data.tipo_id || "";
+            if (data.tipo_id) {
+                // Se o backend retorna json na string, temos que converter. Mas o MySQL já manda como objeto no Express/Python
+                const attrs = typeof data.atributos_dinamicos === 'string' ? JSON.parse(data.atributos_dinamicos) : data.atributos_dinamicos;
+                await loadAtributosDinamicos(data.tipo_id, attrs);
+            }
         }
         if (document.getElementById("ip-generico")) {
             document.getElementById("ip-generico").value = data.endereco_ip || "";
@@ -292,7 +360,7 @@ function mostrarCamposPorTipo() {
       } else if (tipo === "2") {
         rotaBase = API_PRINTERS;
       } else if (tipo === "3") {
-        rotabase = API_GENERIC;
+        rotaBase = API_GENERIC;
       }
 
       if (!rotaBase) {
@@ -332,17 +400,29 @@ function mostrarCamposPorTipo() {
           insumo: document.getElementById("insumo")?.value || "",
         };
       } else if (tipo === "3") {
-        if (!tipoIdElement.value || !tombamentoElement.value) {
+        const tipoIdElement = document.getElementById("tipo-generico");
+        const tombamentoElement = document.getElementById("tombamento-generico");
+        
+        if (!tipoIdElement?.value || !tombamentoElement?.value) {
             alert("Para equipamentos genéricos, o Tipo e o Tombamento são obrigatórios.");
             return;
         }
+        
         const ipValue = document.getElementById("ip-generico")?.value.trim();
+        
+        // Coletar campos dinâmicos JSON
+        const atributosDinamicos = {};
+        document.querySelectorAll('.atributo-dinamico-input').forEach(input => {
+            atributosDinamicos[input.dataset.chave] = input.value;
+        });
+
         payload = {
           ...payload,
-          num_patrimonio: document.getElementById("tombamento-generico")?.value || "",
-          tipo_id: parseInt(document.getElementById("tipo-generico")?.value, 10) || null, // Chave estrangeira NOT NULL
-          endereco_ip: document.getElementById("ip-generico")?.value || null,
+          num_patrimonio: tombamentoElement.value,
+          tipo_id: parseInt(tipoIdElement.value, 10), 
+          endereco_ip: ipValue || null,
           observacao: document.getElementById("observacao-generico")?.value || "",
+          atributos_dinamicos: atributosDinamicos
         };
       }
 
@@ -359,9 +439,9 @@ function mostrarCamposPorTipo() {
         if (res.ok) {
           alert(equipmentId ? "Equipamento atualizado!" : "Equipamento cadastrado!");
           
-          let redirectUrl = "computadores.html";
-          if(tipo === "2") redirectUrl = "impressoras.html";
-          else if(tipo === "3") redirectUrl = "genericos.html"; // Tela de listagem correspondente
+          let redirectUrl = "equipamentos.html";
+          if(tipo === "2") redirectUrl = "equipamentos.html";
+          else if(tipo === "3") redirectUrl = "equipamentos.html";
 
           window.location.href = redirectUrl;
         } else {

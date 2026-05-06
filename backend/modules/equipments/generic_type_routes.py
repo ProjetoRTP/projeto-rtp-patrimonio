@@ -88,3 +88,15 @@ def delete_generic_type(url_id):
         return jsonify({"status": "Tipo genérico removido"}), 200
     except Exception as e:
         return jsonify({"erro": str(e)}), 400
+
+
+# GET ATTRIBUTES OF A TYPE
+@generics_bp.route("/types/<int:url_id>/atributos", methods=["GET"])
+@jwt_required()
+def get_type_attributes(url_id):
+    service = GenericTypeService()
+    try:
+        atributos = service.get_attributes(url_id)
+        return jsonify({"tipo_id": url_id, "atributos": atributos}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400

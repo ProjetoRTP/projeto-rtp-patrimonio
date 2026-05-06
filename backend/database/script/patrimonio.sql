@@ -175,11 +175,29 @@ CREATE TABLE IF NOT EXISTS tipo_generico (
 -- mas com menos detalhes do que equipamentos definidos
 -- -------------------------------------------------------
 CREATE TABLE IF NOT EXISTS equipamentos_generico (
-    id              INT       AUTO_INCREMENT PRIMARY KEY,
-    tipo_id         INT       NOT NULL,
-    observacao      TEXT,
+    id                  INT       AUTO_INCREMENT PRIMARY KEY,
+    tipo_id             INT       NOT NULL,
+    observacao          TEXT,
+    atributos_dinamicos JSON      NULL,
 
     FOREIGN KEY (tipo_id) REFERENCES tipo_generico(id)
+);
+
+-- -------------------------------------------------------
+-- atributos_tipo_generico
+-- Tabela de regras de atributos dinâmicos (EAV)
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS atributos_tipo_generico (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_id         INT NOT NULL,
+    chave           VARCHAR(50) NOT NULL, 
+    label           VARCHAR(100) NOT NULL,
+    tipo_dado       ENUM('texto', 'numero', 'data', 'booleano', 'lista', 'ip', 'patrimonio') NOT NULL,
+    obrigatorio     BOOLEAN DEFAULT FALSE,
+    opcoes          JSON NULL,
+    ativo           BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (tipo_id) REFERENCES tipo_generico(id),
+    UNIQUE(tipo_id, chave)
 );
 
 -- -------------------------------------------------------

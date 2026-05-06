@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required
 from modules.utils.decorators import check_role
-from modules.equipments.services.generic_type_service import GenericService
+from modules.equipments.services.generic_equip_service import GenericService
 from modules.equipments.generic_type_routes import generics_bp
 
 

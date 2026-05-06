@@ -32,10 +32,11 @@ async function carregarTodosEquipamentos() {
         // Busca todos os tipos em paralelo
         // ⚠️ Quando o endpoint de genéricos estiver pronto,
         // adicione: buscarEndpoint("/equipamentos?tipo=generico")
-        const [computadores, impressoras, perifericos] = await Promise.all([
+        const [computadores, impressoras, perifericos, genericos] = await Promise.all([
             buscarEndpoint("/computers"),
             buscarEndpoint("/printer"),
             buscarEndpoint("/peripherals"),
+            buscarEndpoint("/generics"),
         ]);
 
         // Junta tudo e adiciona o tipo em cada item (caso não venha do backend)
@@ -43,6 +44,7 @@ async function carregarTodosEquipamentos() {
             ...computadores.map(e => ({ ...e, tipo: e.tipo ?? "computador" })),
             ...impressoras.map(e => ({ ...e, tipo: e.tipo ?? "impressora" })),
             ...perifericos.map(e => ({ ...e, tipo: e.tipo ?? "periferico" })),
+            ...genericos.map(e => ({ ...e, tipo: e.tipo ?? "generico" })),
         ];
 
         renderizarTabela(todosEquipamentos);
