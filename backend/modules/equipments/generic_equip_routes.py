@@ -54,6 +54,19 @@ def get_generic(url_id):
     return jsonify(generic), 200
 
 
+# READ BY STATUS
+@generics_bp.route("/lista", methods=["GET"])
+@jwt_required()
+def listar():
+    status = request.args.get("status")
+    setor = request.args.get("setor")
+
+    service = GenericService()
+    generico = service.listar(status=status, setor=setor)
+
+    return jsonify(generico), 200
+
+
 # UPDATE — admin ou gerente
 @generics_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()

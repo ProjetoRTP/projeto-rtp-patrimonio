@@ -1,97 +1,148 @@
 const API_BASE_URL = 'http://localhost:5000/movements';
+const API_BASE = 'http://localhost:5000';
+const tbody = document.getElementById("tabela-manutencoes");
+const token = sessionStorage.getItem('token_procape');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const token = sessionStorage.getItem('token_procape');
     if (!token) {
         window.location.href = '../index.html';
         return;
     }
+    carregarSetores();
+    carregarMovimentacoes();
 
     /* ─── Filtros ─────────────────────────────────────────── */
-    const filtroSetor  = document.getElementById('filtro-setor');
-    const filtroStatus = document.getElementById('filtro-status');
+    const filtroSetor = document.getElementById('filtro-setor');
+    const filtroEquip = document.getElementById('filtro-equip');
 
     document.getElementById('btn-limpar').addEventListener('click', () => {
-        filtroSetor.selectedIndex  = 0;
-        filtroStatus.selectedIndex = 0;
+        filtroSetor.value = "";
+        filtroEquip.value = "";
         carregarMovimentacoes();
     });
 
     document.getElementById('btn-aplicar').addEventListener('click', () => {
-        const setor  = filtroSetor.value;
-        const status = filtroStatus.value;
+        const setor = filtroSetor.value;
+        const equip = filtroEquip.value;
 
-        if (!setor && !status) {
+        if (!setor && !equip) {
             alert("Por favor, escolha pelo menos um filtro antes de aplicar!");
             return;
         }
 
-        carregarMovimentacoes({ setor, status });
+        // Passando os parâmetros corretamente em vez de um objeto
+        carregarMovimentacoes(setor, equip);
     });
-
-    /* ─── Carregamento da tabela ──────────────────────────── */
-    async function carregarMovimentacoes(filtros = {}) {
-        const tbody = document.getElementById('tabela-manutencoes');
-        if (!tbody) return;
-
-        try {
-            const params = new URLSearchParams();
-            if (filtros.setor)  params.append('setor',  filtros.setor);
-            if (filtros.status) params.append('status', filtros.status);
-
-            const url = `${API_BASE_URL}${params.toString() ? '?' + params.toString() : ''}`;
-
-            const resposta = await fetch(url, {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-
-            if (resposta.ok) {
-                const movimentacoes = await resposta.json();
-
-                if (movimentacoes.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="3" class="text-center text-muted py-4">
-                                Nenhuma movimentação encontrada.
-                            </td>
-                        </tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = movimentacoes.map(mov => {
-                    const dataMovimentacao = mov.data_movimentacao
-                        ? new Date(mov.data_movimentacao).toLocaleDateString('pt-BR', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric'
-                        })
-                        : 'Sem data';
-
-                    return `
-                    <tr style="border-bottom: 1px solid #f1f1f1;">
-                        <td style="color: #1D4587; padding: 15px 0; font-weight: 500;">
-                            ${String(mov.id).padStart(7, '0')}
-                        </td>
-                        <td style="color: #1D4587; padding: 15px 0; text-align: center; font-weight: 500;">
-                            ${dataMovimentacao}
-                        </td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-outline-danger" onclick="verInfoMovimentacao(${mov.id})">
-                                <i class="bi bi-info-circle"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-                }).join('');
-            }
-
-        } catch (erro) {
-            console.error('Erro ao carregar movimentações:', erro);
-        }
-    }
-
-    carregarMovimentacoes();
 });
 
-function verInfoMovimentacao(id) { window.location.href = `movimentacoes-info.html?id=${id}`; }
+
+/* ─── Carregamento da tabela ──────────────────────────── */
+
+async function carregarMovimentacoes(setorFiltro = "", equipFiltro = "") {
+    mostrarLoading();
+
+    // Pega os filtros dos parâmetros ou direto dos inputs
+    const equip = equipFiltro || document.getElementById("filtro-Equip")?.value || "";
+    const setor = setorFiltro || document.getElementById("filtro-setor")?.value || "";
+
+    const query = new URLSearchParams();
+
+    // No backend o Flask espera request.args.get("equip") e ("setor")
+    if (equip) query.append("equip", equip);
+    if (setor) query.append("setor", setor);
+
+    const qs = query.toString();
+    
+    try {
+        const res = await fetch(`${API_BASE_URL}/lista?${qs}`, {
+            headers: {
+                Authorization: `Bearer ${token}`, 
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!res.ok) throw new Error(`Erro ${res.status}`); // Corrigido de res.Equip para res.status
+
+        let dados = await res.json();
+
+        renderizarTabela(dados);
+    } catch (erro) {
+        console.error("Erro ao carregar as movimentações:", erro);
+        mostrarErro();
+    }
+}
+
+function mostrarLoading() {
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Buscando movimentações...</td></tr>`;
+    }
+}
+
+function mostrarErro() {
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-danger">Erro ao buscar movimentações.</td></tr>`;
+    }
+}
+
+async function carregarSetores() {
+    const setorSelect = document.getElementById("filtro-setor");
+    if (!setorSelect) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/sectors`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!res.ok) return;
+
+        const setores = await res.json();
+
+        setorSelect.innerHTML = '<option value="">Todos os setores</option>';
+
+        setores.forEach(setor => {
+            const option = document.createElement("option");
+            option.value = setor.id;
+            option.textContent = setor.nome;
+            setorSelect.appendChild(option);
+        });
+    } catch (err) {
+        console.error("Erro ao carregar setores:", err);
+    }
+}
+
+function verInfoMovimentacao(id) { 
+    window.location.href = `movimentacoes-info.html?id=${id}`; 
+}
+
+// ===============================
+// RENDERIZAÇÃO DA TABELA
+// ===============================
+function renderizarTabela(lista) {
+    if (!tbody) return;
+
+    if (!lista || lista.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center py-4 text-muted">
+                    Nenhuma movimentação encontrada
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = lista.map(mov => `
+        <tr style="border-bottom: 1px solid #f1f1f1;">
+            <td>${mov.id}</td>
+            <td style="color: #1D4587; font-weight: 500;">
+                Equipamento #${mov.equipamento_id}
+            </td>
+            <td>Setor Origem: ${mov.setor_origem_id} ➔ Destino: ${mov.setor_destino_id}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary" onclick="verInfoMovimentacao(${mov.id})">
+                    <i class="bi bi-info-circle"></i> Detalhes
+                </button>
+            </td>
+        </tr>
+    `).join("");
+}

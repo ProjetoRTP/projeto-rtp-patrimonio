@@ -49,6 +49,19 @@ def get_printer(url_id):
     return jsonify(printer), 200
 
 
+# READ BY STATUS
+@printer_bp.route("/lista", methods=["GET"])
+@jwt_required()
+def listar():
+    status = request.args.get("status")
+    setor = request.args.get("setor")
+
+    service = PrinterService()
+    impressora = service.listar(status=status, setor=setor)
+
+    return jsonify(impressora), 200
+
+
 # UPDATE — gerente ou admin
 @printer_bp.route("/<int:url_id>", methods=["PUT"])
 @jwt_required()

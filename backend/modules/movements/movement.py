@@ -47,6 +47,12 @@ class Movement(BaseCRUD):
                 self.table.insert().values(**data)
             )
             return result.inserted_primary_key[0]
+        
+    def _base_query(self):
+        return (
+            select(self.table)
+            .where(self.table.c.id)
+        )
 
     def get_by_equipment(self, equipment_id):
         with engine.connect() as conn:
@@ -70,3 +76,16 @@ class Movement(BaseCRUD):
                 movement[key] = value.isoformat()
 
         return movement
+    
+    def listar(self, equip=None, setor=None):
+        with engine.connect() as conn:
+            query = self._base_query()
+
+            if equip:
+                query = query.where(self.table.c.equipamento_id == equip)
+
+            if setor:
+                query = query.where(self.table.c.setor_origem_id == setor)
+
+            result = conn.execute(query).fetchall()
+            return [dict(r._mapping) for r in result]

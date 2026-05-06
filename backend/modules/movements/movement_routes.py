@@ -63,3 +63,14 @@ def get_movement(movement_id):
 def get_movements_by_equipment(equipment_id):
     movement_model = Movement()
     return jsonify([movement_model.serialize_movement(m) for m in movement_model.get_by_equipment(equipment_id)]), 200
+
+@movements_bp.route("/lista", methods=["GET"])
+@jwt_required()
+def listar():
+    equip = request.args.get("equip")
+    setor = request.args.get("setor")
+
+    service = Movement()
+    movimentacoes = service.listar(equip=equip, setor=setor)
+
+    return jsonify([service.serialize_movement(m) for m in movimentacoes]), 200
