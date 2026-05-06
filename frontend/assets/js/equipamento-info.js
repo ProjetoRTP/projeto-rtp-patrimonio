@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else if (tipo === "periferico") {
         endpoint = `/peripherals/${id}`;
     } else if (tipo === "generico") {
-        endpoint = `/generic_equip/${id}`; 
+        endpoint = `/generics/${id}`; 
     } else {
         alert("Tipo de equipamento não reconhecido.");
         window.location.href = "equipamentos.html";
@@ -92,11 +92,49 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // 6. Preenche a tela
         setValue("info-tipo", tipoFormatado);
-        setValue("info-setor", data.setor_nome || data.setor); // Cobre as duas possibilidades de nome da coluna
-        setValue("info-tombamento", data.num_patrimonio || data.tombamento); 
+        setValue("info-setor", data.setor_nome || data.setor);
+        setValue("info-tombamento", data.num_patrimonio || data.tombamento);
         setValue("info-data-aquisicao", formatDate(data.data_aquisicao));
         setValue("info-valor", formatCurrency(data.valor));
         setValue("info-observacao", data.observacao);
+
+        // Renderizar atributos dinâmicos se for genérico
+        if (tipo === "generico" && data.atributos_dinamicos) {
+            const container = document.getElementById("container-atributos-info");
+            if (container) {
+                const attrs = typeof data.atributos_dinamicos === "string"
+                    ? JSON.parse(data.atributos_dinamicos)
+                    : data.atributos_dinamicos;
+
+                // Mostrar tipo genérico nome se tiver
+                if (data.tipo_id) {
+                    try {
+                        const tipoRes = await fetch(`http://localhost:5000/generics/types/${data.tipo_id}/atributos`, {
+                            headers: { Authorization: `Bearer ${token}` }
+                        });
+                        if (tipoRes.ok) {
+                            const tipoData = await tipoRes.json();
+                            if (tipoData.nome) {
+                                setValue("info-tipo", `Genérico — ${tipoData.nome}`);
+                            }
+                        }
+                    } catch(e) { /* silencia */ }
+                }
+
+                Object.entries(attrs).forEach(([chave, valor]) => {
+                    const div = document.createElement("div");
+                    div.className = "col-md-6";
+                    const label = chave.charAt(0).toUpperCase() + chave.slice(1).replace(/_/g, " ");
+                    div.innerHTML = `
+                        <label class="fw-bold mb-1" style="color:#274D8A;">${label}</label>
+                        <input type="text" class="form-control fw-medium" disabled
+                               value="${valor ?? 'Não informado'}"
+                               style="background-color:#EAEAEA; border:1px solid #CCCCCC; color:#555;">
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
 
     } catch (err) {
         console.error("Erro de conexão com a API:", err);
