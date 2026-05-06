@@ -4,6 +4,7 @@ const API_PRINTERS = `${API_BASE}/printer`;
 const API_PERIPHERALS = `${API_BASE}/peripherals`;
 const API_SECTORS = `${API_BASE}/sectors`;
 const API_SUBSECTORS = `${API_BASE}/subsectors`;
+const API_GENERIC = `${API_BASE}/` //Alterar assim que a rota para genéricos for definida
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = sessionStorage.getItem("token_procape");
@@ -89,6 +90,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       camposComputador.classList.add("d-none");
       camposImpressora.classList.remove("d-none");
       if (btnCancelarLink) btnCancelarLink.href = "impressoras.html";
+    }
+    // Preencher quando tiver as divs do front bem definidas
+    if (tipoEquipamento.value === "3") {
+
     } else {
       camposComputador.classList.add("d-none");
       camposImpressora.classList.add("d-none");
@@ -209,6 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById("insumo")) {
           document.getElementById("insumo").value = data.insumo || "";
         }
+        // Adicionar campos de coleta de dados quando o front tiver as divs definidas
       }
     } catch (err) {
       console.error("Erro ao carregar equipamento para edição:", err);
@@ -236,6 +242,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         rotaBase = API_COMPUTERS;
       } else if (tipo === "2") {
         rotaBase = API_PRINTERS;
+      } else if (tipo === "3") {
+        rotabase = API_GENERIC;
       }
 
       if (!rotaBase) {
@@ -274,6 +282,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           endereco_ip: document.getElementById("endereco-ip")?.value || "",
           insumo: document.getElementById("insumo")?.value || "",
         };
+      } else if (tipo === "3") {
+        // Adicionar com campos confirmados
       }
 
       try {
