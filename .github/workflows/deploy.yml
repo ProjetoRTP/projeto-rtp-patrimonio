@@ -8,11 +8,13 @@ on:
 jobs:
   deploy-local:
     runs-on: self-hosted
-    if: github.event.base_ref == 'refs/heads/develop' || github.ref_name == 'develop'
+    if: github.ref_type == 'tag' && (github.event.base_ref == 'refs/heads/develop' || contains(github.ref, 'develop'))
     
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
       
       - name: Preparar ambiente
         run: echo "ambiente preparado no servidor SRVPROJETO"
