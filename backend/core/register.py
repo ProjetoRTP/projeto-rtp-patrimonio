@@ -9,6 +9,7 @@ from modules.maintenance.maintenance_routes import maintenances_bp
 from modules.movements.movement_routes import movements_bp
 from modules.history.history_routes import history_bp
 from modules.reports.routes_reports import reports_bp
+from modules.equipments.generic_type_routes import generics_bp
 
 
 def register_routes(app):
@@ -23,6 +24,7 @@ def register_routes(app):
     app.register_blueprint(maintenances_bp)
     app.register_blueprint(movements_bp)
     app.register_blueprint(history_bp)
+    app.register_blueprint(generics_bp)
     
 
 
