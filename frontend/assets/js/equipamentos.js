@@ -201,14 +201,21 @@ async function carregarfiltros() {
     }
 }
 
+async function limpaFiltros() {
+    const filtroSetor = document.getElementById("filtro-setor");
+    const filtroStatus = document.getElementById("filtro-status");
+    filtroSetor.value = "";
+    carregarTodosEquipamentos();
+
+}
+
 function initFiltros() {
     document
-        .getElementById("filtro-status")
-        ?.addEventListener("change", carregarTodosEquipamentos);
-
+        .getElementById("btn-aplicar")
+        ?.addEventListener("click", carregarTodosEquipamentos);
     document
-        .getElementById("filtro-setor")
-        ?.addEventListener("change", carregarTodosEquipamentos);
+        .getElementById("btn-limpar")
+        ?.addEventListener("click", limpaFiltros)
 }
 
 function mostrarLoading() {
