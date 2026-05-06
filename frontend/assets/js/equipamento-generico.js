@@ -44,8 +44,7 @@ async function criarTipo() {
     btnSubmit.disabled = true;
 
     try {
-        // ⚠️ Substitua "/tipos-equipamento" pelo endpoint correto quando estiver pronto
-        const resposta = await fetch(`${API_BASE}/tipos-equipamento`, {
+        const resposta = await fetch(`${API_BASE}/generics/types`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

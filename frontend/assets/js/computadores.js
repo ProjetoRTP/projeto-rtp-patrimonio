@@ -1,7 +1,7 @@
 const API_BASE = "http://localhost:5000";
-const tbody = document.getElementById("tbody-equipamentos");
-const filtroSetor = document.getElementById("filtro-setor");
-const filtroStatus = document.getElementById("filtro-status");
+let tbody;
+let filtroSetor;
+let filtroStatus;
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = sessionStorage.getItem("token_procape");
