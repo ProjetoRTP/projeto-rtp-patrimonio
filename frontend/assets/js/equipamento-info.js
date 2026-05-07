@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 6. Preenche a tela
         setValue("info-tipo", tipoFormatado);
         setValue("info-setor", data.setor_nome || data.setor);
+        setValue("info-subsetor", data.subsetor_nome || data.subsetor);
         setValue("info-tombamento", data.num_patrimonio || data.tombamento);
         setValue("info-data-aquisicao", formatDate(data.data_aquisicao));
         setValue("info-valor", formatCurrency(data.valor));
