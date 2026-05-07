@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROCAPE - Criar Tipo de Equipamentos</title>
+    <title>PROCAPE - Criar Modelo de Equipamento</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,13 +35,23 @@
             <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm m-auto w-100"
                 style="max-width: 900px; z-index: 1; position: relative;">
 
+            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm mx-auto"
+                style="max-width: 900px; z-index: 1; position: relative;">
+
+                
                 <h2 class="text-center text-lg-start" style="color: #1D4587; font-weight: bold; margin-bottom: 40px;">
-                    Criar Tipo de Equipamento</h2>
+                    Criar Modelo de Equipamento
+                </h2>
+
+                <a href="equipamentos-modelos.html"
+                    class="btn btn-outline-danger rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-bold text-decoration-none">
+                    <i class="bi bi-plus-circle"></i>Modelos existentes
+                </a> 
 
                 <form>
                         <div class="row g-4 ">
                             <div class="col-md-6">
-                                <label class="label-azul d-block fw-bold mb-1">Nome do equipamento</label>
+                                <label class="label-azul d-block fw-bold mb-1">Nome do Modelo de equipamento</label>
                                 <input id="inp-nome" type="text" class="form-control input-vermelho w-100" placeholder="Ex: Roteador, Câmera de Segurança" required>
                             </div>
 
@@ -83,10 +93,12 @@
             </form>
 
     </div>
-
+</div>
     <img src="../assets/imagens/logo.png" alt="Logo Coração"
         class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
         style="width: 70px; z-index: 0; opacity: 0.9;">
+
+
     </main>
 
     </div>
