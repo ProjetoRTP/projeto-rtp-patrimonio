@@ -64,11 +64,33 @@
                     <!-- Nova Sessão de Campos Dinâmicos -->
                     <div class="col-12 mt-5">
                         <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                            <h5 class="m-0" style="color: #1D4587; font-weight: bold;">Campos Personalizados (Opcional)</h5>
+                            <h5 class="m-0" style="color: #1D4587; font-weight: bold;">
+                                Campos Personalizados (Opcional)
+                            </h5>
+
                             <button type="button" id="btn-add-campo" class="btn btn-sm text-white fw-bold" style="background-color: #214383; border-radius: 6px;">
-                                <i class="bi bi-plus-circle me-1"></i> Adicionar Campo
+                                <i class="bi bi-plus-circle me-1"></i> 
+                                Adicionar Campo
                             </button>
                         </div>
+
+                            <!-- BLOCO DE CAMPOS PADRÃO -->
+                            <div class="mb-4 p-3 rounded-3" style="background-color: #f8f9fa; border: 1px dashed #c5d8f0;">
+                                <p class="fw-bold mb-2" style="color: #1D4587; font-size: 0.88rem;">
+                                    <i class="bi bi-info-circle me-1"></i> Campos já incluídos automaticamente em todos os equipamentos:
+                                </p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.8rem;">Nº Patrimônio</span>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.8rem;">Nome</span>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.8rem;">Descrição</span>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.8rem;">Status</span>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.8rem;">Setor</span>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #EAF2F8; color: #1D4587; font-size: 0.8rem;">Data de Aquisição</span>
+                                </div>
+                                <small class="text-muted mt-2 d-block">Adicione abaixo apenas campos extras específicos deste modelo.</small>
+                            </div>
+                            <!-- FIM BLOCO CAMPOS PADRÃO -->
+
                         <div id="container-campos" class="row g-3">
                             <!-- Campos adicionados via JS aparecerão aqui -->
                         </div>
@@ -83,9 +105,9 @@
                         </button>
                     </a>
 
-                    <button id="btnSubmit" type="submit" class="btn text-white fw-bold "
+                    <button id="btnSubmit" type="submit" class="btn text-white fw-bold"
                         style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
-                        Criar Tipo
+                        Criar Modelo
                     </button>
                 </div>
         </form>
