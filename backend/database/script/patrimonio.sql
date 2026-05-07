@@ -435,7 +435,6 @@ BEGIN
         )
         VALUES (
             NEW.equipamento_id,
-            @usuario_logado_id,
             'movimentacao',
             NEW.id,
             CONCAT(
