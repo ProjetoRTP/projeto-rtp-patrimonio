@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  //  Pega o ID da URL
+  // Pega o ID da URL
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
@@ -19,6 +19,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // ==========================================
+  // OCULTAR CAMPO DE SENHA NA EDIÇÃO (Pedido do Backend)
+  // ==========================================
+  const inputSenha = document.getElementById("senha");
+  if (inputSenha) {
+      // Oculta a "div" inteira que envolve o input de senha para não deixar um buraco no layout
+      const divPai = inputSenha.closest('div'); 
+      if (divPai) {
+          divPai.style.display = 'none'; 
+      } else {
+          inputSenha.style.display = 'none';
+      }
+  }
+  // ==========================================
+
   await carregarUsuario(id, token);
 
   document
@@ -26,17 +41,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     .addEventListener("click", async function (e) {
       e.preventDefault();
 
+      // Pega os valores dos inputs
+      const nome = document.getElementById("nome").value.trim();
+      const cpf = document.getElementById("cpf").value.replace(/\D/g, ""); 
+      const email = document.getElementById("email").value.trim();
+      const data_nascimento = document.getElementById("dataNascimento").value;
+      const perfil = document.getElementById("permissao").value;
+
+      // Monta o pacote APENAS com os dados do perfil (Sem a senha!)
       const usuarioAtualizado = {
-        nome: document.getElementById("nome").value,
-        cpf: document.getElementById("cpf").value,
-        email: document.getElementById("email").value,
-        data_nascimento: document.getElementById("dataNascimento").value,
-        perfil: document.getElementById("permissao").value,
+        nome,
+        cpf,
+        email,
+        data_nascimento,
+        perfil,
       };
 
       try {
         const response = await fetch(`${API_URL}/${id}`, {
-          method: "PUT",
+          method: "PUT", // Atualização
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -80,7 +103,14 @@ async function carregarUsuario(id, token) {
 
     const user = await response.json();
     document.getElementById("nome").value = user.nome || "";
-    document.getElementById("cpf").value = user.cpf || "";
+    
+    // Formata o CPF ao carregar
+    let cpfValor = user.cpf || "";
+    if (cpfValor.length === 11) {
+        cpfValor = cpfValor.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+    }
+    document.getElementById("cpf").value = cpfValor;
+    
     document.getElementById("email").value = user.email || "";
     document.getElementById("permissao").value = user.perfil || "";
 
