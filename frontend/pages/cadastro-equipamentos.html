@@ -121,7 +121,7 @@
                         </div>
 
                         <!-- CAMPOS IMPRESSORA -->
-                        <div id="campos-impressora" class="row g-4 d-none">
+                       <div id="campos-impressora" class="row g-4 d-none">
 
                             <div class="col-md-6">
                                 <label class="label-azul d-block">Tombamento</label>
@@ -130,20 +130,27 @@
                             </div>
 
                             <div class="col-md-6">
+                                <label class="label-azul">Modelo</label>
+                                <input id="modelo" type="text" class="form-control input-vermelho" placeholder="Ex: HP LaserJet">
+                            </div>
+
+                            <div class="col-md-6">
                                 <label class="label-azul">Tipo</label>
                                 <select id="tipo" class="form-select input-vermelho">
-                                    <option>Laser</option>
-                                    <option>Jato de tinta</option>
-                                    <option>Térmica</option>
-                                    <option>Plotter</option>
+                                    <option value="">Selecione...</option>
+                                    <option value="laser">Laser</option>
+                                    <option value="jato de tinta">Jato de tinta</option>
+                                    <option value="termica">Térmica</option>
+                                    <option value="plotter">Plotter</option>
                                 </select>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="label-azul">Coloração</label>
                                 <select id="coloracao" class="form-select input-vermelho">
-                                    <option>Monocromática</option>
-                                    <option>Colorida</option>
+                                    <option value="">Selecione...</option>
+                                    <option value="monocromatica">Monocromática</option>
+                                    <option value="colorida">Colorida</option>
                                 </select>
                             </div>
 
@@ -221,7 +228,7 @@
                             style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
                             Cadastrar
                         </button>
-                        <button id="teste">teste</button>
+                       
                     </div>
 
             </div>

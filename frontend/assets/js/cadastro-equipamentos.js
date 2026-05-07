@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const btnVoltar = document.getElementById("btnCancelarLink")
+  const btnVoltar = document.getElementById("btnCancelarLink");
   if (btnVoltar) {
     btnVoltar.addEventListener("click", () => {
         window.history.back();
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 2. MOSTRAR/OCULTAR CAMPOS POR TIPO
-function mostrarCamposPorTipo() {
+  function mostrarCamposPorTipo() {
     const camposComputador = document.getElementById("campos-computador");
     const camposImpressora = document.getElementById("campos-impressora");
     const camposGenerico   = document.getElementById("campos-generico");
@@ -121,19 +121,16 @@ function mostrarCamposPorTipo() {
     camposComputador.classList.add("d-none");
     camposImpressora.classList.add("d-none");
     camposGenerico.classList.add("d-none");
-    
 
     // Mostra só o correto
     if (tipoEquipamento.value === "1") {
         camposComputador.classList.remove("d-none");
-
     } else if (tipoEquipamento.value === "2") {
         camposImpressora.classList.remove("d-none");
-
     } else if (tipoEquipamento.value === "3") {
         camposGenerico.classList.remove("d-none");
     }
-}
+  }
 
   tipoEquipamento.addEventListener("change", mostrarCamposPorTipo);
 
@@ -270,25 +267,23 @@ function mostrarCamposPorTipo() {
           }
         }
 
-        // Preencher campos do computador
-        if (document.getElementById("tombamento")) {
-          document.getElementById("tombamento").value =
-            data.num_patrimonio || data.tombamento || "";
+        // ==========================================
+        // PREENCHER CAMPOS DO COMPUTADOR
+        // ==========================================
+        if (document.getElementById("tombamento-computador")) {
+          document.getElementById("tombamento-computador").value = data.num_patrimonio || data.tombamento || "";
         }
         if (document.getElementById("sistema")) {
-          document.getElementById("sistema").value =
-            data.sistema_operacional || "";
+          document.getElementById("sistema").value = data.sistema_operacional || data.os || "";
         }
         if (document.getElementById("memoria-interna")) {
-          document.getElementById("memoria-interna").value =
-            data.memoria_interna || "";
+          document.getElementById("memoria-interna").value = data.memoria_interna || data.mem_cpu || "";
         }
         if (document.getElementById("memoria-ram")) {
-          document.getElementById("memoria-ram").value = data.memoria_ram || "";
+          document.getElementById("memoria-ram").value = data.memoria_ram || data.mem_ram || "";
         }
         if (document.getElementById("armazenamento")) {
-          document.getElementById("armazenamento").value =
-            data.armazenamento || "";
+          document.getElementById("armazenamento").value = data.armazenamento || "";
         }
         if (document.getElementById("numero-ip")) {
           document.getElementById("numero-ip").value = data.endereco_ip || "";
@@ -296,24 +291,32 @@ function mostrarCamposPorTipo() {
         if (document.getElementById("observacoes")) {
           document.getElementById("observacoes").value = data.observacao || "";
         }
-        if (document.getElementById("data_aquisicao")) {
-          document.getElementById("data_aquisicao").value = data.data_aquisicao || "";
+        if (document.getElementById("data_aquisicao_comp")) {
+          document.getElementById("data_aquisicao_comp").value = data.data_aquisicao || "";
         }
 
-        // Preencher campos da impressora
-       if (document.getElementById("tombamento")) {
-          document.getElementById("tombamento").value =
-            data.num_patrimonio || data.tombamento || "";
+        // ==========================================
+        // PREENCHER CAMPOS DA IMPRESSORA
+        // ==========================================
+      // ==========================================
+        // PREENCHER CAMPOS DA IMPRESSORA
+        // ==========================================
+        if (document.getElementById("tombamento-impressora")) {
+          document.getElementById("tombamento-impressora").value = data.num_patrimonio || data.tombamento || "";
+        }
+        // Novo campo Modelo!
+        if (document.getElementById("modelo")) {
+          document.getElementById("modelo").value = data.modelo || "";
         }
         if (document.getElementById("tipo")) {
-          document.getElementById("tipo").value = data.tipo_imp || "";
+          // toLowerCase garante que "Laser" e "laser" são tratados de forma igual
+          document.getElementById("tipo").value = data.tipo_imp ? data.tipo_imp.toLowerCase() : "";
         }
         if (document.getElementById("coloracao")) {
-          document.getElementById("coloracao").value = data.coloracao || "";
+          document.getElementById("coloracao").value = data.coloracao ? data.coloracao.toLowerCase() : "";
         }
         if (document.getElementById("conectividade")) {
-          document.getElementById("conectividade").value =
-            data.conectividade || "";
+          document.getElementById("conectividade").value = data.conectividade || "";
         }
         if (document.getElementById("endereco-ip")) {
           document.getElementById("endereco-ip").value = data.endereco_ip || "";
@@ -321,18 +324,24 @@ function mostrarCamposPorTipo() {
         if (document.getElementById("insumo")) {
           document.getElementById("insumo").value = data.insumo || "";
         }
-        if (document.getElementById("data_aquisicao")) {
-          document.getElementById("data_aquisicao").value = data.data_aquisicao || "";
+        if (document.getElementById("data_aquisicao_imp")) {
+          // Previne erros se a base de dados mandar a data num formato longo com horas (ex: 2024-05-10T00:00:00Z)
+          let dataAquisicao = data.data_aquisicao;
+          if (dataAquisicao && dataAquisicao.includes("T")) {
+              dataAquisicao = dataAquisicao.split("T")[0];
+          }
+          document.getElementById("data_aquisicao_imp").value = dataAquisicao || "";
         }
         
-        // Preencher campos genérico
+        // ==========================================
+        // PREENCHER CAMPOS GENÉRICO
+        // ==========================================
         if (document.getElementById("tombamento-generico")) {
             document.getElementById("tombamento-generico").value = data.num_patrimonio || "";
         }
         if (document.getElementById("tipo-generico")) {
             document.getElementById("tipo-generico").value = data.tipo_id || "";
             if (data.tipo_id) {
-                // Se o backend retorna json na string, temos que converter. Mas o MySQL já manda como objeto no Express/Python
                 const attrs = typeof data.atributos_dinamicos === 'string' ? JSON.parse(data.atributos_dinamicos) : data.atributos_dinamicos;
                 await loadAtributosDinamicos(data.tipo_id, attrs);
             }
@@ -343,8 +352,8 @@ function mostrarCamposPorTipo() {
         if (document.getElementById("observacao-generico")) {
             document.getElementById("observacao-generico").value = data.observacao || "";
         }
-        if (document.getElementById("data_aquisicao")) {
-          document.getElementById("data_aquisicao").value = data.data_aquisicao || "";
+        if (document.getElementById("data_aquisicao_gen")) {
+          document.getElementById("data_aquisicao_gen").value = data.data_aquisicao || "";
         }
       }
     } catch (err) {
@@ -457,7 +466,7 @@ function mostrarCamposPorTipo() {
           alert(equipmentId ? "Equipamento atualizado!" : "Equipamento cadastrado!");
           
           let redirectUrl = "equipamentos.html";
-          if(tipo === "2") redirectUrl = "equipamentos.html";
+          if(tipo === "2") redirectUrl = "impressoras.html"; // Mantive apontado para a página de impressoras baseando-me na sua intenção original
           else if(tipo === "3") redirectUrl = "equipamentos.html";
 
           window.location.href = redirectUrl;
