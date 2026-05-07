@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  const btnVoltar = document.getElementById("btnCancelarLink")
+  if (btnVoltar) {
+    btnVoltar.addEventListener("click", () => {
+        window.history.back();
+    });
+  }
+
   const params = new URLSearchParams(window.location.search);
   const equipmentId = params.get("id");
   console.log("equipmentId do query string:", equipmentId);
@@ -114,19 +121,17 @@ function mostrarCamposPorTipo() {
     camposComputador.classList.add("d-none");
     camposImpressora.classList.add("d-none");
     camposGenerico.classList.add("d-none");
+    
 
     // Mostra só o correto
     if (tipoEquipamento.value === "1") {
         camposComputador.classList.remove("d-none");
-        if (btnCancelarLink) btnCancelarLink.href = "computadores.html";
 
     } else if (tipoEquipamento.value === "2") {
         camposImpressora.classList.remove("d-none");
-        if (btnCancelarLink) btnCancelarLink.href = "impressoras.html";
 
     } else if (tipoEquipamento.value === "3") {
         camposGenerico.classList.remove("d-none");
-        if (btnCancelarLink) btnCancelarLink.href = "genericos.html";
     }
 }
 
@@ -291,6 +296,9 @@ function mostrarCamposPorTipo() {
         if (document.getElementById("observacoes")) {
           document.getElementById("observacoes").value = data.observacao || "";
         }
+        if (document.getElementById("data_aquisicao")) {
+          document.getElementById("data_aquisicao").value = data.data_aquisicao || "";
+        }
 
         // Preencher campos da impressora
        if (document.getElementById("tombamento")) {
@@ -313,6 +321,9 @@ function mostrarCamposPorTipo() {
         if (document.getElementById("insumo")) {
           document.getElementById("insumo").value = data.insumo || "";
         }
+        if (document.getElementById("data_aquisicao")) {
+          document.getElementById("data_aquisicao").value = data.data_aquisicao || "";
+        }
         
         // Preencher campos genérico
         if (document.getElementById("tombamento-generico")) {
@@ -331,6 +342,9 @@ function mostrarCamposPorTipo() {
         }
         if (document.getElementById("observacao-generico")) {
             document.getElementById("observacao-generico").value = data.observacao || "";
+        }
+        if (document.getElementById("data_aquisicao")) {
+          document.getElementById("data_aquisicao").value = data.data_aquisicao || "";
         }
       }
     } catch (err) {
@@ -380,6 +394,7 @@ function mostrarCamposPorTipo() {
       if (tipo === "1") {
         payload = {
           ...payload,
+          data_aquisicao: document.getElementById("data_aquisicao_comp")?.value || null,
           num_patrimonio: document.getElementById("tombamento-computador")?.value || "",
           os: document.getElementById("sistema")?.value || "",
           mem_cpu: document.getElementById("memoria-interna")?.value || "",
@@ -391,6 +406,7 @@ function mostrarCamposPorTipo() {
       } else if (tipo === "2") {
         payload = {
           ...payload,
+          data_aquisicao: document.getElementById("data_aquisicao_imp")?.value || null,
           num_patrimonio: document.getElementById("tombamento-impressora")?.value || "",
           modelo: document.getElementById("modelo")?.value || "",
           tipo_imp: document.getElementById("tipo")?.value || "",
@@ -418,11 +434,12 @@ function mostrarCamposPorTipo() {
 
         payload = {
           ...payload,
+          data_aquisicao: document.getElementById("data_aquisicao_gen")?.value || null,
           num_patrimonio: tombamentoElement.value,
           tipo_id: parseInt(tipoIdElement.value, 10), 
           endereco_ip: ipValue || null,
           observacao: document.getElementById("observacao-generico")?.value || "",
-          atributos_dinamicos: atributosDinamicos
+          atributos_dinamicos: atributosDinamicos,
         };
       }
 

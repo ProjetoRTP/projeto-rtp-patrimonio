@@ -102,6 +102,7 @@ function gerarChave(label) {
 async function criarTipo() {
     const nome      = document.getElementById("inp-nome").value.trim();
     const descricao = document.getElementById("inp-descricao").value.trim();
+    const data_aquisicao = document.getElementById("info-data-aquisicao")
 
     if (!nome) {
         alert("Preencha o nome do tipo de equipamento.");
@@ -144,8 +145,10 @@ async function criarTipo() {
     const payload = {
         nome,
         descricao,
-        atributos
+        atributos,
+        data_aquisicao
     };
+    console.log(payload)
 
     const btnSubmit = document.getElementById("btnSubmit");
     const textoOriginal = btnSubmit.innerText;
