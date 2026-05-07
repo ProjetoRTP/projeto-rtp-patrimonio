@@ -64,19 +64,52 @@ function renderizarTabela(lista) {
                 ${item.descricao
                     ? `<span class="ms-2 text-muted" style="font-size: 0.82rem;">${item.descricao}</span>`
                     : ""}
+                ${item.ativo === false
+                    ? `<span class="badge ms-2" style="background-color: #fdecea; color: #D32F2F; font-size: 0.75rem;">Inativo</span>`
+                    : ""}
             </td>
             <td class="text-end">
-                <div class="d-flex justify-content-end gap-2">
-                    <button class="btn btn-sm btn-outline-primary" onclick="editarModelo(${item.id})" title="Editar">
-                        <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="verDetalhes(${item.id})" title="Detalhes">
-                        <i class="bi bi-info"></i>
-                    </button>
-                </div>
+                <button 
+                    class="btn btn-sm ${item.ativo === false ? 'btn-outline-success' : 'btn-outline-warning'}" 
+                    onclick="toggleAtivo(${item.id}, ${item.ativo !== false})"
+                    title="${item.ativo === false ? 'Ativar' : 'Desativar'}">
+                    <i class="bi ${item.ativo === false ? 'bi-check-circle' : 'bi-slash-circle'}"></i>
+                    ${item.ativo === false ? 'Ativar' : 'Desativar'}
+                </button>
             </td>
         </tr>
     `).join("");
+}
+
+// ===============================
+// DESATIVAR / ATIVAR MODELO
+// ===============================
+async function toggleAtivo(id, estaAtivo) {
+    const acao = estaAtivo ? "desativar" : "ativar";
+    const confirma = confirm(`Deseja ${acao} este modelo?`);
+    if (!confirma) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/generics/types/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ ativo: !estaAtivo })
+        });
+
+        if (res.ok) {
+            await carregarModelos();
+        } else {
+            const erro = await res.json();
+            alert(`Erro: ${erro.erro || erro.error || `Falha ao ${acao} modelo.`}`);
+        }
+
+    } catch (err) {
+        console.error(`Erro ao ${acao} modelo:`, err);
+        alert("Erro ao conectar com o servidor.");
+    }
 }
 
 // ===============================
