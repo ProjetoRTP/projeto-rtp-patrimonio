@@ -481,3 +481,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 });
+
+
+// Mostrar o campo status só na edição (dentro do bloco "SE FOR EDIÇÃO")
+if (equipmentId) {
+    document.getElementById("campo-status").style.display = "block"; // ADICIONA ISSO
+    if (titulo) titulo.innerText = "Editar Equipamento";
+    ...
+    // E preencher o valor atual
+    if (document.getElementById("status")) {
+        document.getElementById("status").value = data.status || "ativo";
+    }
+}
+
+
+// Adicionar status no payload de TODOS os tipos (dentro do submit)
+const statusValue = document.getElementById("status")?.value || "ativo";
+
+
+// No payload de cada tipo adiciona:
+payload = {
+    ...payload,
+    status: statusValue,
+    ...
+};
