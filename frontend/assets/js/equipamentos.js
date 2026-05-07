@@ -19,11 +19,22 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "../index.html";
         return;
     }
-
     carregarfiltros();
     initFiltros();
     carregarTodosEquipamentos();
+    ocultaCriarTipo();
 });
+
+async function ocultaCriarTipo(){
+
+    const perfilUsuario = sessionStorage.getItem("usuario_perfil") || "usuario";
+    
+    if (perfilUsuario.toLowerCase() !== "admin") { 
+        const ocultaTipo = document.getElementById("botao")
+        ocultaTipo.classList.add("d-none")
+        alert("test")
+    }
+}
 
 // ===============================
 // BUSCA TODOS OS TIPOS EM PARALELO
@@ -227,3 +238,5 @@ function mostrarErro() {
     document.getElementById("tbody-equipamentos").innerHTML =
         `<tr><td colspan="2">Erro ao carregar</td></tr>`;
 }
+
+
