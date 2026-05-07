@@ -24,6 +24,25 @@ body {
     background-color: #F8F9FA;
 }
 
+main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    /* Troca vh-100 (fixo) por min-vh-100 (flexível) */
+    min-height: 100vh;
+    /* Adiciona respiro nas bordas para o card não colar no navegador */
+    padding: 40px 20px;
+    background-color: #EAF2F8;
+    overflow-y: auto;
+}
+
+main.login-main {
+    display: block;
+    padding: 0;
+    min-height: 100vh;
+}
+
 /* TELA DE LOADING (Animação do Coração) */
 #loading-screen {
     position: fixed;
@@ -248,18 +267,6 @@ body {
 
 
 /* Ajuste para o container principal não cortar conteúdo */
-main {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-    /* Troca vh-100 (fixo) por min-vh-100 (flexível) */
-    min-height: 100vh;
-    /* Adiciona respiro nas bordas para o card não colar no navegador */
-    padding: 40px 20px;
-    background-color: #EAF2F8;
-    overflow-y: auto;
-}
 
 /* Garante que o card seja legível e centralizado */
 .info-card {
@@ -303,10 +310,4 @@ h2 {
 ::-webkit-scrollbar-thumb {
     background: #1D4587;
     border-radius: 10px;
-}
-
-main.login-main {
-    display: block;
-    padding: 0;
-    min-height: 100vh;
 }

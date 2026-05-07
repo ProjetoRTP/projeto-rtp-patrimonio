@@ -14,12 +14,13 @@
 
 <body>
 
-    <main class="container-fluid p-0">
+    <main class="container-fluid p-0 login-main">
         <div class="row g-0">
 
             <section class="col-md-6 d-none d-md-block login-bg" aria-label="Fundo decorativo da instituição"></section>
 
-            <section class="col-md-6 login-form-container" aria-labelledby="titulo-login">
+            <section class="col-md-6 login-form-container position-relative" aria-labelledby="titulo-login">
+                
                 <div class="w-100 mx-auto" style="max-width: 400px;">
                     <h1 id="titulo-login" class="login-title text-center">Redefinir Senha</h1>
 
@@ -27,30 +28,28 @@
                         
                         <div class="mb-3">
                             <label for="email" class="form-label">E-mail</label>
-                            <input type="email" id="email" name="email" class="form-control " placeholder="Digite seu e-mail" required>
+                            <input type="email" id="email" name="email" class="form-control" style="border-color: #B44848;" placeholder="Digite seu e-mail" required>
                         </div>
                         
                         <div class="mb-3">
                             <label for="token" class="form-label">Token</label>
-                            <input type="" class="form-control " id="token" placeholder="Digite o token recebido" required>
+                            <input type="text" class="form-control" id="token" style="border-color: #B44848;" placeholder="Digite o token recebido" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="nova-senha" class="form-label">Senha</label>
-                            <input type="password" class="form-control mb-3" id="nova-senha" placeholder="Digite sua nova senha" required>
+                            <label for="nova-senha" class="form-label">Nova Senha</label>
+                            <input type="password" class="form-control mb-3" id="nova-senha" style="border-color: #B44848;" placeholder="Digite sua nova senha" required>
                             
                             <label for="confirmar-senha" class="form-label">Confirmar Senha</label>
-                            <input type="password" class="form-control " id="confirmar-senha" placeholder="Digite novamente sua senha" required>
+                            <input type="password" class="form-control" id="confirmar-senha" style="border-color: #B44848;" placeholder="Digite novamente sua senha" required>
                         </div>
 
-                        <button type="submit" class="btn btn-login">Redefinir</button>
+                        <button type="submit" class="btn btn-login" style="background-color: #1D4587; border-color: #1D4587; color: white;">Redefinir Senha</button>
                     </form>
-
-                        <footer id="rodape-login">
-                            <img src="../assets/imagens/logo.png" alt="Logo PROCAPE" aria-hidden="true" id="logo-canto-inferior" >
-                        </footer>
-
                 </div>
+
+                <img src="../assets/imagens/logo.png" alt="Logo PROCAPE" aria-hidden="true" id="logo-canto-inferior">
+
             </section>
 
         </div>
