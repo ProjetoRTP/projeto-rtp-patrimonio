@@ -7,6 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    // Verifica se é uma edição (se existe um ID na URL)
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("id");
+    const isEdicao = !!userId;
+
     // ===============================
     // PREENCHE O SELECT DE PERFIL
     // ===============================
@@ -44,23 +49,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ===============================
-    // CADASTRAR
+    // CADASTRAR / ATUALIZAR
     // ===============================
     document.getElementById("btCadastrar").addEventListener("click", async (event) => {
         event.preventDefault();
 
         const perfil         = document.getElementById("permissao").value;
         const nome           = document.getElementById("nome").value.trim();
-        const cpf            = document.getElementById("cpf").value.replace(/\D/g, ""); // ✅ remove formatação
+        const cpf            = document.getElementById("cpf").value.replace(/\D/g, ""); // remove formatação
         const dataNascimento = document.getElementById("dataNascimento").value;
         const email          = document.getElementById("email").value.trim();
         const senha          = document.getElementById("senha").value;
 
         // ===============================
-        // VALIDAÇÃO
+        // VALIDAÇÃO DE CAMPOS GERAIS
         // ===============================
-        if (!perfil || !nome || !cpf || !dataNascimento || !email || !senha) {
-            alert("Preencha todos os campos.");
+        if (!perfil || !nome || !cpf || !dataNascimento || !email) {
+            alert("Preencha todos os campos obrigatórios.");
             return;
         }
 
@@ -69,21 +74,50 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // ===============================
+        // VALIDAÇÃO DE SENHA (A TAREFA DO TRELLO)
+        // ===============================
+        
+        // 1. Se for CRIAÇÃO de um novo utilizador, a senha não pode estar vazia
+        if (!isEdicao && !senha) {
+            alert("A senha é obrigatória para novos usuários.");
+            return;
+        }
+
+        // 2. Se a senha foi preenchida (seja na criação ou na edição), valida a força
+        if (senha) {
+            if (!isSenhaValida(senha)) {
+                alert("A senha deve ter no mínimo 8 caracteres, contendo letras e números.");
+                document.getElementById("senha").classList.add("is-invalid");
+                return;
+            }
+            document.getElementById("senha").classList.remove("is-invalid");
+        }
+
+        // Monta o pacote de dados base
         const pacoteDados = {
-            perfil,                        // ✅ nome correto para o banco
+            perfil,
             nome,
             cpf,
-            data_nascimento: dataNascimento, // ✅ nome correto para o banco
-            email,
-            senha
+            data_nascimento: dataNascimento,
+            email
         };
 
+        // Adiciona a senha ao pacote APENAS se ela foi preenchida
+        if (senha) {
+            pacoteDados.senha = senha;
+        }
+
         try {
-            const resposta = await fetch("http://localhost:5000/users", { // ✅ URL correta
-                method: "POST",
+            // Define o método e a rota consoante seja criação (POST) ou edição (PUT)
+            const urlFinal = isEdicao ? `http://localhost:5000/users/${userId}` : "http://localhost:5000/users";
+            const metodo = isEdicao ? "PUT" : "POST";
+
+            const resposta = await fetch(urlFinal, {
+                method: metodo,
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` // ✅ token obrigatório
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(pacoteDados)
             });
@@ -91,10 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const resultado = await resposta.json();
 
             if (resposta.ok) {
-                alert("Usuário cadastrado com sucesso.");
+                alert(isEdicao ? "Usuário atualizado com sucesso." : "Usuário cadastrado com sucesso.");
                 window.location.href = "usuario.html";
             } else {
-                alert("Erro: " + (resultado.erro || "Falha ao cadastrar."));
+                alert("Erro: " + (resultado.erro || "Falha ao salvar."));
             }
 
         } catch (erro) {
@@ -102,4 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Não foi possível conectar ao servidor.");
         }
     });
+
+    // ===============================
+    // FUNÇÃO DE VALIDAÇÃO DE FORÇA DA SENHA
+    // ===============================
+    function isSenhaValida(senha) {
+        // Exige no mínimo 8 caracteres, contendo pelo menos uma letra e um número
+        return /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(senha);
+    }
 });
