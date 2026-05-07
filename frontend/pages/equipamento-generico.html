@@ -30,70 +30,67 @@
 
         <div id="espaco-da-navbar"></div>
 
-    <main class="flex-grow-1 position-relative p-3 p-lg-5" style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
+    <main class=class="flex-grow-1 position-relative p-3 p-lg-5" style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
 
-            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm m-auto w-100"
-                style="max-width: 900px; z-index: 1; position: relative;">
+        <div "bg-white p-4 p-lg-5 rounded-4 shadow-sm mx-auto" style="max-width: 900px; z-index: 1; position: relative;">
 
-            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm mx-auto"
-                style="max-width: 900px; z-index: 1; position: relative;">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
 
-                
-                <h2 class="text-center text-lg-start" style="color: #1D4587; font-weight: bold; margin-bottom: 40px;">
+                <h2 style="color: #1D4587; font-weight: bold; margin-bottom: 40px;">
                     Criar Modelo de Equipamento
                 </h2>
 
                 <a href="equipamentos-modelos.html"
                     class="btn btn-outline-danger rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-bold text-decoration-none">
-                    <i class="bi bi-plus-circle"></i>Modelos existentes
+                    <i class="bi bi bi-eye"></i>Modelos existentes
                 </a> 
 
-                <form>
-                        <div class="row g-4 ">
-                            <div class="col-md-6">
-                                <label class="label-azul d-block fw-bold mb-1">Nome do Modelo de equipamento</label>
-                                <input id="inp-nome" type="text" class="form-control input-vermelho w-100" placeholder="Ex: Roteador, Câmera de Segurança" required>
-                            </div>
+            </div>
 
-                            <div class="col-12 mt-4">
-                                <label class="label-azul d-block fw-bold mb-1">Observações</label>
-                                <textarea id="inp-descricao" class="form-control input-vermelho w-100" rows="3" placeholder="Digite os detalhes"></textarea>
-                            </div>
-                            
-                            <!-- Nova Sessão de Campos Dinâmicos -->
-                            <div class="col-12 mt-5">
-                                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                                    <h5 class="m-0" style="color: #1D4587; font-weight: bold;">Campos Personalizados (Opcional)</h5>
-                                    <button type="button" id="btn-add-campo" class="btn btn-sm text-white fw-bold" style="background-color: #214383; border-radius: 6px;">
-                                        <i class="bi bi-plus-circle me-1"></i> Adicionar Campo
-                                    </button>
-                                </div>
-                                <div id="container-campos" class="row g-3">
-                                    <!-- Campos adicionados via JS aparecerão aqui -->
-                                </div>
-                            </div>
+            <form>
+                    <div class="row g-4 ">
+                        <div class="col-md-6">
+                            <label class="label-azul d-block fw-bold mb-1">Nome do Modelo de equipamento</label>
+                            <input id="inp-nome" type="text" class="form-control input-vermelho w-100" placeholder="Ex: Roteador, Câmera de Segurança" required>
                         </div>
 
-
-                    <!-- BOTÕES -->
-                    <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
-                        <a id="btnCancelarLink" onclick="window.history.back()" class="text-decoration-none text-center">
-                            <button type="button" class="btn text-white fw-bold w-100"
-                                style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
-                                Cancelar
-                            </button>
-                        </a>
-
-                        <button id="btnSubmit" type="submit" class="btn text-white fw-bold "
-                            style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
-                            Criar Tipo
-                        </button>
+                        <div class="col-12 mt-4">
+                            <label class="label-azul d-block fw-bold mb-1">Observações</label>
+                            <textarea id="inp-descricao" class="form-control input-vermelho w-100" rows="3" placeholder="Digite os detalhes"></textarea>
+                        </div>
                     </div>
-            </div>
-            </form>
+                        
+                    <!-- Nova Sessão de Campos Dinâmicos -->
+                    <div class="col-12 mt-5">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                            <h5 class="m-0" style="color: #1D4587; font-weight: bold;">Campos Personalizados (Opcional)</h5>
+                            <button type="button" id="btn-add-campo" class="btn btn-sm text-white fw-bold" style="background-color: #214383; border-radius: 6px;">
+                                <i class="bi bi-plus-circle me-1"></i> Adicionar Campo
+                            </button>
+                        </div>
+                        <div id="container-campos" class="row g-3">
+                            <!-- Campos adicionados via JS aparecerão aqui -->
+                        </div>
+                    </div>
 
+                <!-- BOTÕES -->
+                <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
+                    <a id="btnCancelarLink" onclick="window.history.back()" class="text-decoration-none text-center">
+                        <button type="button" class="btn text-white fw-bold w-100"
+                            style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
+                            Cancelar
+                        </button>
+                    </a>
+
+                    <button id="btnSubmit" type="submit" class="btn text-white fw-bold "
+                        style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
+                        Criar Tipo
+                    </button>
+                </div>
+        </form>
     </div>
-</div>
+
+
     <img src="../assets/imagens/logo.png" alt="Logo Coração"
         class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block"
         style="width: 70px; z-index: 0; opacity: 0.9;">
