@@ -57,6 +57,8 @@ async function carregarRelatorios(token) {
     }
 }
 
+function montarTabela(relatorios) {
+    const tbody = document.getElementById("tbody-subsetores");
     const perfil = sessionStorage.getItem("usuario_perfil");
 
     tbody.innerHTML = relatorios.map(r => `
