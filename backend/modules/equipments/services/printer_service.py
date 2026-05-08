@@ -84,6 +84,9 @@ class PrinterService(EquipmentService):
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
         printer_data = {k: v for k, v in data.items() if k in printer_fields}
 
+        eq_data = self._normalize_data(eq_data)
+        printer_data = self._normalize_data(printer_data)
+
         equipment_id = self.equipment.create({
             **eq_data,
             "tipo": "impressora",
@@ -109,6 +112,6 @@ class PrinterService(EquipmentService):
         printer_data = {k: v for k, v in data.items() if k in printer_fields}
 
         if eq_data:
-            self.equipment.update(id, eq_data)
+            self.equipment.update(id, self._normalize_data(eq_data))
         if printer_data:
-            self.printer.update(id, printer_data)
+            self.printer.update(id, self._normalize_data(printer_data))

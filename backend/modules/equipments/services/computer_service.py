@@ -57,6 +57,9 @@ class ComputerService(EquipmentService):
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
         comp_data = {k: v for k, v in data.items() if k in computer_fields}
 
+        eq_data = self._normalize_data(eq_data)
+        comp_data = self._normalize_data(comp_data)
+
         equipment_id = self.equipment.create({
             **eq_data,
             "tipo": "computador",
@@ -82,6 +85,6 @@ class ComputerService(EquipmentService):
         comp_data = {k: v for k, v in data.items() if k in computer_fields}
 
         if eq_data:
-            self.equipment.update(id, eq_data)
+            self.equipment.update(id, self._normalize_data(eq_data))
         if comp_data:
-            self.computer.update(id, comp_data)
+            self.computer.update(id, self._normalize_data(comp_data))

@@ -42,7 +42,11 @@ class Movement(BaseCRUD):
         data["subsetor_origem_id"] = row.subsetor_id
 
         with engine.begin() as conn:
-            conn.execute(text(f"SET @usuario_logado_id = {int(user_id)}"))
+            # Garante que a variável de sessão seja definida na mesma conexão/transação
+            # do INSERT, para que o trigger trg_movimentacao a capture corretamente.
+            print(f"DEBUG: Definindo @usuario_logado_id = {user_id} para a conexão.")
+            conn.execute(text("SET @usuario_logado_id = :uid"), {"uid": int(user_id)})
+            
             result = conn.execute(
                 self.table.insert().values(**data)
             )

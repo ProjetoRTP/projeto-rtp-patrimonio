@@ -20,29 +20,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     configurarBotaoSalvar();
+    configurarAutoPreenchimentoOrigem();
 });
 
 
-/* ─── Carregar Equipamentos ───────────────────────────── */
+/* ─── Carregar Equipamentos (Todos os Tipos) ──────────────── */
 async function carregarEquipamentos() {
     try {
-        const resposta = await fetch(`${API_BASE_URL}/computers`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const endpoints = ["/computers", "/printer", "/peripherals", "/generics"];
+        
+        // Faz o fetch de todos os tipos em paralelo com tratamento de erro individual
+        const promessas = endpoints.map(url => 
+            fetch(`${API_BASE_URL}${url}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(res => res.ok ? res.json() : [])
+            .catch(err => {
+                console.warn(`Falha ao carregar ${url}:`, err);
+                return [];
+            })
+        );
 
-        const dados = await resposta.json();
+        const resultados = await Promise.all(promessas);
+        const todosEquipamentos = resultados.flat();
+        
         const datalist = document.getElementById("lista-equipamentos");
-
         if (!datalist) return;
 
-        // Limpa e preenche o datalist com o num_patrimonio como texto visível
         datalist.innerHTML = "";
-        dados.forEach(eq => {
-            mapaEquipamentos[eq.num_patrimonio] = eq.id;
-            const option = document.createElement("option");
-            option.value = eq.num_patrimonio;
-            datalist.appendChild(option);
+        mapaEquipamentos = {}; // Reinicia o mapa
+
+        todosEquipamentos.forEach(eq => {
+            if (eq.num_patrimonio) {
+                mapaEquipamentos[eq.num_patrimonio] = eq; // Armazena o objeto todo
+                const option = document.createElement("option");
+                option.value = eq.num_patrimonio;
+                // Adiciona o tipo no label para ajudar o usuário
+                option.label = eq.tipo ? eq.tipo.toUpperCase() : "";
+                datalist.appendChild(option);
+            }
         });
+
+        console.log(`Carregados ${todosEquipamentos.length} equipamentos para transferência.`);
 
     } catch (erro) {
         console.error("Erro ao carregar equipamentos:", erro);
@@ -102,7 +121,8 @@ function configurarBotaoSalvar() {
         const observacao         = document.getElementById("observacao")?.value || "";
 
         // Resolve os IDs a partir do texto digitado
-        const equipamento_id   = mapaEquipamentos[equipamentoTexto] ?? null;
+        const equipObj         = mapaEquipamentos[equipamentoTexto];
+        const equipamento_id   = equipObj ? equipObj.id : null;
         const setor_origem_id  = mapaSetores[setorOrigemTexto] ?? null;
         const setor_destino_id = mapaSetores[setorDestinoTexto] ?? null;
 
@@ -153,6 +173,30 @@ function configurarBotaoSalvar() {
         } finally {
             btCriarBtn.innerText = textoOriginal;
             btCriarBtn.disabled = false;
+        }
+    });
+}
+
+/* ─── Auto-preenchimento da Origem ────────────────────── */
+function configurarAutoPreenchimentoOrigem() {
+    const inputEquip = document.getElementById("equipamento");
+    const inputOrigem = document.getElementById("setorOrigem");
+
+    if (!inputEquip || !inputOrigem) return;
+
+    inputEquip.addEventListener("input", () => {
+        const val = inputEquip.value.trim();
+        const equip = mapaEquipamentos[val];
+
+        if (equip && equip.setor_nome) {
+            inputOrigem.value = equip.setor_nome;
+            // Opcional: desabilitar o campo de origem para evitar confusão
+            inputOrigem.readOnly = true;
+            inputOrigem.style.backgroundColor = "#f8f9fa";
+        } else {
+            inputOrigem.value = "";
+            inputOrigem.readOnly = false;
+            inputOrigem.style.backgroundColor = "";
         }
     });
 }

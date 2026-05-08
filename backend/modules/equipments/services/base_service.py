@@ -34,9 +34,11 @@ class EquipmentService:
             )
 
     def _base_query(self):
+        setores = meta.tables.get('setores')
         return (
-            select(self.eq, self.specific)
+            select(self.eq, self.specific, setores.c.nome.label('setor_nome'))
             .join(self.specific, self.eq.c.id == self.specific.c.id)
+            .outerjoin(setores, self.eq.c.setor_id == setores.c.id)
             .where(self.eq.c.status != 'desativado')
         )
 
@@ -72,3 +74,15 @@ class EquipmentService:
                 .values(status='desativado')
             )
     
+    def _normalize_data(self, data):
+        """
+        Normaliza os dados para o banco, convertendo strings vazias em None (NULL).
+        Isso evita erros de UNIQUE CONSTRAINT em campos opcionais (ex: endereco_ip).
+        """
+        normalized = {}
+        for k, v in data.items():
+            if isinstance(v, str) and v.strip() == "":
+                normalized[k] = None
+            else:
+                normalized[k] = v
+        return normalized

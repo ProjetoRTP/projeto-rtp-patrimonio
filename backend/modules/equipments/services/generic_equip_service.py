@@ -89,6 +89,9 @@ class GenericService(EquipmentService):
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
         generic_data = {k: v for k, v in data.items() if k in generic_fields}
 
+        eq_data = self._normalize_data(eq_data)
+        generic_data = self._normalize_data(generic_data)
+
         equipment_id = self.equipment.create({
             **eq_data,
             "tipo": "generico",
@@ -142,6 +145,6 @@ class GenericService(EquipmentService):
         generic_data = {k: v for k, v in data.items() if k in generic_fields}
 
         if eq_data:
-            self.equipment.update(id, eq_data)
+            self.equipment.update(id, self._normalize_data(eq_data))
         if generic_data:
-            self.generic.update(id, generic_data)
+            self.generic.update(id, self._normalize_data(generic_data))

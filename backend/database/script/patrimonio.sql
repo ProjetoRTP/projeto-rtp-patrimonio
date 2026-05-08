@@ -448,8 +448,7 @@ BEGIN
             CONCAT(
                 'Equipamento ', IFNULL(v_patrimonio, 'N/A'),
                 ' transferido de "', IFNULL(v_setor_saida, 'N/A'),
-                '" para "', IFNULL(v_setor_entrada, 'N/A'),
-                '" por ', IFNULL(v_usuario_nome, 'N/A')
+                '" para "', IFNULL(v_setor_entrada, 'N/A'), '"'
             )
         );
 

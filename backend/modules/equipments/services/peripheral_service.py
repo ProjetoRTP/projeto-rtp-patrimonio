@@ -26,6 +26,9 @@ class PeripheralService(EquipmentService):
         eq_data = {k: v for k, v in data.items() if k in equipment_fields}
         per_data = {k: v for k, v in data.items() if k in peripheral_fields}
 
+        eq_data = self._normalize_data(eq_data)
+        per_data = self._normalize_data(per_data)
+
         equipment_id = self.equipment.create({
             **eq_data,
             "tipo": "periferico",
