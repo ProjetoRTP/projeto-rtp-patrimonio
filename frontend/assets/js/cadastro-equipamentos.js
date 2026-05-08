@@ -211,6 +211,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   await carregarSetores();
   await carregarTiposGenericos();
  
+  // Máscara monetária para o campo valor
+  const inputValor = document.getElementById("valor-equipamento");
+  if (inputValor) {
+    inputValor.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value === "") {
+        e.target.value = "";
+        return;
+      }
+      value = (parseInt(value) / 100).toFixed(2) + "";
+      value = value.replace(".", ",");
+      value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      e.target.value = "R$ " + value;
+    });
+  }
+
   // 3. SE FOR EDIÇÃO, CARREGAR DADOS
   if (equipmentId) {
     if (titulo) titulo.innerText = "Editar Equipamento";
@@ -254,17 +270,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (data.subsetor_id) subsetorSelect.value = data.subsetor_id;
           }
  
+          // Preencher valor se existir
+          if (data.valor && inputValor) {
+            let valStr = parseFloat(data.valor).toFixed(2).replace(".", ",");
+            valStr = valStr.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            inputValor.value = "R$ " + valStr;
+          }
+
           // Helper
           const setVal = (id, val) => {
             const el = document.getElementById(id);
             if (el) el.value = val || "";
           };
+
+          // Preencher data de aquisição geral
+          if (data.data_aquisicao) {
+            let dataAq = data.data_aquisicao;
+            if (dataAq.includes("T")) dataAq = dataAq.split("T")[0];
+            setVal("data_aquisicao", dataAq);
+          }
  
           // ── COMPUTADOR ────────────────────────────
           if (tipoParam === "computador") {
-            let dataComp = data.data_aquisicao;
-            if (dataComp?.includes("T")) dataComp = dataComp.split("T")[0];
- 
             setVal("tombamento-computador", data.num_patrimonio);
             setVal("sistema",               data.sistema_operacional || data.os);
             setVal("memoria-interna",       data.memoria_interna || data.mem_cpu);
@@ -272,14 +299,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             setVal("armazenamento",         data.armazenamento);
             setVal("numero-ip",             data.endereco_ip);
             setVal("observacoes",           data.observacao);
-            setVal("data_aquisicao_comp",   dataComp);
           }
  
           // ── IMPRESSORA ────────────────────────────
           else if (tipoParam === "impressora") {
-            let dataImp = data.data_aquisicao;
-            if (dataImp?.includes("T")) dataImp = dataImp.split("T")[0];
- 
             setVal("tombamento-impressora", data.num_patrimonio);
             setVal("modelo",                data.modelo);
             setVal("tipo",                  data.tipo_imp?.toLowerCase());
@@ -287,18 +310,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             setVal("conectividade",         data.conectividade);
             setVal("endereco-ip",           data.endereco_ip);
             setVal("insumo",                data.insumo);
-            setVal("data_aquisicao_imp",    dataImp);
           }
  
           // ── GENÉRICO ──────────────────────────────
           else if (tipoParam === "generico") {
-            let dataGen = data.data_aquisicao;
-            if (dataGen?.includes("T")) dataGen = dataGen.split("T")[0];
- 
             setVal("tombamento-generico",  data.num_patrimonio);
             setVal("ip-generico",          data.endereco_ip);
             setVal("observacao-generico",  data.observacao);
-            setVal("data_aquisicao_gen",   dataGen);
  
             const selectGenerico = document.getElementById("tipo-generico");
             if (selectGenerico && data.tipo_id) {
@@ -353,17 +371,27 @@ document.addEventListener("DOMContentLoaded", async () => {
  
       const urlFinal = equipmentId ? `${rotaBase}/${equipmentId}` : rotaBase;
  
+      let valorFinal = null;
+      const inputValorStr = document.getElementById("valor-equipamento")?.value;
+      if (inputValorStr) {
+          const numStr = inputValorStr.replace(/[R$\s.]/g, "").replace(",", ".");
+          if (numStr && !isNaN(numStr)) {
+              valorFinal = parseFloat(numStr);
+          }
+      }
+
       let payload = {
         tipo: tipo === "1" ? "computador" : tipo === "2" ? "impressora" : "generico",
         setor_id,
         subsetor_id,
         status: statusValue,
+        valor: valorFinal,
+        data_aquisicao: document.getElementById("data_aquisicao")?.value || null,
       };
  
       if (tipo === "1") {
         payload = {
           ...payload,
-          data_aquisicao:  document.getElementById("data_aquisicao_comp")?.value || null,
           num_patrimonio:  document.getElementById("tombamento-computador")?.value || "",
           os:              document.getElementById("sistema")?.value || "",
           mem_cpu:         document.getElementById("memoria-interna")?.value || "",
@@ -375,7 +403,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else if (tipo === "2") {
         payload = {
           ...payload,
-          data_aquisicao: document.getElementById("data_aquisicao_imp")?.value || null,
           num_patrimonio: document.getElementById("tombamento-impressora")?.value || "",
           modelo:         document.getElementById("modelo")?.value || "",
           tipo_imp:       document.getElementById("tipo")?.value || "",
@@ -402,7 +429,6 @@ document.addEventListener("DOMContentLoaded", async () => {
  
         payload = {
           ...payload,
-          data_aquisicao:      document.getElementById("data_aquisicao_gen")?.value || null,
           num_patrimonio:      tombamentoElement.value,
           tipo_id:             parseInt(tipoIdElement.value, 10),
           endereco_ip:         ipValue || null,

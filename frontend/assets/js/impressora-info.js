@@ -36,6 +36,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     console.log("Dados da impressora:", data);
 
+    const formatCurrency = (value) => {
+        if (value === null || value === undefined || value === "") return "";
+        const floatValue = typeof value === 'string' ? parseFloat(value.replace(',', '.')) : value;
+        if (isNaN(floatValue)) return value;
+        return floatValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
     const setValue = (id, value) => {
       const element = document.getElementById(id);
       if (element) {
@@ -49,6 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     setValue("conectividade", data.conectividade || "Não informado");
     setValue("ip", data.endereco_ip || "Não informado");
     setValue("insumo", data.insumo || "Não informado");
+    setValue("info-valor", formatCurrency(data.valor) || "Não informado");
   } catch (err) {
     console.error("Erro ao carregar impressora:", err);
     alert("Erro de conexão com o servidor.");

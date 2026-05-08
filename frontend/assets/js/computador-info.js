@@ -40,6 +40,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     console.log("JSON recebido da API:", data);
 
+    const formatCurrency = (value) => {
+        if (value === null || value === undefined || value === "") return "";
+        const floatValue = typeof value === 'string' ? parseFloat(value.replace(',', '.')) : value;
+        if (isNaN(floatValue)) return value;
+        return floatValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
     const setValue = (id, value) => {
       const element = document.getElementById(id);
       if (element) {
@@ -57,7 +64,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     setValue("info-ip", data.endereco_ip || "Sem IP");
     setValue("info-setor", data.setor_nome || "N/A");
     setValue("info-subsetor", data.subsetor_nome || "N/A");
+    setValue("info-data-aquisicao", formatDate(data.data_aquisicao));
     setValue("info-data-cadastro", formatDate(data.data_cadastro));
+    setValue("info-valor", formatCurrency(data.valor) || "Não informado");
 
     // Preencher observação (textarea)
     const obs = document.getElementById("info-observacao");
