@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (inputId)           inputId.value           = String(mov.id).padStart(7, '0');
             if (inputData)         inputData.value         = mov.data_movimentacao?.split('T')[0] ?? '';
             if (inputEquipamento)  inputEquipamento.value  = mov.equipamento_id   ?? '';
-            if (inputSetorOrigem)  inputSetorOrigem.value  = mov.setor_origem_id  ?? '';
-            if (inputSetorDestino) inputSetorDestino.value = mov.setor_destino_id ?? '';
+            if (inputSetorOrigem)  inputSetorOrigem.value  = mov.setor_origem_nome  ?? '';
+            if (inputSetorDestino) inputSetorDestino.value = mov.setor_destino_nome ?? '';
             if (inputObservacao)   inputObservacao.value   = mov.observacao       ?? '';
 
             // 4. ALTERAÇÃO VISUAL: Troca de d-none
@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Erro na requisição:", erro);
         exibirErro("Não foi possível conectar ao servidor.");
     }
-
     function exibirErro(mensagem) {
         // Esconde o loading e mostra o erro usando classes do Bootstrap
         if (divCarregando) divCarregando.classList.add('d-none');
@@ -72,5 +71,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             divErro.innerText = mensagem;
             divErro.classList.remove('d-none');
         }
+
     }
 });

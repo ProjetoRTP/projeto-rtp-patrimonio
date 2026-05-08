@@ -137,7 +137,7 @@ function renderizarTabela(lista) {
             <td style="color: #1D4587; font-weight: 500;">
                 Equipamento #${mov.equipamento_id}
             </td>
-            <td>Setor Origem: ${mov.setor_origem_id} ➔ Destino: ${mov.setor_destino_id}</td>
+            <td>Setor Origem: ${mov.setor_origem_nome ?? mov.setor_origem_id} ➔ Destino: ${mov.setor_destino_nome ?? mov.setor_destino_id}</td>
             <td class="text-end">
                 <button class="btn btn-sm btn-outline-primary" onclick="verInfoMovimentacao(${mov.id})">
                     <i class="bi bi-info-circle"></i> Detalhes
