@@ -57,13 +57,7 @@ async function carregarRelatorios(token) {
     }
 }
 
-function montarTabela(relatorios) {
-    const tbody = document.getElementById("tbody-subsetores");
-
-    if (!relatorios || relatorios.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Nenhum relatório gerado ainda.</td></tr>`;
-        return;
-    }
+    const perfil = sessionStorage.getItem("usuario_perfil");
 
     tbody.innerHTML = relatorios.map(r => `
         <tr>
@@ -75,10 +69,12 @@ function montarTabela(relatorios) {
                     class="btn btn-sm btn-outline-primary me-2" style="cursor:pointer;" title="Ver Detalhes">
                     <i class="bi bi-info-circle"></i>
                 </button>
+                ${perfil !== "gerente" ? `
                 <button onclick="excluirRelatorio(${r.id})"
                     class="btn btn-sm btn-outline-danger" style="cursor:pointer;" title="Excluir">
                     <i class="bi bi-trash"></i>
                 </button>
+                ` : ""}
             </td>
         </tr>
     `).join("");

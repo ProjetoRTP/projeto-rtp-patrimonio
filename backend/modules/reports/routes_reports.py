@@ -23,15 +23,10 @@ def create_report():
     if not data:
         return jsonify({"erro": "JSON inválido"}), 400
 
-    from database.connection import engine, meta
-    from sqlalchemy import select
-    usuarios_table = meta.tables.get('usuarios')
-    user_id = get_jwt_identity()
-
-    with engine.connect() as conn:
-        perfil = conn.execute(select(usuarios_table.c.perfil).where(usuarios_table.c.id == user_id)).scalar()
-        if perfil == 'gerente':
-            return jsonify({"erro": "Acesso negado. Gerentes não podem gerar novos relatórios."}), 403
+    from flask_jwt_extended import get_jwt
+    claims = get_jwt()
+    if claims.get("perfil") == 'gerente':
+        return jsonify({"erro": "Acesso negado. Gerentes não podem gerar novos relatórios."}), 403
 
     if not data.get("tipo"):
         return jsonify({"erro": "tipo é obrigatório"}), 400
@@ -78,6 +73,11 @@ def get_report_data(report_id):
 @reports_bp.route("/<int:report_id>", methods=["DELETE"])
 @jwt_required()
 def delete_report(report_id):
+    from flask_jwt_extended import get_jwt
+    claims = get_jwt()
+    if claims.get("perfil") == 'gerente':
+        return jsonify({"erro": "Acesso negado. Gerentes não podem excluir relatórios."}), 403
+
     report_model = Report()
     try:
         report_model.delete(report_id)
