@@ -23,8 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const params = new URLSearchParams(window.location.search);
-  const equipmentId = params.get("id");
-  console.log("equipmentId do query string:", equipmentId);
+const equipmentId = params.get("id");
+const tipoParam = params.get("tipo");
+console.log("equipmentId do query string:", equipmentId);
 
   const titulo = document.querySelector("h2");
   const btnSalvar = document.querySelector('button[type="submit"]');
@@ -208,7 +209,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   await carregarTiposGenericos();
 
   // 3. SE FOR EDIÇÃO, CARREGAR DADOS
-  if (equipmentId) {
+if (equipmentId) {
+    if (titulo) titulo.innerText = "Editar Equipamento";
+    if (btnSalvar) btnSalvar.innerText = "Atualizar";
+
+    const campoStatus = document.getElementById("campo-status");
+    if (campoStatus) campoStatus.style.display = "block";
+
+    if (tipoParam === "computador") {
+        tipoEquipamento.value = "1";
+    } else if (tipoParam === "impressora") {
+        tipoEquipamento.value = "2";
+    } else if (tipoParam === "generico") {
+        tipoEquipamento.value = "3";
+    }
+
+    mostrarCamposPorTipo();
+
+    let rotaEdicao = "";
+    if (tipoParam === "computador")      rotaEdicao = `${API_COMPUTERS}/${equipmentId}`;
+    else if (tipoParam === "impressora") rotaEdicao = `${API_PRINTERS}/${equipmentId}`;
+    else if (tipoParam === "generico")   rotaEdicao = `${API_GENERIC}/${equipmentId}`;
+
+    try {
+      const res = await fetch(rotaEdicao, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Dados carregados para edição:", data);
+
+        if (document.getElementById("status")) {
+            document.getElementById("status").value = data.status || "ativo";
+        }
+
+        mostrarCamposPorTipo();
+
+
+  /*  if (equipmentId) {
     if (titulo) titulo.innerText = "Editar Equipamento";
     if (btnSalvar) btnSalvar.innerText = "Atualizar";
 
@@ -250,7 +289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         mostrarCamposPorTipo();
-
+*/
         if (tipoEquipamento.value === "2" && btnCancelarLink) {
           btnCancelarLink.href = "impressoras.html";
         }
@@ -375,6 +414,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
+      const statusValue = document.getElementById("status")?.value || "ativo";
       const metodo = equipmentId ? "PUT" : "POST";
 
       let rotaBase = "";
@@ -393,11 +433,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const urlFinal = equipmentId ? `${rotaBase}/${equipmentId}` : rotaBase;
 
-      let payload = {
+/*    let payload = {
         tipo: tipo === "1" ? "computador" : "impressora",
         setor_id: setor_id,
         subsetor_id: subsetor_id,
       };
+*/ 
+      let payload = {
+        tipo: tipo === "1" ? "computador" : "impressora",
+        setor_id: setor_id,
+        subsetor_id: subsetor_id,
+        status: statusValue,
+      };
+
+
 
       // Adicionar campos específicos
       if (tipo === "1") {
@@ -481,27 +530,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 });
-
-
-// Mostrar o campo status só na edição (dentro do bloco "SE FOR EDIÇÃO")
-if (equipmentId) {
-    document.getElementById("campo-status").style.display = "block"; // ADICIONA ISSO
-    if (titulo) titulo.innerText = "Editar Equipamento";
-    ...
-    // E preencher o valor atual
-    if (document.getElementById("status")) {
-        document.getElementById("status").value = data.status || "ativo";
-    }
-}
-
-
-// Adicionar status no payload de TODOS os tipos (dentro do submit)
-const statusValue = document.getElementById("status")?.value || "ativo";
-
-
-// No payload de cada tipo adiciona:
-payload = {
-    ...payload,
-    status: statusValue,
-    ...
-};
