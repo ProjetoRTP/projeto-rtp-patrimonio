@@ -166,7 +166,8 @@ CREATE TABLE IF NOT EXISTS equipamentos_componentes (
 CREATE TABLE IF NOT EXISTS tipo_generico (
     id              INT       AUTO_INCREMENT PRIMARY KEY,
     nome            VARCHAR(50),
-    descricao       TEXT      
+    descricao       TEXT,
+    ativo           BOOLEAN   DEFAULT TRUE
 );
 
 -- -------------------------------------------------------
@@ -407,6 +408,7 @@ BEGIN
     DECLARE v_patrimonio  VARCHAR(50);
     DECLARE v_setor_saida VARCHAR(100);
     DECLARE v_setor_entrada VARCHAR(100);
+    DECLARE v_usuario_nome VARCHAR(100) DEFAULT 'N/A';
 
     -- Atualiza a localização atual do equipamento
     UPDATE equipamentos
@@ -425,6 +427,11 @@ BEGIN
 
         SELECT nome INTO v_setor_entrada
         FROM setores WHERE id = NEW.setor_destino_id LIMIT 1;
+        
+        IF @usuario_logado_id IS NOT NULL THEN
+            SELECT nome INTO v_usuario_nome
+            FROM usuarios WHERE id = @usuario_logado_id LIMIT 1;
+        END IF;
 
         INSERT INTO historico_equipamentos (
             equipamento_id,
@@ -435,12 +442,14 @@ BEGIN
         )
         VALUES (
             NEW.equipamento_id,
+            @usuario_logado_id,
             'movimentacao',
             NEW.id,
             CONCAT(
                 'Equipamento ', IFNULL(v_patrimonio, 'N/A'),
                 ' transferido de "', IFNULL(v_setor_saida, 'N/A'),
-                '" para "', IFNULL(v_setor_entrada, 'N/A')
+                '" para "', IFNULL(v_setor_entrada, 'N/A'),
+                '" por ', IFNULL(v_usuario_nome, 'N/A')
             )
         );
 

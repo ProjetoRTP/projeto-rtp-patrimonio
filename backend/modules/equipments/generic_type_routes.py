@@ -56,7 +56,7 @@ def get_generic_type(url_id):
 
 
 # UPDATE TYPE — apenas admin
-@generics_bp.route("/types/<int:url_id>", methods=["PUT"])
+@generics_bp.route("/types/<int:url_id>", methods=["PUT", "PATCH"])
 @jwt_required()
 @check_role("admin")
 @swag_from("../../docs/generics/update_generic_type.yml")
@@ -84,8 +84,8 @@ def delete_generic_type(url_id):
     service = GenericTypeService()
 
     try:
-        service.soft_delete(url_id)
-        return jsonify({"status": "Tipo genérico removido"}), 200
+        service.delete(url_id)
+        return jsonify({"status": "Tipo genérico excluído com sucesso"}), 200
     except Exception as e:
         return jsonify({"erro": str(e)}), 400
 

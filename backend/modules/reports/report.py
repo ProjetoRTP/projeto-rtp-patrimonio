@@ -35,6 +35,9 @@ class Report(BaseCRUD):
         
         hist_table = meta.tables.get('historico_equipamentos')
         equip_table = meta.tables.get('equipamentos')
+        usuarios_table = meta.tables.get('usuarios')
+        equip_generico_table = meta.tables.get('equipamentos_generico')
+        tipo_generico_table = meta.tables.get('tipo_generico')
         
         with engine.connect() as conn:
             query = select(
@@ -42,12 +45,23 @@ class Report(BaseCRUD):
                 hist_table.c.tipo_evento,
                 hist_table.c.equipamento_id,
                 equip_table.c.num_patrimonio,
+                equip_table.c.tipo.label('tipo_equipamento'),
+                tipo_generico_table.c.nome.label('nome_generico'),
                 hist_table.c.referencia_id,
                 hist_table.c.usuario_id,
+                usuarios_table.c.nome.label('usuario_nome'),
                 hist_table.c.data_evento,
                 hist_table.c.descricao
             ).select_from(
-                hist_table.join(equip_table, hist_table.c.equipamento_id == equip_table.c.id)
+                hist_table.join(
+                    equip_table, hist_table.c.equipamento_id == equip_table.c.id
+                ).outerjoin(
+                    usuarios_table, hist_table.c.usuario_id == usuarios_table.c.id
+                ).outerjoin(
+                    equip_generico_table, equip_table.c.id == equip_generico_table.c.id
+                ).outerjoin(
+                    tipo_generico_table, equip_generico_table.c.tipo_id == tipo_generico_table.c.id
+                )
             )
 
             if report.get('tipo') == 'movimentacoes':
@@ -79,4 +93,18 @@ class Report(BaseCRUD):
             query = query.order_by(hist_table.c.data_evento.desc())
             
             result = conn.execute(query)
-            return [dict(r._mapping) for r in result]
+            data = []
+            for r in result:
+                row = dict(r._mapping)
+                if row.get('tipo_equipamento') == 'generico' and row.get('nome_generico'):
+                    row['equipamento_nome'] = row['nome_generico']
+                elif row.get('tipo_equipamento'):
+                    row['equipamento_nome'] = str(row['tipo_equipamento']).capitalize()
+                else:
+                    row['equipamento_nome'] = '—'
+                data.append(row)
+            return data
+
+    def delete(self, id):
+        with engine.begin() as conn:
+            conn.execute(self.table.delete().where(self.table.c.id == id))

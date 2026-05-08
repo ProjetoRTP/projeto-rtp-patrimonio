@@ -10,11 +10,17 @@ const LABELS_TIPO = {
 
 document.addEventListener("DOMContentLoaded", () => {
     const token = sessionStorage.getItem("token_procape");
+    const perfil = sessionStorage.getItem("usuario_perfil");
 
     if (!token) {
         alert("Acesso negado. Por favor, inicie sessão.");
         window.location.href = "../index.html";
         return;
+    }
+
+    if (perfil === "gerente") {
+        const btnGerar = document.getElementById("btn-gerar-relatorio");
+        if (btnGerar) btnGerar.style.display = "none";
     }
 
     carregarRelatorios(token);
@@ -66,8 +72,12 @@ function montarTabela(relatorios) {
             <td>${formatarData(r.data_inicio)} → ${formatarData(r.data_fim)}</td>
             <td class="text-end">
                 <button onclick="verDetalhes(${r.id}, '${r.tipo}', '${r.data_inicio}', '${r.data_fim}', '${r.setor_id ?? ''}', '${r.equipamento ?? ''}')"
-                    class="btn btn-sm btn-outline-danger" style="cursor:pointer;">
+                    class="btn btn-sm btn-outline-primary me-2" style="cursor:pointer;" title="Ver Detalhes">
                     <i class="bi bi-info-circle"></i>
+                </button>
+                <button onclick="excluirRelatorio(${r.id})"
+                    class="btn btn-sm btn-outline-danger" style="cursor:pointer;" title="Excluir">
+                    <i class="bi bi-trash"></i>
                 </button>
             </td>
         </tr>
@@ -84,4 +94,31 @@ function verDetalhes(id, tipo, dataInicio, dataFim, setor, equipamento) {
     if (setor)      params.append("setor", setor);
     if (equipamento) params.append("equipamento", equipamento);
     window.location.href = `relatorio-info.html?${params.toString()}`;
+}
+
+async function excluirRelatorio(id) {
+    if (!confirm("Tem certeza que deseja excluir este relatório?")) return;
+
+    const token = sessionStorage.getItem("token_procape");
+    
+    try {
+        const resposta = await fetch(`${API_BASE_URL}/reports/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!resposta.ok) {
+            const erro = await resposta.json();
+            throw new Error(erro.erro || "Erro ao excluir relatório");
+        }
+
+        alert("Relatório excluído com sucesso.");
+        carregarRelatorios(token);
+
+    } catch (erro) {
+        console.error("Erro:", erro);
+        alert(erro.message);
+    }
 }

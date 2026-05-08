@@ -101,9 +101,16 @@ console.log("equipmentId do query string:", equipmentId);
         selectTipoGenerico.innerHTML = '<option value="">Selecione um tipo</option>';
         
         tipos.forEach((tipo) => {
+          const inativo = tipo.ativo === false || tipo.ativo === 0;
           const option = document.createElement("option");
           option.value = tipo.id;
-          option.textContent = tipo.nome;
+          option.textContent = tipo.nome + (inativo ? " (Inativo)" : "");
+          
+          if (inativo) {
+              // Deixa a opção oculta e desabilitada para que não apareça nem seja escolhida em novos cadastros.
+              option.hidden = true;
+              option.disabled = true;
+          }
           selectTipoGenerico.appendChild(option);
         });
       }
@@ -379,7 +386,15 @@ if (equipmentId) {
             document.getElementById("tombamento-generico").value = data.num_patrimonio || "";
         }
         if (document.getElementById("tipo-generico")) {
-            document.getElementById("tipo-generico").value = data.tipo_id || "";
+            const selectGenerico = document.getElementById("tipo-generico");
+            selectGenerico.value = data.tipo_id || "";
+            
+            // Garantir que a opção atual, mesmo inativa, possa ser mantida ao editar
+            if (selectGenerico.options[selectGenerico.selectedIndex]) {
+                selectGenerico.options[selectGenerico.selectedIndex].disabled = false;
+                selectGenerico.options[selectGenerico.selectedIndex].hidden = false;
+            }
+
             if (data.tipo_id) {
                 const attrs = typeof data.atributos_dinamicos === 'string' ? JSON.parse(data.atributos_dinamicos) : data.atributos_dinamicos;
                 await loadAtributosDinamicos(data.tipo_id, attrs);

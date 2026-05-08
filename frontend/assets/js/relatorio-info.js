@@ -97,10 +97,11 @@ function renderizarTabela(lista) {
         <tr>
             <td class="align-middle">${item.id}</td>
             <td class="align-middle">${LABELS_TIPO[item.tipo_evento] ?? item.tipo_evento}</td>
+            <td class="align-middle">${item.equipamento_nome || '—'}</td>
             <td class="align-middle">
                 ${item.num_patrimonio
                     ? `<a href="equipamento-info.html?id=${item.equipamento_id}&tipo=${item.tipo_equipamento ?? 'generico'}" style="color:#1D4587;">${item.num_patrimonio}</a>`
-                    : (item.equipamento_id ?? '—')
+                    : '—'
                 }
             </td>
             <td class="align-middle">${item.usuario_nome ?? item.usuario_id ?? '—'}</td>

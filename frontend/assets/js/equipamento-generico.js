@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    const perfil = sessionStorage.getItem("usuario_perfil");
+    if (perfil === "gerente") {
+        alert("Acesso negado. Gerentes não podem criar tipos de equipamentos.");
+        window.location.href = "equipamentos-modelos.html";
+        return;
+    }
+
     configurarFormulario();
 });
 
@@ -38,6 +45,15 @@ function adicionarCampoUI() {
     const container = document.getElementById("container-campos");
     const idx = container.children.length;
 
+    const descricoesTipos = {
+        texto: "Ideal para nomes, modelos ou observações curtas.",
+        numero: "Permite apenas números (ex: Voltagem, Potência).",
+        data: "Abre um calendário para seleção de datas.",
+        booleano: "Cria uma caixa de seleção para Sim ou Não.",
+        lista: "Permite criar um menu suspenso com opções fixas.",
+        ip: "Valida automaticamente o formato de endereço IP."
+    };
+
     const divRow = document.createElement("div");
     divRow.className = "col-12 d-flex flex-wrap gap-3 align-items-end p-3 border rounded mb-2 shadow-sm bg-white campo-item";
     divRow.style.borderColor = "#f4cccc !important";
@@ -47,8 +63,11 @@ function adicionarCampoUI() {
             <label class="label-azul fw-bold mb-1" style="font-size: 0.9rem;">Nome do Campo</label>
             <input type="text" class="form-control input-vermelho val-label" placeholder="Ex: Resolução, IP, BTUs" required>
         </div>
-        <div class="flex-grow-1" style="min-width: 150px; max-width: 200px;">
-            <label class="label-azul fw-bold mb-1" style="font-size: 0.9rem;">Tipo do Dado</label>
+        <div class="flex-grow-1" style="min-width: 150px; max-width: 220px;">
+            <label class="label-azul fw-bold mb-1 d-flex align-items-center gap-1" style="font-size: 0.9rem;">
+                Tipo do Dado
+                <i class="bi bi-info-circle info-tipo-icon" style="cursor: pointer; font-size: 0.8rem; color: #1D4587;" title="${descricoesTipos.texto}"></i>
+            </label>
             <select class="form-select input-vermelho val-tipo" required>
                 <option value="texto">Texto Curto</option>
                 <option value="numero">Número</option>
@@ -77,9 +96,19 @@ function adicionarCampoUI() {
     const selectTipo = divRow.querySelector('.val-tipo');
     const divOpcoes = divRow.querySelector('.div-opcoes');
     const inputOpcoes = divRow.querySelector('.val-opcoes');
+    const iconInfo = divRow.querySelector('.info-tipo-icon');
+
+    // Mostrar info ao clicar
+    iconInfo.addEventListener('click', () => {
+        const msg = iconInfo.getAttribute('title');
+        alert(msg);
+    });
 
     selectTipo.addEventListener('change', (e) => {
-        if (e.target.value === 'lista') {
+        const val = e.target.value;
+        iconInfo.setAttribute('title', descricoesTipos[val] || "");
+
+        if (val === 'lista') {
             divOpcoes.classList.remove('d-none');
             inputOpcoes.required = true;
         } else {
@@ -102,8 +131,6 @@ function gerarChave(label) {
 async function criarTipo() {
     const nome      = document.getElementById("inp-nome").value.trim();
     const descricao = document.getElementById("inp-descricao").value.trim();
-    const data_aquisicao = document.getElementById("info-data-aquisicao")
-
     if (!nome) {
         alert("Preencha o nome do tipo de equipamento.");
         return;
@@ -145,8 +172,7 @@ async function criarTipo() {
     const payload = {
         nome,
         descricao,
-        atributos,
-        data_aquisicao
+        atributos
     };
     console.log(payload)
 

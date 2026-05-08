@@ -45,6 +45,37 @@ class GenericTypeService():
     def soft_delete(self, id):
         self.type.soft_delete(id)
 
+    def delete(self, id):
+        from sqlalchemy import delete, select
+        from sqlalchemy.exc import IntegrityError
+        
+        print(f"DEBUG: Tentando excluir tipo_generico id={id}")
+        
+        # 1. Verificar se existem EQUIPAMENTOS vinculados a este modelo
+        equip_table = meta.tables.get('equipamentos_generico')
+        with engine.connect() as conn:
+            query = select(equip_table.c.id).where(equip_table.c.tipo_id == id).limit(1)
+            has_equips = conn.execute(query).fetchone()
+            print(f"DEBUG: Equipamentos vinculados encontrados? {has_equips}")
+            
+            if has_equips:
+                raise Exception("Não é possível excluir permanentemente este modelo pois existem equipamentos (ativos ou inativos) vinculados a ele. Utilize a opção de 'Desativar'.")
+
+        # 2. Tentar deletar (incluindo atributos)
+        attr_table = meta.tables.get('atributos_tipo_generico')
+        try:
+            with engine.begin() as conn:
+                # Deletar atributos primeiro (devido à Foreign Key)
+                conn.execute(delete(attr_table).where(attr_table.c.tipo_id == id))
+                # Deletar o modelo
+                conn.execute(delete(self.table).where(self.table.c.id == id))
+                print(f"DEBUG: Modelo {id} excluído com sucesso.")
+        except IntegrityError:
+             raise Exception("Erro de integridade: existem vínculos no banco de dados que impedem a exclusão. Tente desativar o modelo.")
+        except Exception as e:
+            print(f"DEBUG: Erro ao excluir: {str(e)}")
+            raise Exception(f"Erro técnico ao excluir modelo: {str(e)}")
+
     def get_all(self):
         with engine.connect() as conn:
             result = conn.execute(

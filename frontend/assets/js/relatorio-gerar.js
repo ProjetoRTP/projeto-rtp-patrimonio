@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    const perfil = sessionStorage.getItem("usuario_perfil");
+    if (perfil === "gerente") {
+        alert("Acesso negado. Gerentes não podem gerar novos relatórios.");
+        window.location.href = "relatorios.html";
+        return;
+    }
+
     carregarSetores();
     configurarPeriodo();
 

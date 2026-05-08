@@ -70,6 +70,18 @@ class GenericService(EquipmentService):
 
         self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
 
+        tipo_id = data.get("tipo_id")
+        if tipo_id:
+            tipo_generico_table = meta.tables.get('tipo_generico')
+            with engine.connect() as conn:
+                tipo = conn.execute(
+                    select(tipo_generico_table).where(tipo_generico_table.c.id == tipo_id)
+                ).fetchone()
+                if not tipo:
+                    raise Exception("Tipo de equipamento não encontrado.")
+                if tipo._mapping.get('ativo') in [False, 0]:
+                    raise Exception("Não é possível cadastrar um equipamento com um modelo desativado.")
+
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
                             "data_aquisicao", "valor", "setor_id", "subsetor_id"}
         generic_fields = {"tipo_id", "observacao", "atributos_dinamicos"}
@@ -104,6 +116,23 @@ class GenericService(EquipmentService):
 
     def update(self, id, data):
         self._validate_subsector(data.get("setor_id"), data.get("subsetor_id"))
+
+        tipo_id = data.get("tipo_id")
+        if tipo_id:
+            tipo_generico_table = meta.tables.get('tipo_generico')
+            with engine.connect() as conn:
+                tipo = conn.execute(
+                    select(tipo_generico_table).where(tipo_generico_table.c.id == tipo_id)
+                ).fetchone()
+                if not tipo:
+                    raise Exception("Tipo de equipamento não encontrado.")
+                # Na edição, permitimos manter o tipo se ele já for o atual do equipamento, 
+                # mas não trocar para outro que esteja inativo.
+                if tipo._mapping.get('ativo') in [False, 0]:
+                    # Verificar se o equipamento já possui esse tipo
+                    current_equip = self.generic.get_by_id(id)
+                    if not current_equip or current_equip.get('tipo_id') != tipo_id:
+                        raise Exception("Não é possível alterar para um modelo que está desativado.")
 
         equipment_fields = {"num_patrimonio", "endereco_ip", "observacao",
                             "data_aquisicao", "valor", "status", "setor_id", "subsetor_id"}

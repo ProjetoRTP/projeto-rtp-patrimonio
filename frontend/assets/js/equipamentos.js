@@ -25,14 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ocultaCriarTipo();
 });
 
-async function ocultaCriarTipo(){
-
+async function ocultaCriarTipo() {
     const perfilUsuario = sessionStorage.getItem("usuario_perfil") || "usuario";
     
     if (perfilUsuario.toLowerCase() !== "admin") { 
-        const ocultaTipo = document.getElementById("botao")
-        ocultaTipo.classList.add("d-none")
-        alert("test")
+        const ocultaTipo = document.getElementById("botao");
+        if (ocultaTipo) {
+            ocultaTipo.style.display = "none";
+        }
     }
 }
 
