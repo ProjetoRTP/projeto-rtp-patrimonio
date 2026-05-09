@@ -80,7 +80,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("Não foi possível conectar ao servidor.");
       }
     });
-});
+  const delete_btn = document.getElementById('delete-btn')
+  delete_btn.addEventListener("click", async () => {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  })
+  });
 
 async function carregarUsuario(id, token) {
   try {

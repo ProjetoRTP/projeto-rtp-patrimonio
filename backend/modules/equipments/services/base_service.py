@@ -33,14 +33,22 @@ class EquipmentService:
                 f"Subsector {subsector_id} does not belong to sector {sector_id}"
             )
 
-    def _base_query(self):
+    def _base_query(self, show = False):
         setores = meta.tables.get('setores')
-        return (
-            select(self.eq, self.specific, setores.c.nome.label('setor_nome'))
-            .join(self.specific, self.eq.c.id == self.specific.c.id)
-            .outerjoin(setores, self.eq.c.setor_id == setores.c.id)
-            .where(self.eq.c.status != 'desativado')
-        )
+        if show != True:
+            return (
+                select(self.eq, self.specific, setores.c.nome.label('setor_nome'))
+                .join(self.specific, self.eq.c.id == self.specific.c.id)
+                .outerjoin(setores, self.eq.c.setor_id == setores.c.id)
+                .where(self.eq.c.status != 'inativo')
+            )
+        else:
+            return (
+                select(self.eq, self.specific, setores.c.nome.label('setor_nome'))
+                .join(self.specific, self.eq.c.id == self.specific.c.id)
+                .outerjoin(setores, self.eq.c.setor_id == setores.c.id)
+            )
+
 
     def get_all(self):
         with engine.connect() as conn:
@@ -55,7 +63,11 @@ class EquipmentService:
     
     def listar(self, status=None, setor=None):
         with engine.connect() as conn:
-            query = self._base_query()
+            if status and status == "inativo":
+                show = True
+            else:
+                show = False
+            query = self._base_query(show)
 
             if status:
                 query = query.where(self.eq.c.status == status)

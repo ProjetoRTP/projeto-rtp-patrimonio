@@ -20,6 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  document.getElementById("inativo").addEventListener("click", () => {
+    carregarUsuarios(token)
+  })
+
   carregarUsuarios(token);
 });
 
@@ -29,8 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
 async function carregarUsuarios(token) {
   try {
     tbody.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-muted">Buscando usuários...</td></tr>`;
-
-    const response = await fetch(API_URL, {
+    const inativo = document.getElementById("inativo");
+    const query = new URLSearchParams();
+    
+    if (inativo.checked) {
+      query.append("inativo", "True")
+    }
+    const qs = query.toString();
+    console.log(qs)
+    const response = await fetch(`${API_URL}?${qs}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

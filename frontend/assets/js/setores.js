@@ -7,16 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '../index.html';
         return;
     }
+    document.getElementById("inativo").addEventListener("click", () => carregarSetores())
 
     async function carregarSetores() {
         const tbody = document.getElementById('tbody-setores');
         if (!tbody) return;
-
-        try {
-            const resposta = await fetch(API_BASE_URL, {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+        const inativo = document.getElementById("inativo");
+        const query = new URLSearchParams();
+        
+        if (inativo.checked) {
+        query.append("inativo", "True")
+        }
+        const qs = query.toString();
+        console.log(qs)
+        try{ 
+        const resposta = await fetch(`${API_BASE_URL}?${qs}`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        });
 
             if (resposta.ok) {
                 const setores = await resposta.json();

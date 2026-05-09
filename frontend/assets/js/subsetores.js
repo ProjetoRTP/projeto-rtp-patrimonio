@@ -14,14 +14,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // 2. FUNÇÃO PARA CARREGAR OS SUBSETORES
   async function carregarSubsetores() {
     const tbody = document.getElementById("tbody-subsetores");
-
-    try {
-      const resposta = await fetch(`${API_BASE_URL}/subsectors`, {
+    document.getElementById("inativo").addEventListener("click", () => carregarSubsetores())
+    const inativo = document.getElementById("inativo");
+        const query = new URLSearchParams();
+        
+        if (inativo.checked) {
+        query.append("inativo", "True")
+        }
+        const qs = query.toString();
+        console.log(qs)
+        try{ 
+        const resposta = await fetch(`${API_BASE_URL}/subsectors?${qs}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
         },
-      });
+        });
 
       if (resposta.ok) {
         const subsetores = await resposta.json();

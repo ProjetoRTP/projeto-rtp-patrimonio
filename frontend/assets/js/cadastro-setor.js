@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (tituloPagina) tituloPagina.innerText = 'Editar Setor';
         if (btnSalvar) btnSalvar.innerText = 'Atualizar';
         
+        document.getElementById("delete-btn").classList.remove("d-none")
         try {
             const resposta = await fetch(`${API_BASE_URL}/${sectorId}`, {
                 method: 'GET',
@@ -41,6 +42,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Erro ao carregar dados para edição:', erro);
         }
     }
+    
+    const deletar = document.getElementById('delete-btn')
+    deletar.addEventListener("click", async () =>{
+        const resposta = await fetch(`${API_BASE_URL}/${sectorId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+    });
 
     // 3. AÇÃO DO BOTÃO CANCELAR
     const btnCancelar = document.getElementById('btn-cancelar');

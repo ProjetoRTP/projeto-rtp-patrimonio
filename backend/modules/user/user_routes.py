@@ -44,7 +44,12 @@ def create_user():
 @swag_from("../../docs/user/list_user.yml")
 def list_user():
     user_model = User()
-    return jsonify([user_model.serialize_user(u) for u in user_model.get_all()]), 200
+    check = request.args.get("inativo")
+    if check == "True":
+        inactive = True
+    else:
+        inactive = False
+    return jsonify([user_model.serialize_user(u) for u in user_model.get_all(inactive)]), 200
 
 
 # READ SELF

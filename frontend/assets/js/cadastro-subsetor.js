@@ -5,6 +5,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const subsectorId = params.get("id");
 
+  document.getElementById("delete-btn").classList.remove("d-none")
+  const deletar = document.getElementById('delete-btn')
+  deletar.addEventListener("click", async () =>{
+      const resposta = await fetch(`${API_BASE_URL}/subsectors/${subsectorId}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${token}` }
+          });
+  });
+
   if (!token) {
     alert("Acesso negado. Faça login novamente.");
     window.location.href = "../index.html";

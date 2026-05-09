@@ -40,7 +40,12 @@ def create_subsector():
 @swag_from("../../docs/sectors/list_subsectors.yml")
 def list_subsectors():
     subsector_model = Subsector()
-    return jsonify(subsector_model.get_all()), 200
+    check = request.args.get("inativo")
+    if check == "True":
+        inactive = True
+    else:
+        inactive = False
+    return jsonify(subsector_model.get_all(inactive)), 200
 
 
 # READ BY ID

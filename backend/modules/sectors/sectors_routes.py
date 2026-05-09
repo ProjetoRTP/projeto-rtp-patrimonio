@@ -33,7 +33,12 @@ def create_sector():
 @swag_from("../../docs/sectors/get_all.yml")
 def list_sector():
     sector_model = Sector()
-    return jsonify(sector_model.get_all()), 200
+    check = request.args.get("inativo")
+    if check == "True":
+        inactive = True
+    else:
+        inactive = False
+    return jsonify(sector_model.get_all(inactive)), 200
 
 
 # READ SELF
