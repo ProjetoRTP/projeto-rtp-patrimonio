@@ -1,0 +1,100 @@
+/* ══════════════════════════════════════
+   leitor.css — Página Leitor de Código de Barras
+   ══════════════════════════════════════ */
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #EAF2F8;
+}
+
+.page-content {
+    flex: 1;
+    padding: 32px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+/* ── Card branco principal ── */
+.card-principal {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 32px 32px;
+    width: 100%;
+    max-width: 1400px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Layout: conteúdo à esquerda, painel à direita ── */
+.layout-leitor {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+.col-leitor {
+    flex: 1;
+    min-width: 0;
+}
+
+.col-detalhe {
+    width: 240px;
+    flex-shrink: 0;
+    border-left: 1px solid #f0f0f0;
+    padding-left: 28px;
+}
+
+/* ── Grupos de campo ── */
+.leitor-grupo {
+    margin-bottom: 8px;
+}
+
+/* ── Label dos campos ── */
+.leitor-label {
+    color: var(--azul-principal, #1D4587);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* ── Divisória ── */
+.leitor-divisoria {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    margin: 20px 0;
+}
+
+/* ── Input de upload (simula o campo de arquivo) ── */
+.input-upload {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--vermelho-principal, #B44848);
+    border-radius: 8px;
+    padding: 8px 14px;
+    max-width: 260px;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 0.88rem;
+    font-family: var(--fonte-principal, 'Quicksand', sans-serif);
+    transition: border-color 0.2s;
+}
+
+.input-upload:hover {
+    border-color: #a33f3f;
+}
+
+.input-upload i {
+    color: var(--vermelho-principal, #B44848);
+    font-size: 1rem;
+}
+
+#btn-buscar:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

@@ -1,0 +1,95 @@
+/* ══════════════════════════════════════
+   inputs.css — Campos de formulário
+   ══════════════════════════════════════ */
+
+/* ── Input padrão (borda vermelha) ── */
+.input-vermelho {
+    border: 1px solid #e08e8e;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #6c757d;
+    width: 100%;
+    font-family: var(--fonte-principal, 'Quicksand', sans-serif);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-vermelho:focus {
+    border-color: #D32F2F;
+    box-shadow: 0 0 0 0.25rem rgba(211, 47, 47, 0.25);
+    outline: none;
+}
+
+.input-vermelho::placeholder {
+    color: #A0A0A0;
+    font-weight: 500;
+}
+
+/* ── Input desabilitado ── */
+.input-vermelho:disabled,
+.input-vermelho[readonly] {
+    background-color: #f1f3f5;
+    color: #495057;
+    opacity: 1;
+    border: 1px solid #dee2e6;
+    font-weight: 500;
+}
+
+/* ── Input personalizado (borda vermelha mais suave) ── */
+/* Uso: campos de filtro na barra de filtros */
+.input-filtro {
+    border: 1px solid var(--vermelho-claro, #ffb3b3);
+    border-radius: 6px;
+    color: var(--vermelho-principal, #B44848);
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    background-color: #fffafa;
+    font-family: var(--fonte-principal, 'Quicksand', sans-serif);
+    transition: border-color 0.2s;
+}
+
+.input-filtro:focus {
+    outline: none;
+    border-color: var(--vermelho-principal, #B44848);
+    box-shadow: 0 0 0 0.2rem rgba(180, 72, 72, 0.15);
+}
+
+.input-filtro::placeholder {
+    color: #c49898;
+}
+
+/* ── Select padrão (borda vermelha) ── */
+.select-vermelho {
+    border: 1px solid #e08e8e;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #6c757d;
+    background-color: #ffeaea;
+    font-family: var(--fonte-principal, 'Quicksand', sans-serif);
+    cursor: pointer;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+
+.select-vermelho:focus {
+    border-color: #D32F2F;
+    box-shadow: 0 0 0 0.25rem rgba(211, 47, 47, 0.25);
+    outline: none;
+}
+
+/* ── Select de filtro (pequeno, arredondado) ── */
+.select-filtro {
+    border: 1px solid var(--vermelho-claro, #ffb3b3);
+    border-radius: 50px;
+    color: var(--vermelho-principal, #B44848);
+    font-size: 0.75rem;
+    padding: 2px 20px 2px 10px;
+    background-color: #fffafa;
+    cursor: pointer;
+    font-family: var(--fonte-principal, 'Quicksand', sans-serif);
+    transition: border-color 0.2s;
+}
+
+.select-filtro:focus {
+    outline: none;
+    border-color: var(--vermelho-principal, #B44848);
+}

@@ -1,0 +1,70 @@
+/* ══════════════════════════════════════
+   tabela.css — Tabela padrão do projeto
+   ══════════════════════════════════════ */
+
+.tabela-padrao {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* ── Cabeçalho ── */
+.tabela-padrao thead th {
+    color: var(--vermelho-principal, #B44848);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #f0f0f0;
+    padding: 0 0 10px 0;
+}
+
+/* ── Células ── */
+.tabela-padrao tbody td {
+    color: var(--azul-principal, #1D4587);
+    font-weight: 500;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 12px 0;
+}
+
+/* ── Linha hover ── */
+.tabela-padrao tbody tr:hover {
+    background-color: #f8fbff;
+    cursor: pointer;
+}
+
+/* ── Checkbox coluna ── */
+.tabela-padrao .col-check {
+    width: 36px;
+}
+
+.tabela-padrao input[type="checkbox"] {
+    accent-color: var(--azul-principal, #1D4587);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ── Estado vazio / carregando ── */
+.tabela-padrao .linha-vazia td {
+    color: #adb5bd;
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 0.95rem;
+}
+
+/* ── Centraliza células ── */
+.tabela-padrao thead th,
+.tabela-padrao tbody td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ── Exceto a coluna do checkbox que fica à esquerda ── */
+.tabela-padrao .col-check {
+    text-align: left;
+}
+
+.tabela-padrao {
+    table-layout: fixed;
+}

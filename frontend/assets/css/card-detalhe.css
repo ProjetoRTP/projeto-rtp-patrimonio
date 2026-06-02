@@ -1,0 +1,54 @@
+/* ══════════════════════════════════════
+   card-detalhe.css — Painel lateral direito
+   (Detalhes do Produto + Código de Barras)
+   ══════════════════════════════════════ */
+
+/* ── Título da seção (vermelho, uppercase) ── */
+.titulo-secao {
+    color: var(--vermelho-principal, #B44848);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+/* ── Painel de detalhes ── */
+.card-detalhe {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 220px;
+}
+
+/* ── Texto dos detalhes ── */
+.detalhe-info {
+    color: var(--azul-principal, #1D4587);
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.8;
+}
+
+/* ── Divisória ── */
+.detalhe-divisoria {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    margin: 16px 0;
+}
+
+/* ── Área do código de barras ── */
+.barcode-container {
+    border: 1.5px solid var(--azul-principal, #1D4587);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    background: white;
+}
+
+.barcode-container img,
+.barcode-container svg {
+    max-width: 100%;
+    height: auto;
+}

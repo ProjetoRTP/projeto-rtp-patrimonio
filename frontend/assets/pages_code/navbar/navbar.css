@@ -1,0 +1,118 @@
+/* ── navbar.css ── */
+
+.navbar-principal {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0;                /* tira o padding do nav */
+    background: linear-gradient(90deg, #1D4587 0%, #022154 100%);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* ── Logo ── */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-right: 24px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.navbar-logo img {
+    width: 38px;
+    height: auto;
+}
+
+.navbar-logo::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 28px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Links ── */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 0 28px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.15s;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 28px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.nav-link:hover {
+    color: #ffffff;
+}
+
+.nav-link.active {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* ── Sair ── */
+.navbar-sair {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding-left: 28px;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+}
+
+.navbar-sair:hover {
+    opacity: 0.8;
+    color: #ffffff;
+}
+
+.navbar-sair svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+
+/* container interno que alinha com o card */
+.navbar-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    max-width: 1400px;        /* mesmo max-width do card */
+    margin: 0 auto;
+    padding: 0 24px;
+}

@@ -1,0 +1,50 @@
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #EAF2F8;
+        }
+
+        .page-content {
+            flex: 1;
+            padding: 32px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        /* Card branco principal */
+        .card-principal {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 32px 20px;
+            width: 100%;
+            max-width: 1400px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Layout: tabela à esquerda, painel à direita */
+        .layout-produtos {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+        .col-tabela {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .col-detalhe {
+            width: 240px;
+            flex-shrink: 0;
+        }
+
+        /* Divisória vertical */
+        .col-detalhe {
+            border-left: 1px solid #f0f0f0;
+            padding-left: 28px;
+        }
+
+

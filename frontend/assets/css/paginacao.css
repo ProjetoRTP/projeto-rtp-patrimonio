@@ -1,0 +1,31 @@
+/* ══════════════════════════════════════
+   paginacao.css — Navegação de páginas
+   ══════════════════════════════════════ */
+
+.paginacao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 20px 0 8px;
+}
+
+.paginacao-link {
+    color: var(--vermelho-principal, #B44848);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s;
+}
+
+.paginacao-link:hover {
+    opacity: 0.7;
+    color: var(--vermelho-principal, #B44848);
+}
+
+.paginacao-link.desabilitado {
+    opacity: 0.35;
+    pointer-events: none;
+}
