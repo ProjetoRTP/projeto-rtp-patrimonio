@@ -12,6 +12,8 @@ function carregarNavbar() {
                 }
             });
 
+            configurarHoverGavetas();
+
             // Controle de acesso por perfil
             const perfil = sessionStorage.getItem('usuario_perfil') || '';
             if (perfil.toLowerCase() !== 'admin') {
@@ -21,6 +23,49 @@ function carregarNavbar() {
             }
         })
         .catch(err => console.error('Erro ao carregar navbar:', err));
+}
+
+function configurarHoverGavetas() {
+    const linksComGaveta = document.querySelectorAll('.sidebar-link[data-alvo]');
+
+    linksComGaveta.forEach(link => {
+        const idAlvo = link.getAttribute('data-alvo');
+        const gaveta = document.getElementById(idAlvo);
+
+        if (!gaveta) return;
+
+        let timeoutId = null;
+
+        const esconderGaveta = () => {
+            timeoutId = setTimeout(() => {
+                gaveta.classList.remove('show');
+            }, 200);
+        };
+
+        const limparTimeout = () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+        };
+
+        link.addEventListener('mouseenter', () => {
+            limparTimeout();
+            gaveta.classList.add('show');
+        });
+
+        link.addEventListener('mouseleave', () => {
+            esconderGaveta();
+        });
+
+        gaveta.addEventListener('mouseenter', () => {
+            limparTimeout();
+        });
+
+        gaveta.addEventListener('mouseleave', () => {
+            esconderGaveta();
+        });
+    });
 }
 
 carregarNavbar();
