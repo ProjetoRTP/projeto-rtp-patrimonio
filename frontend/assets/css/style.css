@@ -311,3 +311,82 @@ h2 {
     background: #1D4587;
     border-radius: 10px;
 }
+
+
+
+
+.login-bg {
+    background: url('../imagens/PROCAPE_background.png') no-repeat center;
+    background-size: cover;
+    background-position: left;
+    height: 100vh;
+    position: relative;
+}
+
+.login-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.20); /* ajuste a intensidade */
+}
+
+/* Caixa do título */
+.titulo-capa {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+    width: 80%;
+    z-index: 2;
+}
+
+/* Título principal */
+.titulo-capa h1 {
+    color: #FFFFFF;
+    font-size: 3.5rem;
+    font-weight: 700;
+    position: absolute;
+    z-index: 2;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,0.4),
+        0 4px 12px rgba(0,0,0,0.3);
+}
+
+
+/* Subtítulo */
+.titulo-capa p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 2px 6px rgba(0,0,0,0.4);
+}
+
+
+.linha-topo{
+    color:#B44848;
+    font-weight:700;
+    letter-spacing:4px;
+    font-size:1rem;
+    display:block;
+    margin-bottom:15px;
+}
+
+.titulo-capa h1{
+    color:#fff;
+    font-size:3.5rem;
+    font-weight:700;
+    line-height:1.2;
+}
+
+.titulo-capa p{
+    color:rgba(255,255,255,.85);
+    font-size:1.2rem;
+    margin-top:10px;
+}
