@@ -8,7 +8,7 @@ from io import BytesIO
 from database.generic_queries import repository
 from utils.barcode import id_to_barcode
 
-telegram_bp = Blueprint('telegram', __name__)
+telegram_bp = Blueprint('telegram', __name__, url_prefix='/telegram')
 
 # Dados necessários para envio
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")

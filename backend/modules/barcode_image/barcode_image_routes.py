@@ -2,7 +2,7 @@ from flask import jsonify, Blueprint, request
 from utils.barcode_by_image import read_image_and_delete
 import os
 
-bar_up_bp = Blueprint("barcodeup", __name__)
+bar_up_bp = Blueprint("barcodeup", __name__, url_prefix='/barcodeup')
 
 @bar_up_bp.route("/upload", methods=['POST'])
 def upload_barcode():

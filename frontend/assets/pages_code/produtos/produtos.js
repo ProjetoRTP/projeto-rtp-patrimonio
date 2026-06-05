@@ -40,7 +40,8 @@ async function carregarProdutos() {
 
         if (!resposta.ok) throw new Error('Erro ao buscar produtos');
 
-        const produtos = await resposta.json();
+        const dados = await resposta.json();
+        const produtos = dados.data;
 
         if (!produtos || produtos.length === 0) {
             tbody.innerHTML = `

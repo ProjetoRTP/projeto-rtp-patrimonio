@@ -5,10 +5,10 @@ from io import BytesIO
 from database.generic_queries import repository
 from utils.barcode import barcode_to_id, id_to_barcode
 
-product_bp = Blueprint("products", __name__)
+product_bp = Blueprint("products", __name__, url_prefix='/products')
 
 
-@product_bp.route("/", methods=["GET"])
+@product_bp.route("", methods=["GET"])
 def get_all_products():
     try:
         products = repository.select_all_products()
