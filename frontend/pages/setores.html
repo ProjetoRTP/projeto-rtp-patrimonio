@@ -35,36 +35,19 @@
                         <i class="bi bi-plus-circle"></i> Cadastrar
                     </a>
                 </div>
-                <!--
-                <form id="form-filtros"
-                    class="border p-3 rounded-4 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4 gap-3"
-                    style="border-color: #1D4587 !important;">
 
-                    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 w-100">
-                        <span class="d-none d-md-block fw-bold"
-                            style="color: var(--azul-principal, #1D4587); font-size: 1rem;">FILTRO</span>
+                <div class="table-responsive w-100">
 
-                        <div class="d-flex flex-column w-100">
-                            <label class="filtro-label" for="filtro-setor">SETOR</label>
-                            <select class="filtro-select w-100" id="filtro-setor">
-                                <option value="">Selecione um setor</option>
-                            </select>
+                    <div class="barra-filtros d-inline-flex" style="margin-bottom: 0.75rem;">
+                        <div class="filtro-grupo">
+                            <input id="inativo" type="checkbox" class="form-check-input">
+                            <label for="inativo" class="filtro-label" style="cursor: pointer;">
+                                Exibir inativos
+                            </label>
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2 w-100 justify-content-end justify-content-md-start mt-2 mt-md-0">
-                        <button type="button" id="btn-limpar-filtros"
-                            class="btn-limpar flex-grow-1 flex-md-grow-0">LIMPAR</button>
-                        <button type="submit" class="btn-aplicar flex-grow-1 flex-md-grow-0">APLICAR</button>
-                    </div>
-                </form>
-            -->
-
-                <div class="table-responsive w-100">
                     <table class="table tabela-setores mb-0" style="min-width: 500px;">
-                        <input id="inativo" type="checkbox" class="align-items-center text-center align-self-center">
-                        <h7 scope="col" style="color: #762fd34c; font-size: 0.85rem; font-weight: bold;"
-                                    class="pb-3">Exibir inativos<h7/></input>
                         <thead>
                             <tr>
                                 <th>NOME DO SETOR</th>
