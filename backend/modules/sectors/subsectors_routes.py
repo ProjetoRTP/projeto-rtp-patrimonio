@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required
-from modules.utils.decorators import check_role
+from utils.decorators import check_role
 from modules.sectors.subsectors import Subsector
 
 subsectors_bp = Blueprint("subsectors_bp", __name__, url_prefix="/subsectors")

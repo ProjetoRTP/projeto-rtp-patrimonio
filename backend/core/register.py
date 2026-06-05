@@ -9,6 +9,9 @@ from modules.maintenance.maintenance_routes import maintenances_bp
 from modules.movements.movement_routes import movements_bp
 from modules.history.history_routes import history_bp
 from modules.reports.routes_reports import reports_bp
+from modules.product.product_routes import product_bp
+from modules.send_message.telegram_routes import telegram_bp
+from modules.barcode_image.barcode_image_routes import bar_up_bp
 
 # Importa o blueprint de genéricos E o módulo de rotas de equipamentos genéricos
 # (os dois usam o mesmo blueprint generics_bp — o import do equip_routes registra as rotas nele)
@@ -29,3 +32,6 @@ def register_routes(app):
     app.register_blueprint(movements_bp)
     app.register_blueprint(history_bp)
     app.register_blueprint(generics_bp)
+    app.register_blueprint(product_bp, url_prefix='/products')
+    app.register_blueprint(telegram_bp, url_prefix='/telegram')
+    app.register_blueprint(bar_up_bp, url_prefix='/barcodeup')

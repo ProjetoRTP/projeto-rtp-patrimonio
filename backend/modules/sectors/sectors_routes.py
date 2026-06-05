@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
-from modules.utils.decorators import check_role
+from utils.decorators import check_role
 from modules.sectors.sectors import Sector
 from flasgger import swag_from
 

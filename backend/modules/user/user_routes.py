@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required
-from modules.utils.decorators import check_role, user_or_admin_user
-from modules.utils.security import hash_password
+from utils.decorators import check_role, user_or_admin_user
+from utils.security import hash_password
 from modules.user.user import User
 from datetime import datetime, timedelta
 from modules.user.forgot_password import send_email, create_token

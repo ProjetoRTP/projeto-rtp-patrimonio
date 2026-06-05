@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required
-from modules.utils.decorators import check_role
+from utils.decorators import check_role
 from modules.equipments.classes.computers import Computer
 from modules.equipments.services.computer_service import ComputerService
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
-from modules.utils.security import check_password
+from utils.security import check_password
 from modules.user.user import User
 
 from flasgger import swag_from

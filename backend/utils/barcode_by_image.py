@@ -32,7 +32,7 @@ def read_image_and_delete(image_dir):
     return resultados
 
 # --- Exemplo de como você vai chamar ela no seu código principal ---
-caminho_arquivo = "backend/utils/temp_barcode/Teste.png"
+caminho_arquivo = "backend/utils/Teste.png"
 codigos_encontrados = read_image_and_delete(caminho_arquivo)
 
 # Agora você pode usar o resultado como quiser:
