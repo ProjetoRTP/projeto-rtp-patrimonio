@@ -99,7 +99,7 @@ main.login-main {
     justify-content: center;
     height: 100vh;
     padding: 2rem;
-    background-color: var(--azul-mais-claro);
+    background-color:#E6F4FB;
 }
 
 .login-title {

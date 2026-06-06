@@ -31,7 +31,7 @@
         <div id="espaco-da-navbar"></div>
 
         <!-- Conteúdo -->
-        <div class="page-content">
+        <div class="page-content" style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
             <div class="card-principal">
 
                 <h2>Leitor de Código de Barras</h2>
@@ -53,16 +53,7 @@
 
                         <hr class="leitor-divisoria" id="hr-metodo" style="display:none;">
 
-                        <!-- Carregar imagem -->
-                        <div class="leitor-grupo" id="grupo-imagem" style="display:none;">
-                            <label class="leitor-label">Carregue uma imagem</label>
-                            <label class="input-upload" for="input-imagem">
-                                <span id="nome-arquivo">Procurar arquivo</span>
-                                <i class="bi bi-upload"></i>
-                                <input type="file" id="input-imagem" accept="image/*" hidden>
-                            </label>
-                        </div>
-
+   
                         <!-- Conectar scanner -->
                         <div class="leitor-grupo" id="grupo-scanner" style="display:none;">
                             <label class="leitor-label">Conecte o scanner</label>
