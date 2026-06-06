@@ -1,14 +1,15 @@
-// ══════════════════════════════════════
-// produtos.js — Lógica da página Produtos
-// ══════════════════════════════════════
-
 const API_URL = 'http://localhost:5000';
 
-const checkTodos  = document.getElementById('check-todos');
-const tbody       = document.getElementById('tbody-produtos');
-const detalheDiv  = document.getElementById('detalhe-produto');
+const checkTodos = document.getElementById('check-todos');
+const tbody = document.getElementById('tbody-produtos');
 const barcodeArea = document.getElementById('barcode-area');
 const btnImprimir = document.getElementById('btn-imprimir');
+
+// ── Estado da paginação ──
+const PRODUTOS_POR_PAGINA = 100;
+let paginaAtual = 1;
+let totalProdutos = 0;
+let totalPaginas = 1;
 
 // ── Token ──
 function getHeaders() {
@@ -19,72 +20,163 @@ function getHeaders() {
     };
 }
 
+
 // ══════════════════════════════════════
 // 1. CARREGAR PRODUTOS DA API
 // ══════════════════════════════════════
-async function carregarProdutos() {
-    tbody.innerHTML = `
-        <tr class="linha-vazia">
-            <td colspan="4">Carregando produtos...</td>
-        </tr>`;
+let todosProdutos = []; // cache local
 
-    try {
-        const resposta = await fetch(`${API_URL}/products`, {
-            headers: getHeaders()
-        });
+async function carregarProdutos(pagina = 1) {
+    // Só busca da API na primeira vez
+    if (todosProdutos.length === 0) {
+        tbody.innerHTML = `<tr class="linha-vazia"><td colspan="4">Carregando produtos...</td></tr>`;
 
-        if (resposta.status === 401) {
-            window.location.href = '../login/login.html';
+        try {
+            const resposta = await fetch(`${API_URL}/products/`, { headers: getHeaders() });
+
+            if (resposta.status === 401) { window.location.href = '../login/login.html'; return; }
+            if (!resposta.ok) throw new Error('Erro ao buscar produtos');
+
+            const json = await resposta.json();
+            todosProdutos = json.data ?? [];
+
+        } catch (erro) {
+            tbody.innerHTML = `<tr class="linha-vazia"><td colspan="4">Erro: ${erro.message}</td></tr>`;
             return;
         }
-
-        if (!resposta.ok) throw new Error('Erro ao buscar produtos');
-
-        const dados = await resposta.json();
-        const produtos = dados.data;
-
-        if (!produtos || produtos.length === 0) {
-            tbody.innerHTML = `
-                <tr class="linha-vazia">
-                    <td colspan="4">Nenhum produto encontrado.</td>
-                </tr>`;
-            return;
-        }
-
-        tbody.innerHTML = '';
-        produtos.forEach(produto => {
-            const tr = document.createElement('tr');
-            tr.dataset.id      = produto.cd_produto;
-            tr.dataset.codigo  = produto.cd_produto;
-            tr.dataset.nome    = produto.ds_produto;
-            tr.dataset.estoque = produto.qt_estoque_atual ?? '-';
-
-            tr.innerHTML = `
-                <td class="col-check"><input type="checkbox"></td>
-                <td>${produto.cd_produto}</td>
-                <td>${produto.ds_produto}</td>
-                <td>${produto.qt_estoque_atual ?? '-'}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        configurarCheckboxes();
-        configurarSelecaoLinha();
-        atualizarPainel();
-
-    } catch (erro) {
-        tbody.innerHTML = `
-            <tr class="linha-vazia">
-                <td colspan="4">Erro ao carregar produtos: ${erro.message}</td>
-            </tr>`;
     }
+
+    // Calcula paginação local
+    totalProdutos = todosProdutos.length;
+    totalPaginas  = Math.max(1, Math.ceil(totalProdutos / PRODUTOS_POR_PAGINA));
+    paginaAtual   = pagina;
+
+    const inicio  = (pagina - 1) * PRODUTOS_POR_PAGINA;
+    const fatia   = todosProdutos.slice(inicio, inicio + PRODUTOS_POR_PAGINA);
+
+    tbody.innerHTML = '';
+    fatia.forEach(produto => {
+        const tr = document.createElement('tr');
+        tr.dataset.id      = produto.cd_produto;
+        tr.dataset.codigo  = produto.cd_produto;
+        tr.dataset.nome    = produto.ds_produto;
+        tr.dataset.estoque = produto.qt_estoque_atual ?? '-';
+
+        tr.innerHTML = `
+            <td class="col-check"><input type="checkbox"></td>
+            <td>${produto.cd_produto}</td>
+            <td>${produto.ds_produto}</td>
+            <td>${produto.qt_estoque_atual ?? '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    atualizarPainel();
+    renderizarPaginacao();
+    } 
+
+
+// ══════════════════════════════════════
+// 2. PAGINAÇÃO
+// ══════════════════════════════════════
+
+/**
+ * Gera a janela de 5 páginas ao redor da página atual.
+ * Ex: total=20, atual=10  →  [8, 9, 10, 11, 12]
+ */
+function janelaDePaginas(atual, total, janela = 5) {
+    const metade = Math.floor(janela / 2);
+    let inicio = Math.max(1, atual - metade);
+    let fim    = Math.min(total, inicio + janela - 1);
+
+    // Ajusta se ficou menor que a janela no final
+    if (fim - inicio + 1 < janela) {
+        inicio = Math.max(1, fim - janela + 1);
+    }
+
+    const paginas = [];
+    for (let i = inicio; i <= fim; i++) paginas.push(i);
+    return paginas;
 }
 
+function renderizarPaginacao() {
+    const container = document.getElementById('paginacao-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const isFirst = paginaAtual === 1;
+    const isLast  = paginaAtual === totalPaginas;
+
+    // |< Primeira
+    container.appendChild(criarBtnPaginacao('|&lt;', 1, isFirst, 'nav'));
+
+    // < Anterior
+    container.appendChild(criarBtnPaginacao('&lt;', paginaAtual - 1, isFirst, 'nav'));
+
+    // Reticências iniciais
+    const paginas = janelaDePaginas(paginaAtual, totalPaginas);
+    if (paginas[0] > 1) {
+        container.appendChild(criarEticencias());
+    }
+
+    // Números
+    paginas.forEach(p => {
+        container.appendChild(criarBtnPaginacao(p, p, false, p === paginaAtual ? 'ativo' : 'numero'));
+    });
+
+    // Reticências finais
+    if (paginas[paginas.length - 1] < totalPaginas) {
+        container.appendChild(criarEticencias());
+    }
+
+    // > Próxima
+    container.appendChild(criarBtnPaginacao('&gt;', paginaAtual + 1, isLast, 'nav'));
+
+    // >| Última
+    container.appendChild(criarBtnPaginacao('&gt;|', totalPaginas, isLast, 'nav'));
+}
+
+function criarBtnPaginacao(label, pagina, desativado, tipo) {
+    const btn = document.createElement('button');
+    btn.innerHTML = label;
+
+    if (tipo === 'ativo') {
+        btn.className = 'pag-btn pag-btn--ativo';
+    } else if (tipo === 'nav') {
+        btn.className = 'pag-btn pag-btn--nav';
+    } else {
+        btn.className = 'pag-btn pag-btn--numero';
+    }
+
+    if (desativado) {
+        btn.disabled = true;
+        btn.classList.add('pag-btn--desativado');
+    } else {
+        btn.addEventListener('click', () => {
+            if (pagina >= 1 && pagina <= totalPaginas) {
+                carregarProdutos(pagina);
+                // Sobe suavemente ao topo da tabela
+                document.querySelector('.col-tabela')?.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    return btn;
+}
+
+function criarEticencias() {
+    const span = document.createElement('span');
+    span.className = 'pag-ellipsis';
+    span.textContent = '...';
+    return span;
+}
+
+
 // ══════════════════════════════════════
-// 2. CHECKBOXES
+// 3. CHECKBOXES
 // ══════════════════════════════════════
 function configurarCheckboxes() {
-
     checkTodos.addEventListener('change', () => {
         tbody.querySelectorAll('input[type="checkbox"]')
             .forEach(c => c.checked = checkTodos.checked);
@@ -94,7 +186,7 @@ function configurarCheckboxes() {
     tbody.addEventListener('change', (e) => {
         if (e.target.type !== 'checkbox') return;
 
-        const checks        = [...tbody.querySelectorAll('input[type="checkbox"]')];
+        const checks = [...tbody.querySelectorAll('input[type="checkbox"]')];
         const totalMarcados = checks.filter(c => c.checked).length;
 
         checkTodos.checked       = totalMarcados === checks.length;
@@ -104,8 +196,9 @@ function configurarCheckboxes() {
     });
 }
 
+
 // ══════════════════════════════════════
-// 3. CLIQUE NA LINHA → SELECIONA CHECKBOX
+// 4. CLIQUE NA LINHA → SELECIONA CHECKBOX
 // ══════════════════════════════════════
 function configurarSelecaoLinha() {
     tbody.addEventListener('click', (e) => {
@@ -120,51 +213,21 @@ function configurarSelecaoLinha() {
     });
 }
 
+
 // ══════════════════════════════════════
-// 4. PAINEL DIREITO — detalhes + barcode
+// 5. PAINEL DIREITO
 // ══════════════════════════════════════
 async function atualizarPainel() {
     const selecionados = [...tbody.querySelectorAll('input[type="checkbox"]:checked')]
         .map(c => c.closest('tr'));
 
-    // Nenhum selecionado
     if (selecionados.length === 0) {
-        detalheDiv.innerHTML = `
-            <span style="color:#adb5bd; font-size:0.85rem;">
-                Nenhum item ainda foi selecionado.
-            </span>`;
-        barcodeArea.innerHTML = '';
+        barcodeArea.innerHTML = '<span style="color:#adb5bd; font-size:0.85rem;">Nenhum item selecionado.</span>';
         btnImprimir.style.display = 'none';
         return;
     }
 
-    // Mais de um selecionado
-    if (selecionados.length > 1) {
-        detalheDiv.innerHTML = `
-            <span style="color:#adb5bd; font-size:0.85rem;">
-                ${selecionados.length} itens selecionados.
-            </span>`;
-        barcodeArea.innerHTML = `
-            <button class="btn-outline-vermelho w-100" id="btn-gerar-lote">
-                GERAR CÓDIGO DE BARRAS EM LOTE
-            </button>`;
-        btnImprimir.style.display = 'none';
-        return;
-    }
-
-    // Exatamente um selecionado
-    const tr      = selecionados[0];
-    const id      = tr.dataset.id;
-    const codigo  = tr.dataset.codigo;
-    const nome    = tr.dataset.nome;
-    const estoque = tr.dataset.estoque;
-
-    detalheDiv.innerHTML = `
-        Código: ${codigo}<br>
-        Produto: ${nome}<br>
-        Estoque: ${estoque}
-    `;
-
+    const id = selecionados[0].dataset.id;
     await carregarBarcode(id);
 }
 
@@ -209,7 +272,10 @@ async function carregarBarcode(id) {
     }
 }
 
+
 // ══════════════════════════════════════
-// 5. INICIALIZA
+// 6. INICIALIZA
 // ══════════════════════════════════════
-carregarProdutos();
+configurarCheckboxes();
+configurarSelecaoLinha();
+carregarProdutos(1);

@@ -1,3 +1,4 @@
+
         .page-wrapper {
             display: flex;
             flex-direction: column;
@@ -11,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            overflow-y: auto;
+            overflow-y: visible;
         }
 
         /* Card branco principal */
@@ -24,7 +25,6 @@
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         }
 
-        /* Layout: tabela à esquerda, painel à direita */
         .layout-produtos {
             display: flex;
             gap: 32px;
@@ -36,15 +36,21 @@
             min-width: 0;
         }
 
+
+        /* Divisória vertical */
+
+        body {
+            padding-top: 64px;
+        } 
+
+
+
         .col-detalhe {
             width: 240px;
             flex-shrink: 0;
-        }
-
-        /* Divisória vertical */
-        .col-detalhe {
             border-left: 1px solid #f0f0f0;
             padding-left: 28px;
+            position: sticky;
+            top: 80px;
+            align-self: flex-start;
         }
-
-

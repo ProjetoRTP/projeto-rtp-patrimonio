@@ -48,35 +48,6 @@
                     <!-- ── Coluna esquerda: filtros + tabela + paginação ── -->
                     <div class="col-tabela">
 
-                        <!-- Barra de Filtros -->
-                        <!-- <div class="barra-filtros">
-                            <span class="filtro-titulo">FILTROS</span>
-
-                            <div class="filtro-grupo">
-                                <span class="filtro-label">CÓDIGO</span>
-                                <input type="text" class="input-filtro" id="filtro-codigo" placeholder="00000.0000">
-                            </div>
-
-                            <div class="filtro-grupo">
-                                <span class="filtro-label">PRODUTO</span>
-                                <input type="text" class="input-filtro" id="filtro-produto" placeholder="Detalhes do item">
-                            </div>
-
-                            <div class="filtro-grupo">
-                                <span class="filtro-label">TIPO</span>
-                                <select class="form-select form-select-sm select-filtro" id="filtro-tipo">
-                                    <option value="">Selecione</option>
-                                    <option value="mat_hospitalar">Mat. Hospitalar</option>
-                                    <option value="medicamento">Medicamento</option>
-                                </select>
-                            </div>
-
-                            <div class="d-flex gap-2 ms-auto">
-                                <button class="btn-limpar" id="btn-limpar">LIMPAR</button>
-                                <button class="btn-aplicar" id="btn-aplicar">APLICAR</button>
-                            </div>
-                        </div> -->
-
                         <!-- Tabela -->
                         <div class="table-responsive">
                             <table class="tabela-padrao" style="min-width: 480px;">
@@ -94,60 +65,18 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-produtos">
-                                    <!-- <tr>
-                                        <td class="col-check"><input type="checkbox" checked></td>
-                                        <td>1205000545865</td>
-                                        <td>Dipirona</td>
-                                        <td>200</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-check"><input type="checkbox" checked></td>
-                                        <td>1205000545865</td>
-                                        <td>Dipirona</td>
-                                        <td>200</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-check"><input type="checkbox" checked></td>
-                                        <td>1205000545865</td>
-                                        <td>Dipirona</td>
-                                        <td>200</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-check"><input type="checkbox"></td>
-                                        <td>1205000545865</td>
-                                        <td>Dipirona</td>
-                                        <td>200</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-check"><input type="checkbox"></td>
-                                        <td>1205000545865</td>
-                                        <td>Dipirona</td>
-                                        <td>200</td>
-                                    </tr> -->
+
                                 </tbody>
                             </table>
                         </div>
 
                         <!-- Paginação -->
-                        <div class="paginacao">
-                            <a href="#" class="paginacao-link">&lt;&lt; PÁGINA ANTERIOR</a>
-                            <a href="#" class="paginacao-link">PÁGINA SEGUINTE &gt;&gt;</a>
-                        </div>
+                        <div class="paginacao" id="paginacao-container"></div>
 
                     </div>
 
                     <!-- ── Coluna direita: detalhes + código de barras ── -->
                     <div class="col-detalhe">
-
-                        <!-- Detalhes do Produto -->
-                        <!-- <p class="titulo-secao">DETALHES DO PRODUTO</p>
-                        <div class="detalhe-info" id="detalhe-produto">
-                            Código: 001<br>
-                            Produto: Dipirona 500g<br>
-                            Descrição: Analgésico<br>
-                        </div>
-
-                        <hr class="detalhe-divisoria"> -->
 
                         <!-- Código de Barras -->
                         <p class="titulo-secao">CÓDIGO DE BARRAS</p>
