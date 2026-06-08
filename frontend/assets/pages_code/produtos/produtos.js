@@ -32,7 +32,7 @@ async function carregarProdutos(pagina = 1) {
         tbody.innerHTML = `<tr class="linha-vazia"><td colspan="4">Carregando produtos...</td></tr>`;
 
         try {
-            const resposta = await fetch(`${API_URL}/products/`, { headers: getHeaders() });
+            const resposta = await fetch(`${API_URL}/products`, { headers: getHeaders() });
 
             if (resposta.status === 401) { window.location.href = '../login/login.html'; return; }
             if (!resposta.ok) throw new Error('Erro ao buscar produtos');

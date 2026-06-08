@@ -4,7 +4,10 @@ class GenericRepository:
 
     def select_all_products(self):
         query = """
-        SELECT P.CD_PRODUTO, P.DS_PRODUTO
+        SELECT 
+            P.CD_PRODUTO, 
+            P.DS_PRODUTO,
+            E.QT_ESTOQUE_ATUAL
         FROM PRODUTO P
         JOIN EST_PRO E
         ON P.CD_PRODUTO = E.CD_PRODUTO
@@ -15,11 +18,11 @@ class GenericRepository:
         return result
 
     def select_product_by_id(self, id):
-        # Em Oracle Python, usamos :nome para binds, igual ao Node
         query = """
         SELECT 
-        A.DS_PRODUTO, 
-        B.QT_ESTOQUE_ATUAL 
+            A.CD_PRODUTO,
+            A.DS_PRODUTO, 
+            B.QT_ESTOQUE_ATUAL 
         FROM PRODUTO A 
         JOIN EST_PRO B 
         ON A.CD_PRODUTO = B.CD_PRODUTO
@@ -29,7 +32,6 @@ class GenericRepository:
         """
         binds = {"id": id}
         result = Database.execute(query, binds)
-        # Transforma os dados em uma lista para facilitar o acesso (DS_PRODUTO, QT_ESTOQUE_ATUAL)
         if result:
             return result
         return None

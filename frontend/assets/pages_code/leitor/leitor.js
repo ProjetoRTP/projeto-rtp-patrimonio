@@ -64,12 +64,25 @@ btnBuscar.addEventListener('click', async () => {
         `;
 
         // ── Envia etiqueta ao Telegram ──
-        if (produto.cd_produto) {
-            fetch(`${API_URL}/telegram/send-product-tag/${produto.cd_produto}`, {
-                method: 'POST',
-                headers: getHeaders()
-            }).catch(() => {});
+if (produto.cd_produto) {
+    try {
+        const telegramResposta = await fetch(`${API_URL}/telegram/send-product-tag/${produto.cd_produto}`, {
+            method: 'POST',
+            headers: getHeaders()
+        });
+
+        const telegramJson = await telegramResposta.json();
+
+        if (telegramResposta.ok && telegramJson.success) {
+            alert('✅ Etiqueta enviada ao Telegram com sucesso!');
+        } else {
+            alert(`⚠️ Produto encontrado, mas falha ao enviar ao Telegram:\n${telegramJson.error ?? 'Erro desconhecido'}`);
         }
+
+    } catch {
+        alert('⚠️ Produto encontrado, mas não foi possível contactar o Telegram.');
+    }
+}
 
 //      await carregarBarcode(produto.cd_produto); 
 // O backend ainda não retorna cd_produto.
