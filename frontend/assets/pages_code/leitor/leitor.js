@@ -8,7 +8,7 @@ const detalheItem  = document.getElementById('detalhe-item');
 
 // ── Token JWT salvo no login ──
 function getHeaders() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token_procape');
     return {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

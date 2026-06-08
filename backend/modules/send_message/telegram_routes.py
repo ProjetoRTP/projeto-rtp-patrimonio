@@ -40,6 +40,7 @@ def send_photo_to_channel(photo_bytes, caption: str, parse_mode: str = "Markdown
 
 # Envia a mensagem de texto para o canal
 @telegram_bp.route("/send", methods=["POST"])
+@jwt_required()
 def send_message():
     try:
         data = request.get_json()
@@ -75,6 +76,7 @@ def send_message():
 
 #Envia a mensagem completa, dados do produto com o código de barras
 @telegram_bp.route("/send-product-tag/<int:product_id>", methods=["POST"])
+@jwt_required()
 def send_product_tag(product_id):
 
     try:
