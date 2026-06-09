@@ -9,7 +9,7 @@ from modules.maintenance.maintenance_routes import maintenances_bp
 from modules.movements.movement_routes import movements_bp
 from modules.history.history_routes import history_bp
 from modules.reports.routes_reports import reports_bp
-from modules.product.product_routes import product_bp
+from modules.barcode_image.barcode_routes import barcode_bp
 from modules.send_message.telegram_routes import telegram_bp
 from modules.barcode_image.barcode_image_routes import bar_up_bp
 
@@ -32,6 +32,6 @@ def register_routes(app):
     app.register_blueprint(movements_bp)
     app.register_blueprint(history_bp)
     app.register_blueprint(generics_bp)
-    app.register_blueprint(product_bp)
+    app.register_blueprint(barcode_bp)
     app.register_blueprint(telegram_bp)
     app.register_blueprint(bar_up_bp)

@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROCAPE - Equipamentos Impressoras</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../equipamentos/equipamentos.css">
+    <link rel="stylesheet" href="../relatorios/relatorios.css">
+        <link rel="shortcut icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="../navbar/navbar.css?v=4">
+</head>
+
+<body>
+    <div class="d-flex vh-100">
+        
+        <!-- Navbar -->
+        <div id="espaco-da-navbar"></div>
+
+        <!-- Lista de Impressoras -->
+        <main class="flex-grow-1 position-relative p-5 overflow-auto" style="background-color: #E6F4FB;">
+            
+            <div class="bg-white p-5 rounded-4 shadow-sm mx-auto" style="max-width: 900px; z-index: 1; position: relative;">
+                
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h2 style="color: #1D4587; font-weight: bold; margin: 0;">Impressoras</h2>
+                    
+                    <a href="../equipamentos/cadastro-equipamentos.html" class="btn btn-outline-danger rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-bold text-decoration-none">
+                        <i class="bi bi-plus-circle"></i> Cadastrar
+                    </a>
+                </div>
+
+                <!-- Menu de Filtros -->
+                <div class="border p-3 p-lg-2 px-lg-4 mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3" style="border-color: #1D4587 !important; border-radius: 30px !important;">
+
+                    <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3 gap-lg-4 w-100 w-lg-auto">
+                        <span class="fw-bold text-center text-lg-start" style="color: #1D4587;">FILTROS</span>
+
+                        <div class="d-flex flex-column flex-sm-row gap-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="color: #D32F2F; font-size: 0.85rem; font-weight: bold;">SETOR</span>
+                                <select id="filtro-setor" title="select" class="form-select form-select-sm rounded-pill text-danger w-100 w-sm-auto" style="border-color: #ffcccc; font-size: 0.8rem; min-width: 120px;">
+                                    <option value="">Selecione</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="color: #D32F2F; font-size: 0.85rem; font-weight: bold;">STATUS</span>
+                                <select id="filtro-status" title="select" class="form-select form-select-sm rounded-pill text-danger w-100 w-sm-auto" style="border-color: #ffcccc; font-size: 0.8rem; min-width: 120px;">
+                                    <option value="">Selecione</option>
+                                    <option value="ativo">Ativo</option>
+                                    <option value="emprestado">Emprestado</option>
+                                    <option value="em_manutencao">Em Manutenção</option>
+                                    <option value="inativo">Inativo</option>
+                                    <option value="descartado">Descartado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 w-100 w-lg-auto justify-content-end mt-2 mt-lg-0">
+                        <button id="btn-limpar" class="btn btn-sm btn-outline-primary rounded-pill px-3 flex-grow-1 flex-lg-grow-0" style="font-weight: bold; border-color: #1D4587; color: #1D4587; font-size: 0.8rem;">LIMPAR</button>
+                        <button id="btn-aplicar" class="btn btn-sm btn-primary rounded-pill px-3 flex-grow-1 flex-lg-grow-0" style="font-weight: bold; background-color: #1D4587; border: none; font-size: 0.8rem;">APLICAR</button>
+                    </div>
+                </div>
+
+
+                <table class="table table-borderless align-middle">
+                    
+                    <thead>
+                        <tr style="border-bottom: 2px solid #f1f1f1;">
+                            <th scope="col" style="color: #D32F2F; font-size: 0.85rem; font-weight: bold;" class="pb-3">PATRIMÔNIO</th>
+                            <th scope="col" class="text-end pb-3" style="color: #D32F2F; font-size: 0.85rem; font-weight: bold;">EDITAR</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="tbody-equipamentos">
+                        <tr>
+                            <td colspan="2" class="text-center text-muted py-4">
+                                Carregando impressoras...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <img src="../../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4" style="width: 70px; z-index: 0; opacity: 0.9;">
+            
+        </main>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./impressoras.js"></script>
+    <script src="../navbar/navbar.js"></script>
+
+</body></html>

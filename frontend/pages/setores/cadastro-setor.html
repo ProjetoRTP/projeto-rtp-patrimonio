@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROCAPE - Cadastrar Setor</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="./cadastro-setor.css">
+    <link rel="shortcut icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../navbar/navbar.css?v=4">
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Navbar -->
+        <div id="espaco-da-navbar"></div>
+
+        <main class="flex-grow-1 p-3 p-lg-5 position-relative d-flex justify-content-center align-items-start align-items-lg-center" style="background-color: #EAF2F8; overflow-y: auto; overflow-x: hidden;">
+
+            <div class="bg-white rounded-4 shadow-sm w-100 p-4 p-lg-5 mx-auto" style="max-width: 650px; z-index: 1;">
+
+                <h2 class="text-center text-sm-start" style="color: var(--azul-principal, #1D4587); font-weight: 700; margin-bottom: 30px;">Cadastro de Setor</h2>
+
+                <form id="form-cadastro-setor">
+
+                    <div class="mb-4">
+                        <label for="inp-nome-setor" class="form-label fw-bold" style="color: #1D4587;">Nome do Setor</label>
+                        <input type="text" class="form-control form-control-custom w-100" id="inp-nome-setor" placeholder="Nome do setor" required="">
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="inp-descricao-setor" class="form-label fw-bold" style="color: #1D4587;">Localização</label>
+                        <input type="text" class="form-control form-control-custom w-100" id="inp-descricao-setor" placeholder="Digite a localização do setor (Andar / Sala). " required="">
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <button type="button" id="btn-cancelar" class="btn btn-cancelar w-100">Cancelar</button>
+                        <button type="submit" id="btn-salvar-setor" class="btn btn-cadastrar w-100">Cadastrar</button>
+                        <button id="delete-btn" class="d-none align-self-end btn btn-cancelar px-2 py-2 rounded-3"><i class="bi bi-trash"></i></button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <img src="../../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block" style="width: 60px; z-index: 0; opacity: 0.8;">
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./cadastro-setor.js"></script>
+    <script src="../navbar/navbar.js"></script>
+
+
+</body></html>

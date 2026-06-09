@@ -1,0 +1,5 @@
+<!DOCTYPE html><html><body><script>
+    fetch('../navbar/navbar.html')
+        .then(res => res.text())
+        .then(html => console.log("FETCH:", html.substring(0, 200)));
+</script></body></html>

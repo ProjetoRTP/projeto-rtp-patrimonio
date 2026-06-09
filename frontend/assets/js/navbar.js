@@ -1,5 +1,5 @@
 function carregarNavbar() {
-    fetch('navbar.html')
+    fetch('../navbar/navbar.html')
         .then(resposta => resposta.text())
         .then(html => {
             document.getElementById('espaco-da-navbar').innerHTML = html;
@@ -12,6 +12,18 @@ function carregarNavbar() {
             if (perfilUsuario.toLowerCase() !== "admin") {
                 document.querySelectorAll('[data-role="admin-only"]').forEach(el => {
                     el.style.display = "none";
+                });
+            }
+
+            // Logout centralizado
+            const btnSair = document.getElementById('btn-sair');
+            if (btnSair) {
+                btnSair.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    if (confirm("Tem certeza que deseja sair do sistema?")) {
+                        sessionStorage.clear();
+                        window.location.href = btnSair.getAttribute('href');
+                    }
                 });
             }
 

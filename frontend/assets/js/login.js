@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
           sessionStorage.setItem("token_procape", dados.access_token); // ← era dados.token
           sessionStorage.setItem("usuario_nome", dados.nome);
           sessionStorage.setItem("usuario_perfil", dados.perfil);
-          window.location.href = "pages/menu_principal.html";
+          window.location.href = "pages/dashboard/menu_principal.html";
         } else {
           alert(`Erro ao acessar: ${dados.mensagem}`);
         }

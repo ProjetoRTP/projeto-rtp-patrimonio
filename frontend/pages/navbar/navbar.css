@@ -1,0 +1,168 @@
+/* ══════════════════════════════════════════════
+   SIDEBAR VERTICAL (Esquerda)
+══════════════════════════════════════════════ */
+
+.navbar-principal {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1D4587 0%, #022154 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 24px 0 20px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+/* ── inner wrapper ── */
+.navbar-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* ── Logo ── */
+.navbar-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px 28px;
+    flex-shrink: 0;
+}
+
+.navbar-logo img {
+    width: 52px;
+    height: auto;
+}
+
+.navbar-logo::after {
+    display: none; /* remove separador horizontal */
+}
+
+/* ── Links ── */
+.navbar-links {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 2px;
+    padding: 0 12px;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.80);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.nav-link::after {
+    display: none; /* remove separador vertical */
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Item com submenu ── */
+.nav-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-link[data-alvo] {
+    padding-right: 14px;
+}
+
+.nav-link-arrow {
+    margin-left: auto;
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-item:hover .nav-link-arrow {
+    transform: rotate(180deg);
+}
+
+/* Drawer vertical (submenu) */
+.nav-drawer {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+    padding-left: 12px;
+    gap: 2px;
+}
+
+.nav-drawer.show {
+    max-height: 200px;
+    opacity: 1;
+}
+
+.nav-drawer .sidebar-sublink {
+    display: block;
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.70);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.nav-drawer .sidebar-sublink:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.10);
+}
+
+/* ── Sair (bottom) ── */
+.navbar-sair {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 26px;
+    margin-top: auto;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 16px;
+    transition: color 0.15s;
+}
+
+.navbar-sair:hover {
+    color: #ffffff;
+}
+
+.navbar-sair svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════
+   AJUSTE DO LAYOUT DAS PÁGINAS
+   Todas as páginas precisam de margin-left = 220px
+══════════════════════════════════════════════ */
+.page-with-sidebar {
+    margin-left: 220px;
+    min-height: 100vh;
+}

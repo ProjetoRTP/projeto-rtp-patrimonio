@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROCAPE - Cadastro de Equipamentos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/cadastro.css">
+    <link rel="shortcut icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../navbar/navbar.css?v=4">
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Navbar -->
+        <div id="espaco-da-navbar"></div>
+
+        <!-- Cadastro de Equipamentos -->
+        <main class="flex-grow-1 position-relative p-3 p-lg-5" style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
+
+            <div class="bg-white p-4 p-lg-5 rounded-4 shadow-sm m-auto w-100" style="max-width: 900px; z-index: 1; position: relative;">
+
+                <h2 class="text-center text-lg-start" style="color: #1D4587; font-weight: bold; margin-bottom: 40px;">
+                    Cadastro de Equipamentos</h2>
+
+                <form>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="label-azul mb-0 fs-5">Tipo:</label>
+                                <select id="tipoEquipamento" class="form-select input-vermelho flex-grow-1 w-100" style="background-color: #ffeaea; color: #D32F2F;">
+                                    <option value="" selected="">Selecione</option>
+                                    <option value="1">Computador</option>
+                                    <option value="2">Impressora</option>
+                                    <option value="3">Genérico</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="label-azul mb-0 fs-5">Setor:</label>
+
+                                <select id="setor" class="form-select input-vermelho">
+                                    <option value="">Selecione um setor</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="label-azul mb-0 fs-5">Subsetor:</label>
+
+                                <select id="subsetor" class="form-select input-vermelho" disabled="">
+                                    <option value="">Selecione um subsetor</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        
+            <!-- Select status do equipamento -->
+            <div class="col-md-6" id="campo-status" style="display:none;">
+                <div class="d-flex align-items-center gap-3">
+                    <label class="label-azul mb-0 fs-5">Status:</label>
+                    <select id="status" class="form-select input-vermelho">
+                        <option value="ativo">Ativo</option>
+                        <option value="emprestado">Emprestado</option>
+                        <option value="em_manutencao">Em Manutenção</option>
+                        <option value="inativo">Inativo</option>
+                        <option value="descartado">Descartado</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-6" id="campo-valor">
+                <div class="d-flex align-items-center gap-3">
+                    <label class="label-azul mb-0 fs-5">Valor:</label>
+                    <input id="valor-equipamento" type="text" class="form-control input-vermelho" placeholder="R$ 0,00">
+                </div>
+            </div>
+
+            <div class="col-md-6" id="campo-data-aquisicao">
+                <div class="d-flex align-items-center gap-3">
+                    <label class="label-azul mb-0 fs-5">Data de aquisição:</label>
+                    <input id="data_aquisicao" type="date" class="form-control input-vermelho w-100">
+                </div>
+            </div>
+                        
+
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- CAMPOS COMPUTADOR -->
+                        <div id="campos-computador" class="row g-4 d-none">
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Tombamento</label>
+                                <input id="tombamento-computador" type="text" class="form-control input-vermelho w-100" placeholder="00000.00000.000-00">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Sistema operacional</label>
+                                <input id="sistema" type="text" class="form-control input-vermelho w-100" placeholder="Sistema">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Memória interna</label>
+                                <input id="memoria-interna" type="text" class="form-control input-vermelho w-100" placeholder="Memória">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Memória RAM</label>
+                                <input id="memoria-ram" type="text" class="form-control input-vermelho w-100" placeholder="Memória RAM">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Armazenamento</label>
+                                <input id="armazenamento" type="text" class="form-control input-vermelho w-100" placeholder="Armazenamento">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Número IP</label>
+                                <input id="numero-ip" type="text" class="form-control input-vermelho w-100" placeholder="Número">
+                            </div>
+
+                            <!-- Data de aquisição movida para seção geral -->
+
+                            <div class="col-12 mt-4">
+                                <label class="label-azul d-block">Observações</label>
+                                <textarea id="observacoes" class="form-control input-vermelho w-100" rows="4" placeholder="Detalhes adicionais"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- CAMPOS IMPRESSORA -->
+                       <div id="campos-impressora" class="row g-4 d-none">
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Tombamento</label>
+                                <input id="tombamento-impressora" type="text" class="form-control input-vermelho w-100" placeholder="00000.00000.000-00">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Modelo</label>
+                                <input id="modelo" type="text" class="form-control input-vermelho" placeholder="Ex: HP LaserJet">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Modelo</label>
+                                <select id="tipo" class="form-select input-vermelho">
+                                    <option value="">Selecione...</option>
+                                    <option value="laser">Laser</option>
+                                    <option value="jato de tinta">Jato de tinta</option>
+                                    <option value="termica">Térmica</option>
+                                    <option value="plotter">Plotter</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Coloração</label>
+                                <select id="coloracao" class="form-select input-vermelho">
+                                    <option value="">Selecione...</option>
+                                    <option value="monocromatica">Monocromática</option>
+                                    <option value="colorida">Colorida</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Conectividade</label>
+                                <input id="conectividade" type="text" class="form-control input-vermelho" placeholder="USB / Wi-Fi / Rede">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Endereço IP</label>
+                                <input id="endereco-ip" type="text" class="form-control input-vermelho">
+                            </div>
+
+                            <!-- Data de aquisição movida para seção geral -->
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Insumo principal</label>
+                                <input id="insumo" type="text" class="form-control input-vermelho" placeholder="Toner / Tinta">
+                            </div>
+
+                        </div>
+
+                        <!-- CAMPOS GENÉRICO -->
+                        <div id="campos-generico" class="row g-4 d-none">
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Tombamento</label>
+                                <input id="tombamento-generico" type="text" class="form-control input-vermelho w-100" placeholder="00000.00000.000-00">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul">Tipo do Equipamento</label>
+
+                                <!-- Idealmente, esse select será preenchido via API (tabela tipo_generico) assim como os setores -->
+                                <select id="tipo-generico" class="form-select input-vermelho">
+                                    <option value="">Selecione um tipo</option>
+                                </select>
+                            </div>
+
+                            <!-- Container para os atributos dinâmicos do banco de dados -->
+                            <div id="container-atributos-genericos" class="col-12 row g-4 m-0 p-0"></div>
+
+                            <div class="col-md-6">
+                                <label class="label-azul d-block">Número IP (Opcional)</label>
+                                <input id="ip-generico" type="text" class="form-control input-vermelho w-100" placeholder="Número IP se aplicável">
+                            </div>
+
+                            <!-- Data de aquisição movida para seção geral -->
+
+                            <div class="col-12 mt-4">
+                                <label class="label-azul d-block">Observações</label>
+                                <textarea id="observacao-generico" class="form-control input-vermelho w-100" rows="4" placeholder="Detalhes adicionais do equipamento genérico"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- BOTÕES -->
+                    <div class="col-12 d-flex flex-column flex-sm-row justify-content-center gap-3 gap-sm-4 mt-5 mb-4">
+                        <a id="btnCancelarLink" class="text-decoration-none text-center">
+                            <button type="button" class="btn text-white fw-bold w-100" style="background-color: #bd4a4a; min-width: 140px; border-radius: 6px;">
+                                Cancelar
+                            </button>
+                        </a>
+
+                        <button id="btnSubmit" type="submit" class="btn text-white fw-bold " style="background-color: #214383; min-width: 140px !important; border-radius: 6px;">
+                            Cadastrar
+                        </button>
+                       
+                    </div>
+
+            </form></div>
+            
+
+    </main></div>
+
+    <img src="../../assets/imagens/logo.png" alt="Logo Coração" class="position-absolute bottom-0 end-0 mb-4 me-4 d-none d-lg-block" style="width: 70px; z-index: 0; opacity: 0.9;">
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="./cadastro-equipamentos.js?v=3"></script>
+
+    <script src="../navbar/navbar.js"></script>
+
+
+
+</body></html>

@@ -75,25 +75,54 @@ def send_message():
 
 
 #Envia a mensagem completa, dados do produto com o código de barras
-@telegram_bp.route("/send-product-tag/<int:product_id>", methods=["POST"])
+@telegram_bp.route("/send-equipment-tag/<int:equip_id>", methods=["POST"])
 @jwt_required()
-def send_product_tag(product_id):
+def send_equipment_tag(equip_id):
 
     try:
+        from modules.equipments.services.generic_equip_service import GenericService
+        from modules.equipments.services.generic_type_service import GenericTypeService
+        from sqlalchemy import select, func
+        from database.connection import engine, meta
 
-        product = repository.select_product_by_id(product_id)
+        service = GenericService()
+        equipment = service.get_by_id(equip_id)
 
-        if not product:
+        if not equipment:
             return jsonify({
                 "success": False,
-                "error": "Produto não encontrado."
+                "error": "Equipamento não encontrado."
             }), 404
 
-        product_data = product[0]
-        product_name = product_data["ds_produto"]
-        stock = product_data["qt_estoque_atual"]
+        num_patrimonio = equipment.get("num_patrimonio", "N/A")
+        setor_nome = equipment.get("setor_nome", "N/A")
+        subsetor_nome = equipment.get("subsetor_nome", "N/A")
+        tipo_id = equipment.get("tipo_id")
 
-        barcode_value = id_to_barcode(product_id)
+        tipo_nome = "Desconhecido"
+        ativos = 0
+        inativos = 0
+
+        if tipo_id:
+            # Obter nome do modelo
+            tipo = GenericTypeService().get_by_id(tipo_id)
+            if tipo:
+                tipo_nome = tipo.get("nome", "Desconhecido")
+            
+            # Consultar quantos equipamentos deste modelo existem
+            equip_table = meta.tables['equipamentos']
+            gen_table = meta.tables['equipamentos_generico']
+            
+            with engine.connect() as conn:
+                query = select(equip_table.c.status, func.count(equip_table.c.id)).select_from(
+                    equip_table.join(gen_table, equip_table.c.id == gen_table.c.id)
+                ).where(gen_table.c.tipo_id == tipo_id).group_by(equip_table.c.status)
+                
+                counts = dict(conn.execute(query).fetchall())
+                ativos = counts.get('ativo', 0)
+                inativos = counts.get('desativado', 0) + counts.get('inativo', 0)
+
+        barcode_value = id_to_barcode(equip_id)
 
         buffer = BytesIO()
 
@@ -107,10 +136,14 @@ def send_product_tag(product_id):
 
         caption = (
             f"📦 *Etiqueta de Patrimônio*\n\n"
-            f"🆔 *ID:* `{product_id}`\n"
-            f"📌 *Produto:* {product_name}\n"
-            f"📦 *Estoque Atual:* {stock}\n"
-            f"🏷️ *Código:* `{barcode_value}`"
+            f"🆔 *ID:* `{equip_id}`\n"
+            f"📌 *Patrimônio:* {num_patrimonio}\n"
+            f"🏷️ *Modelo:* {tipo_nome}\n"
+            f"🏢 *Setor:* {setor_nome} / {subsetor_nome}\n"
+            f"📊 *Estatísticas do Modelo:*\n"
+            f"   ✅ *Ativos:* {ativos}\n"
+            f"   ❌ *Inativos/Desativados:* {inativos}\n"
+            f"📷 *Código:* `{barcode_value}`"
         )
 
         result = send_photo_to_channel(buffer, caption)
@@ -123,13 +156,14 @@ def send_product_tag(product_id):
                 "message_id": result["result"]["message_id"]
             }), 200
 
+        print(f"Erro na API do Telegram: {result}")
         return jsonify({
             "success": False,
             "error": result.get("description")
         }), 500
 
     except Exception as e:
-
+        print(f"Erro interno ao enviar para o Telegram: {str(e)}")
         return jsonify({
             "success": False,
             "error": "Erro interno do servidor."
