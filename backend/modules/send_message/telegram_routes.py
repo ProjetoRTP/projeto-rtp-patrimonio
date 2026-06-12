@@ -15,7 +15,6 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
 CHANNEL_ID = os.getenv("TELEGRAM_CHANNEL_ID")
 
-
 # Auxiliar para envio de mensagem de texto
 def send_message_to_channel(text: str, parse_mode: str = "Markdown") -> dict:
     response = requests.post(f"{TELEGRAM_API}/sendMessage", json={
@@ -80,13 +79,19 @@ def send_message():
 def send_equipment_tag(equip_id):
 
     try:
-        from modules.equipments.services.generic_equip_service import GenericService
         from modules.equipments.services.generic_type_service import GenericTypeService
-        from sqlalchemy import select, func
+        from sqlalchemy import select, func, text
         from database.connection import engine, meta
 
-        service = GenericService()
-        equipment = service.get_by_id(equip_id)
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT e.*, s.nome as setor_nome, sub.nome as subsetor_nome
+                FROM equipamentos e
+                LEFT JOIN setores s ON e.setor_id = s.id
+                LEFT JOIN subsetores sub ON e.subsetor_id = sub.id
+                WHERE e.id = :id AND e.status != 'inativo'
+            """), {"id": equip_id}).fetchone()
+            equipment = dict(result._mapping) if result else None
 
         if not equipment:
             return jsonify({
@@ -95,29 +100,34 @@ def send_equipment_tag(equip_id):
             }), 404
 
         num_patrimonio = equipment.get("num_patrimonio", "N/A")
-        setor_nome = equipment.get("setor_nome", "N/A")
-        subsetor_nome = equipment.get("subsetor_nome", "N/A")
+        setor_nome = equipment.get("setor_nome") or "N/A"
+        subsetor_nome = equipment.get("subsetor_nome") or "N/A"
         tipo_id = equipment.get("tipo_id")
 
-        tipo_nome = "Desconhecido"
+        tipo_map = {
+            "computador": "Computador",
+            "impressora": "Impressora",
+            "periferico": "Periférico",
+            "generico": "Genérico"
+        }
+        tipo_nome = tipo_map.get(equipment.get("tipo"), "Desconhecido")
+
         ativos = 0
         inativos = 0
 
         if tipo_id:
-            # Obter nome do modelo
             tipo = GenericTypeService().get_by_id(tipo_id)
             if tipo:
-                tipo_nome = tipo.get("nome", "Desconhecido")
-            
-            # Consultar quantos equipamentos deste modelo existem
+                tipo_nome = tipo.get("nome", tipo_nome)
+
             equip_table = meta.tables['equipamentos']
             gen_table = meta.tables['equipamentos_generico']
-            
+
             with engine.connect() as conn:
                 query = select(equip_table.c.status, func.count(equip_table.c.id)).select_from(
                     equip_table.join(gen_table, equip_table.c.id == gen_table.c.id)
                 ).where(gen_table.c.tipo_id == tipo_id).group_by(equip_table.c.status)
-                
+
                 counts = dict(conn.execute(query).fetchall())
                 ativos = counts.get('ativo', 0)
                 inativos = counts.get('desativado', 0) + counts.get('inativo', 0)
@@ -125,13 +135,7 @@ def send_equipment_tag(equip_id):
         barcode_value = id_to_barcode(equip_id)
 
         buffer = BytesIO()
-
-        barcode.get(
-            "code128",
-            barcode_value,
-            writer=ImageWriter()
-        ).write(buffer)
-
+        barcode.get("code128", barcode_value, writer=ImageWriter()).write(buffer)
         buffer.seek(0)
 
         caption = (
@@ -149,7 +153,6 @@ def send_equipment_tag(equip_id):
         result = send_photo_to_channel(buffer, caption)
 
         if result.get("ok"):
-
             return jsonify({
                 "success": True,
                 "message": "Etiqueta enviada com sucesso.",
@@ -163,7 +166,7 @@ def send_equipment_tag(equip_id):
         }), 500
 
     except Exception as e:
-        print(f"Erro interno ao enviar para o Telegram: {str(e)}")
+        print(f"Erro interno ao enviar para o Telegram: {str(e)}", flush=True)
         return jsonify({
             "success": False,
             "error": "Erro interno do servidor."

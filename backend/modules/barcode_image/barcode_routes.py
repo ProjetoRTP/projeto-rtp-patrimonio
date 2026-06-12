@@ -5,6 +5,8 @@ from flask import Blueprint, jsonify, send_file
 from io import BytesIO
 from utils.barcode import barcode_to_id, id_to_barcode
 from modules.equipments.classes.equipments import Equipment
+from sqlalchemy import text
+from database.connection import engine
 
 barcode_bp = Blueprint("barcode", __name__, url_prefix='/barcode')
 
@@ -17,9 +19,16 @@ def get_equipment_by_barcode(barcode_value):
             return jsonify({"error": "Código de barras inválido."}), 400
 
         equip_id = barcode_to_id(barcode_value)
-        
-        service = Equipment()
-        equipment = service.get_by_id(equip_id)
+
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT e.*, s.nome as setor_nome, sub.nome as subsetor_nome
+                FROM equipamentos e
+                LEFT JOIN setores s ON e.setor_id = s.id
+                LEFT JOIN subsetores sub ON e.subsetor_id = sub.id
+                WHERE e.id = :id AND e.status != 'inativo'
+            """), {"id": equip_id}).fetchone()
+            equipment = dict(result._mapping) if result else None
 
         if not equipment:
             return jsonify({"error": "Equipamento não encontrado."}), 404

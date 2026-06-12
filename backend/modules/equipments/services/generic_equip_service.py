@@ -14,6 +14,7 @@ class GenericService(EquipmentService):
     
     def get_by_id(self, id):
         data = super().get_by_id(id)
+        print(f"[SUPER] data={data}", flush=True)
         
         if not data:
             return None

@@ -305,33 +305,6 @@ CREATE TABLE IF NOT EXISTS relatorios (
     FOREIGN KEY (setor_id)   REFERENCES setores(id)
 );
 
--- Cria tabela de produtos
-CREATE TABLE PRODUTO (
-    CD_PRODUTO  INT PRIMARY KEY AUTO_INCREMENT,
-    DS_PRODUTO  VARCHAR(100) NOT NULL,
-    CD_ESPECIE  INT NOT NULL
-);
-
--- Cria tabela de estoque por produto
-CREATE TABLE EST_PRO (
-    CD_PRODUTO        INT NOT NULL,
-    CD_ESTOQUE        INT NOT NULL,
-    QT_ESTOQUE_ATUAL  INT DEFAULT 0,
-    PRIMARY KEY (CD_PRODUTO, CD_ESTOQUE),
-    FOREIGN KEY (CD_PRODUTO) REFERENCES PRODUTO(CD_PRODUTO)
-);
-
--- Dados de teste
-INSERT INTO PRODUTO VALUES (1, 'Notebook Dell', 10);
-INSERT INTO PRODUTO VALUES (2, 'Mouse Logitech', 10);
-INSERT INTO PRODUTO VALUES (3, 'Teclado Mecânico', 10);
-INSERT INTO PRODUTO VALUES (4, 'Monitor LG 24"', 99);
-
-INSERT INTO EST_PRO VALUES (1, 1, 15);
-INSERT INTO EST_PRO VALUES (2, 1, 8);
-INSERT INTO EST_PRO VALUES (3, 1, 3);
-INSERT INTO EST_PRO VALUES (4, 1, 2);
-
 
 -- =============================================================
 -- ÍNDICES
