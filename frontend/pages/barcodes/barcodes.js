@@ -58,7 +58,6 @@ async function carregarEquipamentos() {
 function renderizarPagina(pagina) {
     paginaAtual = pagina;
     const tbody = document.getElementById('tbody-equipamentos');
-    const checkTodos = document.getElementById('check-todos');
     const inicio = (pagina - 1) * POR_PAGINA;
     const fatia = todosEquipamentos.slice(inicio, inicio + POR_PAGINA);
 
@@ -74,26 +73,21 @@ function renderizarPagina(pagina) {
         tr.dataset.id = eq.id;
 
         tr.innerHTML = `
-            <td><input type="checkbox" class="check-equip" data-id="${eq.id}"></td>
-            <td style="text-align:center;">${eq._codigo}</td>
-            <td style="text-align:center;">${eq.num_patrimonio ?? '-'}</td>
-            <td style="font-size:0.78rem; color:#555;">${eq._tipo}</td>
-            <td style="font-size:0.78rem; color:#555;">${eq.setor_nome ?? eq.setor ?? '-'}</td>
+            <td style="text-align: center;"><input type="radio" name="equip-selecionado" class="check-equip" data-id="${eq.id}"></td>
+            <td style="font-size:0.78rem; color:#555; text-align:center;">${eq._codigo}</td>
+            <td style="font-size:0.78rem; color:#555; text-align:center;">${eq.num_patrimonio ?? '-'}</td>
+            <td style="font-size:0.78rem; color:#555; text-align:center">${eq._tipo}</td>
+            <td style="font-size:0.78rem; color:#555; text-align:center;">${eq.setor_nome ?? eq.setor ?? '-'}</td>
         `;
 
         // Clique na linha → carrega barcode
         tr.addEventListener('click', e => {
-            if (e.target.type === 'checkbox') return;
+            const radio = tr.querySelector('input[type="radio"]');
+            if (e.target !== radio) radio.checked = true;
             selecionarEquipamento(eq, tr);
         });
 
         tbody.appendChild(tr);
-    });
-
-    // checkbox "todos"
-    checkTodos.checked = false;
-    checkTodos.addEventListener('change', () => {
-        tbody.querySelectorAll('.check-equip').forEach(c => c.checked = checkTodos.checked);
     });
 
     renderizarPaginacao();

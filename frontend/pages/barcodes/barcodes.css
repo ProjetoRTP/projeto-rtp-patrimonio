@@ -60,8 +60,8 @@
     vertical-align: middle;
 }
 
-.bc-col-tabela tbody tr.selecionado {
-    background-color: #eaf1fb;
+.bc-col-tabela tbody tr.selecionado td {
+    background-color: #eefaff !important;
 }
 
 .bc-col-tabela tbody tr:hover {
