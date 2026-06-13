@@ -1,9 +1,24 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const token = sessionStorage.getItem("token_procape");
+
+    if (!token) {
+        alert("Acesso negado. Por favor, inicie sessão.");
+        window.location.href = "../../index.html";
+        return;
+    }
+
+    configurarCheckboxes();
+    configurarSelecaoLinha();
+    carregarProdutos(1);
+});
+
 const API_URL = 'http://localhost:5000';
 
-const checkTodos = document.getElementById('check-todos');
 const tbody = document.getElementById('tbody-produtos');
 const barcodeArea = document.getElementById('barcode-area');
 const btnImprimir = document.getElementById('btn-imprimir');
+
+
 
 // ── Estado da paginação ──
 const PRODUTOS_POR_PAGINA = 100;
@@ -63,7 +78,7 @@ async function carregarProdutos(pagina = 1) {
         tr.dataset.estoque = produto.qt_estoque_atual ?? '-';
 
         tr.innerHTML = `
-            <td class="col-check"><input type="checkbox"></td>
+            <td class="col-check"><input  type="radio" name="produto-selecionado"></td>
             <td>${produto.cd_produto}</td>
             <td>${produto.ds_produto}</td>
             <td>${produto.qt_estoque_atual ?? '-'}</td>
@@ -74,6 +89,8 @@ async function carregarProdutos(pagina = 1) {
     atualizarPainel();
     renderizarPaginacao();
     } 
+
+
 
 
 // ══════════════════════════════════════
@@ -174,24 +191,11 @@ function criarEticencias() {
 
 
 // ══════════════════════════════════════
-// 3. CHECKBOXES
+// 3. RADIOS
 // ══════════════════════════════════════
 function configurarCheckboxes() {
-    checkTodos.addEventListener('change', () => {
-        tbody.querySelectorAll('input[type="checkbox"]')
-            .forEach(c => c.checked = checkTodos.checked);
-        atualizarPainel();
-    });
-
     tbody.addEventListener('change', (e) => {
-        if (e.target.type !== 'checkbox') return;
-
-        const checks = [...tbody.querySelectorAll('input[type="checkbox"]')];
-        const totalMarcados = checks.filter(c => c.checked).length;
-
-        checkTodos.checked       = totalMarcados === checks.length;
-        checkTodos.indeterminate = totalMarcados > 0 && totalMarcados < checks.length;
-
+        if (e.target.type !== 'radio') return;
         atualizarPainel();
     });
 }
@@ -205,10 +209,10 @@ function configurarSelecaoLinha() {
         const tr = e.target.closest('tr');
         if (!tr) return;
 
-        const checkbox = tr.querySelector('input[type="checkbox"]');
-        if (e.target !== checkbox) {
-            checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+        const radio = tr.querySelector('input[type="radio"]');
+        if (e.target !== radio) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
         }
     });
 }
@@ -218,7 +222,7 @@ function configurarSelecaoLinha() {
 // 5. PAINEL DIREITO
 // ══════════════════════════════════════
 async function atualizarPainel() {
-    const selecionados = [...tbody.querySelectorAll('input[type="checkbox"]:checked')]
+    const selecionados = [...tbody.querySelectorAll('input[type="radio"]:checked')]
         .map(c => c.closest('tr'));
 
     if (selecionados.length === 0) {
@@ -271,11 +275,3 @@ async function carregarBarcode(id) {
             </button>`;
     }
 }
-
-
-// ══════════════════════════════════════
-// 6. INICIALIZA
-// ══════════════════════════════════════
-configurarCheckboxes();
-configurarSelecaoLinha();
-carregarProdutos(1);

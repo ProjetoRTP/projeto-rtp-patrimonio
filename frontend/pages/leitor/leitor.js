@@ -1,3 +1,13 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const token = sessionStorage.getItem("token_procape");
+
+    if (!token) {
+        alert("Acesso negado. Por favor, inicie sessão.");
+        window.location.href = "../../index.html";
+        return;
+    }
+});
+
 const API_URL = 'http://localhost:5000';
 
 const inputScanner = document.getElementById('input-scanner');
@@ -5,6 +15,7 @@ const btnBuscar    = document.getElementById('btn-buscar');
 const detalheItem  = document.getElementById('detalhe-item');
 const barcodeArea  = document.getElementById('barcode-area');
 const btnImprimir  = document.getElementById('btn-imprimir');
+
 
 // ── Token JWT salvo no login ──
 function getHeaders() {

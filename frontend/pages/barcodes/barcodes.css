@@ -1,22 +1,5 @@
 /* ── barcodes.css ── */
 
-/* Card principal */
-.card-bc {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 32px 36px;
-    box-shadow: 0 4px 24px rgba(29, 69, 135, 0.08);
-    max-width: 980px;
-    margin: 0 auto;
-}
-
-.bc-titulo {
-    color: #1D4587;
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-}
-
 /* Layout lado a lado */
 .bc-layout {
     display: flex;
@@ -40,6 +23,53 @@
     gap: 12px;
 }
 
+
+
+/* Estilização da Tabela */
+.tabela-padrao th {
+    color: var(--vermelho-principal, #B44848);
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding: 10px 15px !important;
+}
+
+.tabela-padrao td {
+    color: var(--azul-principal, #1D4587);
+    font-weight: 500;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 12px 15px !important;
+}
+
+
+
+/* Cabeçalho da tabela — padrão movimentações */
+.bc-col-tabela thead th {
+    color: #D32F2F;
+    font-weight: bold;
+}
+
+/* Linhas da tabela */
+.bc-col-tabela tbody tr {
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.bc-col-tabela tbody tr td {
+    color: #333;
+    vertical-align: middle;
+}
+
+.bc-col-tabela tbody tr.selecionado {
+    background-color: #eaf1fb;
+}
+
+.bc-col-tabela tbody tr:hover {
+    background-color: #f5f9ff;
+    cursor: pointer;
+}
+
+/* Label barcode */
 .bc-label-barcode {
     font-size: 0.78rem;
     font-weight: 700;
@@ -49,6 +79,7 @@
     letter-spacing: 0.04em;
 }
 
+/* Caixa do barcode */
 .bc-barcode-box {
     width: 100%;
     min-height: 160px;
@@ -67,80 +98,7 @@
     object-fit: contain;
 }
 
-/* Botão imprimir */
-.bc-btn-imprimir {
-    background: #1D4587;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 28px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: background 0.15s;
-    width: 100%;
-}
-
-.bc-btn-imprimir:hover {
-    background: #163a72;
-}
-
-/* Tabela */
-.bc-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-}
-
-.bc-table thead tr {
-    border-bottom: 2px solid #f0f0f0;
-}
-
-.bc-table th {
-    color: #D32F2F;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 0 8px 12px;
-    text-align: left;
-}
-
-.bc-table th:first-child {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-}
-
-.bc-table td {
-    padding: 10px 8px;
-    color: #333;
-    border-bottom: 1px solid #f5f5f5;
-    vertical-align: middle;
-}
-
-.bc-table td:nth-child(2),
-.bc-table td:nth-child(3) {
-    color: #1D4587;
-    font-weight: 500;
-    text-align: center;
-}
-
-.bc-table tbody tr {
-    cursor: pointer;
-    transition: background 0.1s;
-}
-
-.bc-table tbody tr:hover {
-    background: #f0f6fc;
-}
-
-.bc-table tbody tr.selecionado {
-    background: #daeaf8;
-}
-
-/* Paginação */
+/* Paginação — padrão movimentações */
 .bc-paginacao {
     display: flex;
     justify-content: center;
@@ -181,4 +139,15 @@
 .bc-paginacao button:disabled {
     opacity: 0.35;
     cursor: not-allowed;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .bc-layout {
+        flex-direction: column;
+    }
+
+    .bc-col-barcode {
+        width: 100%;
+    }
 }

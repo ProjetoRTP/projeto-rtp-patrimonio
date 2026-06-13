@@ -34,7 +34,7 @@ main {
     /* Adiciona respiro nas bordas para o card não colar no navegador */
     padding: 40px 20px;
     background-color: #EAF2F8;
-    overflow-y: auto;
+    overflow-y: auto !important;
 }
 
 main.login-main {
