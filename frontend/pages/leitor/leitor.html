@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PROCAPE - Leitor de Código de Barras</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- Design System CSS -->
@@ -23,14 +25,15 @@
     <link rel="shortcut icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
 </head>
 
-<body style="margin">
+<body style="margin: 0;">
     <div class="page-wrapper">
 
         <!-- Navbar -->
         <div id="espaco-da-navbar"></div>
 
         <!-- Conteúdo -->
-        <div class="page-content flex-grow-1 position-relative p-3 p-lg-5" style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
+        <div class="page-content flex-grow-1 position-relative p-3 p-lg-5"
+            style="background-color: #E6F4FB; overflow-y: auto; overflow-x: hidden;">
             <div class="card-principal p-4 p-lg-5 rounded-4 shadow-sm mx-auto" style="max-width: 900px;">
 
                 <h2>Leitor de Código de Barras</h2>
@@ -44,8 +47,9 @@
                         <div class="leitor-grupo">
                             <label class="leitor-label">Digite ou conecte o scanner</label>
                             <div class="d-flex gap-3 align-items-center">
-                                <input type="text" class="input-vermelho" id="input-scanner" placeholder="Receber Código" style="max-width: 260px;">
-                                <button class="btn-perigo" id="btn-buscar" disabled="">
+                                <input type="text" class="input-vermelho" id="input-scanner"
+                                    placeholder="Receber Código" style="max-width: 260px;">
+                                <button type="button" class="btn-perigo" id="btn-buscar" disabled="">
                                     BUSCAR PRODUTO
                                 </button>
                             </div>
@@ -71,13 +75,35 @@
                         <div class="text-center mt-2">
                             <button class="btn-primario" id="btn-imprimir" style="display:none;">
                                 IMPRIMIR
-                            </button> 
+                            </button>
                         </div>
 
                     </div>
                 </div>
+            </div>
+
         </div>
 
+        <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmacaoModalLabel">Confirmação de Dados</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Revise os dados antes de enviar para o Telegram:</p>
+                        <div id="dados-confirmacao"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btn-confirmar-envio">Confirmar e
+                            Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -86,4 +112,5 @@
 
 
 </body>
+
 </html>
