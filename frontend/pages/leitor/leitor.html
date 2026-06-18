@@ -54,57 +54,46 @@
                                 </button>
                             </div>
                         </div>
-
                     </div>
+
+                    <hr class="leitor-divisoria">
 
                     <!-- ── Coluna direita: detalhes + código de barras ── -->
-                    <div class="col-detalhe">
+                    <div class="resultado-container">
 
-                        <p class="titulo-secao">DETALHES DO ITEM</p>
-                        <div class="detalhe-info" id="detalhe-item">
-                            <span style="color:#adb5bd; font-size:0.85rem;">
-                                Nenhum produto buscado ainda.
-                            </span>
+                        <div class="detalhes-item">
+
+                            <p class="titulo-secao">DETALHES DO ITEM</p>
+                            <div class="detalhe-info" id="detalhe-item">
+                                <span style="color:#adb5bd; font-size:0.85rem;">
+                                    Nenhum produto buscado ainda.
+                                </span>
+                            </div>
                         </div>
-
-                        <hr class="detalhe-divisoria">
-
-                        <p class="titulo-secao">CÓDIGO DE BARRAS</p>
-                        <div id="barcode-area" class="barcode-container"></div>
-
-                        <div class="text-center mt-2">
-                            <button class="btn-primario" id="btn-imprimir" style="display:none;">
-                                IMPRIMIR
-                            </button>
+                        <div class="codigo-barras">
+                            <p class="titulo-secao">CÓDIGO DE BARRAS</p>
+                            <div id="barcode-area" class="barcode-container"></div>
                         </div>
-
-                    </div>
+                <hr class="detalhe-divisoria">
+                        <div class="">
+                            <div class=" mt-2" style="text-align: left !important;">
+                                <button class="btn-primario" id="btn-imprimir" disabled>
+                                    IMPRIMIR
+                                </button>
+                            </div>
+                            <div class="text-center mt-2">
+                                <button class="btn-primario" id="btn-telegram" disabled>
+                                    ENVIAR P/ TELEGRAM
+                                </button>
+                            </div>
+                        </div>
                 </div>
+                
             </div>
 
-        </div>
-
-        <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmacaoModalLabel">Envio ao Telegram</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Deseja enviar os seguintes dados ao grupo do Telegram:</p>
-                        <div id="dados-confirmacao"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não Enviar</button>
-                        <button type="button" class="btn btn-primary" id="btn-confirmar-envio">
-                            Enviar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>  
     </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../navbar/navbar.js"></script>

@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════
-   leitor.css — Página Leitor de Código de Barras
+leitor.css — Página Leitor de Código de Barras
    ══════════════════════════════════════ */
 
 .page-wrapper {
@@ -31,21 +31,40 @@
 /* ── Layout: conteúdo à esquerda, painel à direita ── */
 .layout-leitor {
     display: flex;
-    gap: 32px;
+    flex-direction: column;
+    gap: 16px;
+}
+.resultado-container {
+    display: flex;
+    gap: 16px;
+}
+
+.resultado-container {
+    display: flex;
+    gap: 16px;
     align-items: flex-start;
 }
 
+.detalhes-item {
+    flex: 0 1 240px;
+}
+
+.codigo-barras {
+    flex: 0 1 190px;
+}
+
 .col-leitor {
-    flex: 1;
-    min-width: 0;
+    width: 100%;
 }
 
 .col-detalhe {
-    width: 240px;
-    flex-shrink: 0;
-    border-left: 1px solid #f0f0f0;
-    padding-left: 28px;
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 24px;
 }
+
 
 /* ── Grupos de campo ── */
 .leitor-grupo {
@@ -64,8 +83,9 @@
 /* ── Divisória ── */
 .leitor-divisoria {
     border: none;
-    border-top: 1px solid #f0f0f0;
+    border-top: 2px solid #f0f0f0;
     margin: 20px 0;
+    opacity: 1;
 }
 
 /* ── Input de upload (simula o campo de arquivo) ── */
@@ -99,3 +119,14 @@
     opacity: 0.6;
 }
 
+
+.resultado-container .detalhe-divisoria {
+    display: block !important;
+    border: none !important;
+    border-left: 3px solid #f0f0f0 !important;
+    opacity: 1 !important;
+    width: 0 !important;
+    height: auto !important;
+    align-self: stretch !important;
+    margin: 0 8px !important;
+}
