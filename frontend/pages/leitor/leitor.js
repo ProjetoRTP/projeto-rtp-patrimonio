@@ -9,6 +9,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnImprimir = document.getElementById("btn-imprimir");
   const btnTelegram = document.getElementById("btn-telegram");
 
+
+
+const alertaTelegram = document.getElementById("alerta-telegram");
+const alertaTelegramTexto = document.getElementById("alerta-telegram-texto");
+const alertaTelegramIcone = document.getElementById("alerta-telegram-icone");
+const btnFecharAlerta = document.getElementById("btn-fechar-alerta");
+let alertaTelegramTimeout = null;
+
+function mostrarAlertaTelegram(tipo, mensagem) {
+  if (!alertaTelegram) return;
+
+  alertaTelegram.classList.remove("alert-procape-success", "alert-procape-error", "d-none");
+  alertaTelegram.classList.add(tipo === "sucesso" ? "alert-procape-success" : "alert-procape-error");
+  alertaTelegramTexto.textContent = mensagem;
+
+  if (alertaTelegramIcone) {
+    alertaTelegramIcone.className = tipo === "sucesso"
+      ? "bi bi-check-circle-fill"
+      : "bi bi-exclamation-triangle-fill";
+  }
+
+  clearTimeout(alertaTelegramTimeout);
+  alertaTelegramTimeout = setTimeout(() => {
+    alertaTelegram.classList.add("d-none");
+  }, 8000);
+}
+
+if (btnFecharAlerta) {
+  btnFecharAlerta.addEventListener("click", () => {
+    alertaTelegram.classList.add("d-none");
+    clearTimeout(alertaTelegramTimeout);
+  });
+}
+
+
+
+
+
   if (!token) {
     alert("Acesso negado. Por favor, inicie sessão.");
     window.location.href = "../../index.html";
@@ -69,11 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const observacao = currentEquipamento.observacao || "Nenhuma";
 
       detalheItem.innerHTML = `
-        <p class="mb-1"><strong>PRODUTO ENCONTRADO</strong></p>
-        <p class="mb-1"><strong>Patrimônio:</strong> ${patrimonio}</p>
-        <p class="mb-1"><strong>Setor:</strong> ${setor}</p>
-        <p class="mb-1"><strong>Tipo:</strong> ${tipo}</p>
-        <p class="mb-0"><strong>Observação:</strong> ${observacao}</p>
+        <div class="alert-procape alert-procape-success justify-content-start mb-2" style="padding: 0.65rem 1rem 0.65rem 1rem; display: inline-flex !important;">
+          <strong>PRODUTO ENCONTRADO</strong>
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <p class="mb-1"><strong>PATRIMÔNIO:</strong> ${patrimonio}</p>
+        <p class="mb-1"><strong>SETOR:</strong> ${setor}</p>
+        <p class="mb-1"><strong>TIPO:</strong> ${tipo}</p>
+        <p class="mb-0"><strong>OBSERVAÇÃO:</strong> ${observacao}</p>
       `;
 
       await carregarBarcode(currentEquipamento.id);
@@ -120,9 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
               headers: getHeaders(),
             });
             if (!resposta.ok) throw new Error("Falha ao notificar no Telegram.");
-            alert("✅ Enviado ao Telegram com sucesso!");
+              mostrarAlertaTelegram("sucesso", "Enviado ao Telegram com sucesso!");
           } catch (erro) {
-            alert(`Ocorreu um erro: ${erro.message}`);
+            mostrarAlertaTelegram("erro", `Ocorreu um erro: ${erro.message}`);
           } finally {
             btnTelegram.disabled = false;
           }

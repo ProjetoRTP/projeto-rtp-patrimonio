@@ -48,21 +48,17 @@
                             <label class="leitor-label">Digite ou conecte o scanner</label>
                             <div class="d-flex gap-3 align-items-center">
                                 <input type="text" class="input-vermelho" id="input-scanner"
-                                    placeholder="Receber Código" style="max-width: 260px;">
+                                    placeholder="Receber Código" style="color: #495057; max-width: 260px;">
                                 <button type="button" class="btn-perigo" id="btn-buscar" disabled="">
                                     BUSCAR PRODUTO
                                 </button>
                             </div>
                         </div>
                     </div>
-
                     <hr class="leitor-divisoria">
-
                     <!-- ── Coluna direita: detalhes + código de barras ── -->
                     <div class="resultado-container">
-
                         <div class="detalhes-item">
-
                             <p class="titulo-secao">DETALHES DO ITEM</p>
                             <div class="detalhe-info" id="detalhe-item">
                                 <span style="color:#adb5bd; font-size:0.85rem;">
@@ -70,21 +66,27 @@
                                 </span>
                             </div>
                         </div>
+                        <hr class="detalhe-divisoria">
                         <div class="codigo-barras">
                             <p class="titulo-secao">CÓDIGO DE BARRAS</p>
                             <div id="barcode-area" class="barcode-container"></div>
                         </div>
-                <hr class="detalhe-divisoria">
+                        <hr class="detalhe-divisoria">
                         <div class="">
-                            <div class=" mt-2" style="text-align: left !important;">
+                            <div class=" mt-3" style="text-align: left !important;">
                                 <button class="btn-primario" id="btn-imprimir" disabled>
-                                    IMPRIMIR
+                                    IMPRIMIR<i class="bi bi-printer icone-botao ms-2"></i>
                                 </button>
                             </div>
-                            <div class="text-center mt-2">
+                            <div class=" mt-3">
                                 <button class="btn-primario" id="btn-telegram" disabled>
-                                    ENVIAR P/ TELEGRAM
+                                    ENVIAR<img src="../../assets/imagens/icon-telegram.svg" alt="Telegram" class="icone-botao ms-1">
                                 </button>
+                                <div class="alert-procape alert-procape-success mt-2 d-none" id="alerta-telegram" role="alert">
+                                    <i class="bi bi-check-circle-fill" id="alerta-telegram-icone"></i>
+                                    <span id="alerta-telegram-texto">Enviado ao Telegram com sucesso!</span>
+                                    <button type="button" class="alerta-procape-close" id="btn-fechar-alerta" aria-label="Fechar">&times;</button>
+                                </div>
                             </div>
                         </div>
                 </div>

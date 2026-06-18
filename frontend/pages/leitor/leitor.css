@@ -130,3 +130,74 @@ leitor.css — Página Leitor de Código de Barras
     align-self: stretch !important;
     margin: 0 8px !important;
 }
+
+
+
+
+
+
+.alert-procape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.65rem 2.5rem 0.65rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.7rem;
+    position: relative;
+    animation: alertaProcapeFadeIn 0.3s ease;
+}
+
+.alert-procape-success {
+    background-color: var(--azul-claro);
+    color: var(--azul-principal);
+   
+}
+
+.alert-procape-error {
+    background-color: var(--vermelho-claro);
+    color: var(--vermelho-principal);
+    border: 2px solid var(--vermelho-principal);
+}
+
+.alerta-procape-close {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: inherit;
+    cursor: pointer;
+    position: absolute;
+    right: 12px;
+    opacity: 0.6;
+}
+
+.alerta-procape-close:hover {
+    opacity: 1;
+}
+
+@keyframes alertaProcapeFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+.icone-botao {
+    font-size: 1rem;
+    vertical-align: middle;
+}
+
+
+img.icone-botao {
+    width: 1.1rem;
+    height: 1.1rem;
+    vertical-align: middle;
+}
+
+#btn-imprimir,
+#btn-telegram {
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}
